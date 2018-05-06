@@ -1,6 +1,7 @@
 theme: jekyll-theme-minimal
+
 pygments: true
-highlighter: rouge
+
 
 title: exiftoolr
 description: Read and modify EXIF data from R
