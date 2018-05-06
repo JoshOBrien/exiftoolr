@@ -48,7 +48,7 @@ use Image::ExifTool::Exif;
 use Image::ExifTool::GPS;
 require Exporter;
 
-$VERSION = '3.05';
+$VERSION = '3.11';
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(EscapeXML UnescapeXML);
 
@@ -172,6 +172,8 @@ my %xmpNS = (
     GImage    => 'http://ns.google.com/photos/1.0/image/',
     GPano     => 'http://ns.google.com/photos/1.0/panorama/',
     GSpherical=> 'http://ns.google.com/videos/1.0/spherical/',
+    GDepth    => 'http://ns.google.com/photos/1.0/depthmap/',
+    GFocus    => 'http://ns.google.com/photos/1.0/focus/',
     dwc       => 'http://rs.tdwg.org/dwc/index.htm',
     GettyImagesGIFT => 'http://xmp.gettyimages.com/gift/1.0/',
 );
@@ -202,6 +204,7 @@ my %uri2ns;
     # NOTE: Do NOT put "Groups" here because Groups hash must not be common!
     Writable => 'date',
     Shift => 'Time',
+    Validate => 'ValidateXMPDate($val)',
     PrintConv => '$self->ConvertDateTime($val)',
     PrintConvInv => '$self->InverseDateTime($val,undef,1)',
 );
@@ -731,6 +734,14 @@ my %sRetouchArea = (
     GSpherical => {
         Name => 'GSpherical',
         SubDirectory => { TagTable => 'Image::ExifTool::XMP::GSpherical' },
+    },
+    GDepth => {
+        Name => 'GDepth',
+        SubDirectory => { TagTable => 'Image::ExifTool::XMP::GDepth' },
+    },
+    GFocus => {
+        Name => 'GFocus',
+        SubDirectory => { TagTable => 'Image::ExifTool::XMP::GFocus' },
     },
     dwc => {
         Name => 'dwc',
@@ -2042,9 +2053,8 @@ my %sPantryItem = (
         PrintConv => \&Image::ExifTool::Exif::PrintLensInfo,
         PrintConvInv => \&Image::ExifTool::Exif::ConvertLensInfo,
         Notes => q{
-            called LensSpecification by the spec.  Unfortunately the EXIF 2.3 for XMP
-            specification defined this new tag instead of using the existing
-            XMP-aux:LensInfo
+            unfortunately the EXIF 2.3 for XMP specification defined this new tag
+            instead of using the existing XMP-aux:LensInfo
         },
     },
     LensMake            => { },
@@ -2391,19 +2401,30 @@ sub IsUTF8($)
             # were required in the UTF-8 character
             $rtnVal = 2;
         }
-        return -1 unless $$strPt =~ /\G[\x80-\xbf]{$n}/g;
+        return -1 unless $$strPt =~ /\G([\x80-\xbf]{$n})/g;
+        # the following is ref https://www.cl.cam.ac.uk/%7Emgk25/ucs/utf8_check.c
+        if ($n == 2) {
+            return -1 if ($ch == 0xe0 and (ord($1) & 0xe0) == 0x80) or
+                         ($ch == 0xed and (ord($1) & 0xe0) == 0xa0) or
+                         ($ch == 0xef and ord($1) == 0xbf and
+                            (ord(substr $1, 1) & 0xfe) == 0xbe);
+        } else {
+            return -1 if ($ch == 0xf0 and (ord($1) & 0xf0) == 0x80) or
+                         ($ch == 0xf4 and ord($1) > 0x8f) or $ch > 0xf4;
+        }
         last unless $$strPt =~ /([\x80-\xff])/g;
     }
     return $rtnVal;
 }
 
 #------------------------------------------------------------------------------
-# Fix malformed UTF8 (by replacing bad bytes with '?')
-# Inputs: 0) string reference
+# Fix malformed UTF8 (by replacing bad bytes with specified character)
+# Inputs: 0) string reference, 1) string to replace each bad byte,
+#         may be '' to delete bad bytes, or undef to use '?'
 # Returns: true if string was fixed, and updates string
-sub FixUTF8($)
+sub FixUTF8($;$)
 {
-    my $strPt = shift;
+    my ($strPt, $bad) = @_;
     my $fixed;
     pos($$strPt) = 0; # start at beginning of string
     for (;;) {
@@ -2413,11 +2434,24 @@ sub FixUTF8($)
         # (see comments in IsUTF8() above)
         if ($ch >= 0xc2 and $ch < 0xf8) {
             my $n = $ch < 0xe0 ? 1 : ($ch < 0xf0 ? 2 : 3);
-            next if $$strPt =~ /\G[\x80-\xbf]{$n}/g;
+            if ($$strPt =~ /\G([\x80-\xbf]{$n})/g) {
+                next if $n == 1;
+                if ($n == 2) {
+                    next unless ($ch == 0xe0 and (ord($1) & 0xe0) == 0x80) or
+                                ($ch == 0xed and (ord($1) & 0xe0) == 0xa0) or
+                                ($ch == 0xef and ord($1) == 0xbf and
+                                    (ord(substr $1, 1) & 0xfe) == 0xbe);
+                } else {
+                    next unless ($ch == 0xf0 and (ord($1) & 0xf0) == 0x80) or
+                                ($ch == 0xf4 and ord($1) > 0x8f) or $ch > 0xf4;
+                }
+            }
         }
-        # replace bad character with '?'
-        substr($$strPt, $pos-1, 1) = '?';
-        pos($$strPt) = $fixed = $pos;
+        # replace bad character
+        $bad = '?' unless defined $bad;
+        substr($$strPt, $pos-1, 1) = $bad;
+        pos($$strPt) = $pos-1 + length $bad;
+        $fixed = 1;
     }
     return $fixed;
 }
@@ -2473,6 +2507,7 @@ sub GetXMPTagID($;$$)
         my ($ns, $nm) = ($prop =~ /(.*?):(.*)/) ? ($1, $2) : ('', $prop);
         if ($ignoreNamespace{$ns} or $ignoreProp{$prop}) {
             # special case: don't ignore rdf numbered items
+            # (not technically allowed in XMP, but used in RDF/XML)
             unless ($prop =~ /^rdf:(_\d+)$/) {
                 # save list index if necessary for structures
                 if ($structProps and @$structProps and $prop =~ /^rdf:li (\d+)$/) {
@@ -2537,7 +2572,7 @@ sub RegisterNamespace($)
         while (@ns) {
             $ns = pop @ns;
             if ($nsURI{$ns} and $nsURI{$ns} ne $$nsRef{$ns}) {
-                warn "User-defined namespace prefix '$ns' conflicts with existing namespace\n";
+                warn "User-defined namespace prefix '${ns}' conflicts with existing namespace\n";
             }
             $nsURI{$ns} = $$nsRef{$ns};
             $uri2ns{$$nsRef{$ns}} = $ns;
@@ -3130,6 +3165,7 @@ NoLoop:
 # Returns: Number of contained XMP elements
 sub ParseXMPElement($$$;$$$$)
 {
+    local $_;
     my ($et, $tagTablePtr, $dataPt, $start, $end, $propListPt, $blankInfo) = @_;
     my ($count, $nItems) = (0, 0);
     my $isWriting = $$et{XMP_CAPTURE};
@@ -3273,6 +3309,14 @@ sub ParseXMPElement($$$;$$$$)
                             # use the new namespace prefix
                             $$xlatNS{$ns} = $newNS;
                             $attr = 'xmlns:' . $newNS;
+                            # must go through previous attributes and change prefixes if necessary
+                            foreach (@attrs) {
+                                next unless /(.*?):/ and $1 eq $ns and $1 ne $newNS;
+                                my $newAttr = $newNS . substr($_, length($ns));
+                                $attrs{$newAttr} = $attrs{$_};
+                                delete $attrs{$_};
+                                $_ = $newAttr;
+                            }
                         } else {
                             delete $$xlatNS{$ns};
                         }
@@ -3434,7 +3478,7 @@ sub ParseXMPElement($$$;$$$$)
             {
                 # (no value since we found more properties within this one)
                 # set an error on any ignored attributes here, because they will be lost
-                $$et{XMP_ERROR} = "Can't handle XMP attribute '$ignored'" if $ignored;
+                $$et{XMP_ERROR} = "Can't handle XMP attribute '${ignored}'" if $ignored;
             } elsif (not $shorthand or $valEnd != $valStart) {
                 $val = substr($$dataPt, $valStart, $valEnd - $valStart);
                 # remove comments and whitespace from rdf:Description only
@@ -3556,7 +3600,7 @@ sub ProcessXMP($$;$)
         pos($$dataPt) = $dirStart;
         $double = $1 if $$dataPt =~ /\G((\0\0)?\xfe\xff|\xff\xfe(\0\0)?|\xef\xbb\xbf)\0*<\0*\?\0*x\0*p\0*a\0*c\0*k\0*e\0*t/g;
     } else {
-        my ($type, $buf2, $buf3);
+        my ($type, $mime, $buf2, $buf3);
         # read information from XMP file
         my $raf = $$dirInfo{RAF} or return 0;
         $raf->Read($buff, 256) or return 0;
@@ -3612,6 +3656,7 @@ sub ProcessXMP($$;$)
                             $type = 'PLIST';
                         } elsif ($1 eq 'REDXIF') {
                             $type = 'RMD';
+                            $mime = 'application/xml';
                         } else {
                             return 0;
                         }
@@ -3660,7 +3705,7 @@ sub ProcessXMP($$;$)
                 $type = $ext if $ext and $ext eq 'COS'; # recognize COS by extension
             }
         }
-        $et->SetFileType($type);
+        $et->SetFileType($type, $mime);
 
         my $fast = $et->Options('FastScan');
         return 1 if $fast and $fast == 3;
@@ -3893,7 +3938,7 @@ information.
 
 =head1 AUTHOR
 
-Copyright 2003-2017, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

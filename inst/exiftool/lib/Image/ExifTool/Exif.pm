@@ -53,7 +53,7 @@ use vars qw($VERSION $AUTOLOAD @formatSize @formatName %formatNumber %intFormat
 use Image::ExifTool qw(:DataAccess :Utils);
 use Image::ExifTool::MakerNotes;
 
-$VERSION = '3.93';
+$VERSION = '4.00';
 
 sub ProcessExif($$$);
 sub WriteExif($$$);
@@ -349,6 +349,7 @@ my %sampleFormat = (
     },
     0xfe => {
         Name => 'SubfileType',
+        Notes => 'called NewSubfileType by the TIFF specification',
         Protected => 1,
         Writable => 'int32u',
         WriteGroup => 'IFD0',
@@ -359,6 +360,7 @@ my %sampleFormat = (
     },
     0xff => {
         Name => 'OldSubfileType',
+        Notes => 'called SubfileType by the TIFF specification',
         Protected => 1,
         Writable => 'int16u',
         WriteGroup => 'IFD0',
@@ -502,9 +504,11 @@ my %sampleFormat = (
             ByteOrder => 'LittleEndian',
         },
         {
+            # (APP1 IFD2 is for Leica JPEG preview)
             Condition => q[
                 not ($$self{TIFF_TYPE} eq 'CR2' and $$self{DIR_NAME} eq 'IFD0') and
-                not ($$self{TIFF_TYPE} eq 'DNG' and $$self{Compression} eq '7' and $$self{SubfileType} ne '0')
+                not ($$self{TIFF_TYPE} eq 'DNG' and $$self{Compression} eq '7' and $$self{SubfileType} ne '0') and
+                not ($$self{TIFF_TYPE} eq 'APP1' and $$self{DIR_NAME} eq 'IFD2')
             ],
             Name => 'StripOffsets',
             IsOffset => 1,
@@ -586,9 +590,11 @@ my %sampleFormat = (
             ByteOrder => 'LittleEndian',
         },
         {
+            # (APP1 IFD2 is for Leica JPEG preview)
             Condition => q[
                 not ($$self{TIFF_TYPE} eq 'CR2' and $$self{DIR_NAME} eq 'IFD0') and
-                not ($$self{TIFF_TYPE} eq 'DNG' and $$self{Compression} eq '7' and $$self{SubfileType} ne '0')
+                not ($$self{TIFF_TYPE} eq 'DNG' and $$self{Compression} eq '7' and $$self{SubfileType} ne '0') and
+                not ($$self{TIFF_TYPE} eq 'APP1' and $$self{DIR_NAME} eq 'IFD2')
             ],
             Name => 'StripByteCounts',
             OffsetPair => 0x111,   # point to associated offset
@@ -766,6 +772,7 @@ my %sampleFormat = (
         Writable => 'string',
         Shift => 'Time',
         WriteGroup => 'IFD0',
+        Validate => 'ValidateExifDate($val)',
         PrintConv => '$self->ConvertDateTime($val)',
         PrintConvInv => '$self->InverseDateTime($val,0)',
     },
@@ -1380,10 +1387,26 @@ my %sampleFormat = (
         },
     },
     # 0x7001 - int16u[1] (in SubIFD of Sony ARW images) - values: 0,1
-    # 0x7010 - int16u[4] (in SubIFD of Sony ARW images) - values: "0 9824 11512 16362","8000 10400 12900 14100"
+    0x7010 => { #IB
+        Name => 'SonyToneCurve',
+        # int16u[4] (in SubIFD of Sony ARW images -- don't allow writes for now)
+        # - only the middle 4 points are stored (lower comes from black level,
+        #   and upper from data maximum)
+    },
     # 0x7011 - int16u[4] (in SubIFD of Sony ARW images) - values: "0 4912 8212 12287","4000 7200 10050 12075"
     # 0x7020 - int32u[1] (in SubIFD of Sony ARW images) - values: 0,3
-    # 0x7031 - int16u[1] (in SubIFD of Sony ARW images) - values: 256,257
+    0x7031 => {
+        Name => 'VignettingCorrection',
+        Notes => 'found in Sony ARW images',
+        Protected => 1,
+        Writable => 'int16s',
+        WriteGroup => 'SubIFD',
+        PrintConv => {
+            256 => 'Off',
+            257 => 'Auto',
+            511 => 'No correction params available',
+        },
+    },
     0x7032 => {
         Name => 'VignettingCorrParams', #forum7640
         Notes => 'found in Sony ARW images',
@@ -1392,7 +1415,18 @@ my %sampleFormat = (
         WriteGroup => 'SubIFD',
         Count => 17,
     },
-    # 0x7034 - int16u[1] (in SubIFD of Sony ARW images) - values: 1
+    0x7034 => {
+        Name => 'ChromaticAberrationCorrection',
+        Notes => 'found in Sony ARW images',
+        Protected => 1,
+        Writable => 'int16s',
+        WriteGroup => 'SubIFD',
+        PrintConv => {
+            0 => 'Off',
+            1 => 'Auto',
+            255 => 'No correction params available',
+        },
+    },
     0x7035 => {
         Name => 'ChromaticAberrationCorrParams', #forum6509
         Notes => 'found in Sony ARW images',
@@ -1401,7 +1435,19 @@ my %sampleFormat = (
         WriteGroup => 'SubIFD',
         Count => 33,
     },
-    # 0x7036 - int16u[1] (in SubIFD of Sony ARW images) - values: 0,1,17
+    0x7036 => {
+        Name => 'DistortionCorrection',
+        Notes => 'found in Sony ARW images',
+        Protected => 1,
+        Writable => 'int16s',
+        WriteGroup => 'SubIFD',
+        PrintConv => {
+            0 => 'Off',
+            1 => 'Auto',
+            17 => 'Auto fixed by lens',
+            255 => 'No correction params available',
+        },
+    },
     0x7037 => {
         Name => 'DistortionCorrParams', #forum6509
         Notes => 'found in Sony ARW images',
@@ -1645,6 +1691,7 @@ my %sampleFormat = (
     0x8649 => { #19
         Name => 'PhotoshopSettings',
         Format => 'binary',
+        WriteGroup => 'IFD0', # (only for Validate)
         SubDirectory => {
             DirName => 'Photoshop',
             TagTable => 'Image::ExifTool::Photoshop::Main',
@@ -1881,6 +1928,7 @@ my %sampleFormat = (
         Notes => 'date/time when original image was taken',
         Writable => 'string',
         Shift => 'Time',
+        Validate => 'ValidateExifDate($val)',
         PrintConv => '$self->ConvertDateTime($val)',
         PrintConvInv => '$self->InverseDateTime($val,0)',
     },
@@ -1890,6 +1938,7 @@ my %sampleFormat = (
         Notes => 'called DateTimeDigitized by the EXIF spec.',
         Writable => 'string',
         Shift => 'Time',
+        Validate => 'ValidateExifDate($val)',
         PrintConv => '$self->ConvertDateTime($val)',
         PrintConvInv => '$self->InverseDateTime($val,0)',
     },
@@ -2115,14 +2164,14 @@ my %sampleFormat = (
     0x9217 => { #12
         Name => 'SensingMethod',
         Groups => { 2 => 'Camera' },
-        Notes => 'values 1 and 6 are not standard EXIF',
         PrintConv => {
-            1 => 'Monochrome area', #12 (not standard EXIF)
+            # (values 1 and 6 are not used by corresponding EXIF tag 0xa217)
+            1 => 'Monochrome area',
             2 => 'One-chip color area',
             3 => 'Two-chip color area',
             4 => 'Three-chip color area',
             5 => 'Color sequential area',
-            6 => 'Monochrome linear', #12 (not standard EXIF)
+            6 => 'Monochrome linear',
             7 => 'Trilinear',
             8 => 'Color sequential linear',
         },
@@ -2438,11 +2487,20 @@ my %sampleFormat = (
     0xa401 => {
         Name => 'CustomRendered',
         Writable => 'int16u',
+        Notes => q{
+            only 0 and 1 are standard EXIF, but other values are used by Apple iOS
+            devices
+        },
         PrintConv => {
             0 => 'Normal',
             1 => 'Custom',
-            # 4 - Apple iPhone5c horizontal orientation
-            # 6 - Apple iPhone5c panorama
+            # 2 - also seen (Apple iOS)
+            3 => 'HDR',      # non-standard (Apple iOS)
+            # 4 - also seen (Apple iOS) - normal image from iOS Camera app (ref http://regex.info/blog/lightroom-goodies/metadata-presets)
+            6 => 'Panorama', # non-standard (Apple iOS, horizontal or vertical)
+            # 7 - also seen (Apple iOS)
+            8 => 'Portrait', # non-standard (Apple iOS, blurred background)
+            # 9 - also seen (Apple iOS) (HDR Portrait?)
         },
     },
     0xa402 => {
@@ -3052,6 +3110,7 @@ my %sampleFormat = (
             # - Adobe Camera Raw 5.3 gives an error
             # - Apple Preview 10.5.8 gets the wrong white balance
             FixFormat => 'int8u', # (stupid Sony)
+            WriteGroup => 'IFD0', # (for Validate)
             SubDirectory => {
                 DirName => 'SR2Private',
                 TagTable => 'Image::ExifTool::Sony::SR2Private',
@@ -3079,6 +3138,7 @@ my %sampleFormat = (
             Name => 'MakerNotePentax',
             MakerNotes => 1,    # (causes "MakerNotes header" to be identified in HtmlDump output)
             Binary => 1,
+            WriteGroup => 'IFD0', # (for Validate)
             # Note: Don't make this block-writable for a few reasons:
             # 1) It would be dangerous (possibly confusing Pentax software)
             # 2) It is a different format from the JPEG version of MakerNotePentax
@@ -3099,6 +3159,7 @@ my %sampleFormat = (
             Name => 'MakerNotePentax5',
             MakerNotes => 1,
             Binary => 1,
+            WriteGroup => 'IFD0', # (for Validate)
             SubDirectory => {
                 TagTable => 'Image::ExifTool::Pentax::Main',
                 Start => '$valuePtr + 10',
@@ -3248,7 +3309,7 @@ my %sampleFormat = (
         WriteGroup => 'IFD0',
         Protected => 1,
     },
-    0xc6c5 => { Name => 'SRawType', Description => 'SRaw Type' }, #exifprobe (CR2 proprietary)
+    0xc6c5 => { Name => 'SRawType', Description => 'SRaw Type', WriteGroup => 'IFD0' }, #exifprobe (CR2 proprietary)
     0xc6d2 => { #JD (Panasonic DMC-TZ5)
         # this text is UTF-8 encoded (hooray!) - PH (TZ5)
         Name => 'PanasonicTitle',
@@ -3275,6 +3336,7 @@ my %sampleFormat = (
         ValueConvInv => '$self->Encode($val,"UTF8")',
     },
     # 0xc6dc - int32u[4]: found in CR2 images (PH, 7DmkIII)
+    # 0xc6dd - int16u[256]: found in CR2 images (PH, 5DmkIV)
     0xc6f3 => {
         Name => 'CameraCalibrationSig',
         WriteGroup => 'IFD0',
@@ -4407,7 +4469,8 @@ my %subSecConv = (
             0 => 'GPSLatitude',
             1 => 'GPSLongitude',
         },
-        ValueConv => '"$val[0] $val[1]"',
+        Priority => 0,
+        ValueConv => '(length($val[0]) or length($val[1])) ? "$val[0] $val[1]" : undef',
         PrintConv => '"$prt[0], $prt[1]"',
     },
     LensID => {
@@ -5270,8 +5333,6 @@ sub ProcessExif($$$)
     my ($tagKey, $dirSize, $makerAddr, $strEnc);
     my $inMakerNotes = $$tagTablePtr{GROUPS}{0} eq 'MakerNotes';
 
-    require Image::ExifTool::Validate if $validate;
-
     # set encoding to assume for strings
     $strEnc = $et->Options('CharsetEXIF') if $$tagTablePtr{GROUPS}{0} eq 'EXIF';
 
@@ -5460,7 +5521,9 @@ sub ProcessExif($$$)
             $valuePtr = Get32u($dataPt, $valuePtr);
             if ($validate and not $inMakerNotes) {
                 $et->Warn(sprintf('Odd offset for %s tag 0x%.4x', $name, $tagID), 1) if $valuePtr & 0x01;
-                if ($valuePtr < 8 || $valuePtr + $size > ($$et{VALUE}{FileSize} || length($$dataPt))) {
+                if ($valuePtr < 8 || ($valuePtr + $size > length($$dataPt) and
+                                      $valuePtr + $size > $$et{VALUE}{FileSize}))
+                {
                     $et->Warn(sprintf("Invalid offset for %s tag 0x%.4x", $name, $tagID));
                     ++$warnCount;
                     next;
@@ -6101,7 +6164,7 @@ EXIF and TIFF meta information.
 
 =head1 AUTHOR
 
-Copyright 2003-2017, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -28,7 +28,7 @@ use strict;
 use vars qw($VERSION $AUTOLOAD $iptcDigestInfo);
 use Image::ExifTool qw(:DataAccess :Utils);
 
-$VERSION = '1.55';
+$VERSION = '1.58';
 
 sub ProcessPhotoshop($$$);
 sub WritePhotoshop($$$);
@@ -543,11 +543,32 @@ my %unicodeString = (
         Name => 'LayerUnicodeNames',
         List => 1,
         RawConv => q{
-            return "" if length($val) < 4;
+            return '' if length($val) < 4;
             my $len = Get32u(\$val, 0);
             return $self->Decode(substr($val, 4, $len * 2), 'UCS2');
         },
     },
+    lyid => {
+        Name => 'LayerIDs',
+        Description => 'Layer IDs',
+        Format => 'int32u',
+        List => 1,
+        Unknown => 1,
+    },
+    shmd => { # layer metadata (undocumented structure)
+        # (for now, only extract layerTime.  May also contain "layerXMP" --
+        #  it would be nice to decode this but I need a sample)
+        Name => 'LayerModifyDates',
+        Groups => { 2 => 'Time' },
+        List => 1,
+        RawConv => q{
+            return '' unless $val =~ /layerTimedoub(.{8})/s;
+            my $tmp = $1;
+            return GetDouble(\$tmp, 0);
+        },
+        ValueConv => 'length $val ? ConvertUnixTime($val,1) : ""',
+        PrintConv => 'length $val ? $self->ConvertDateTime($val) : ""',
+    }
 );
 
 # image data
@@ -623,16 +644,24 @@ sub ProcessLayers($$$)
 
     # read the layer information header
     my $n = $psiz * 2 + 2;
-    my $dataPos = $raf->Tell();
     $raf->Read($data, $n) == $n or return 0;
-    my %dinfo = ( DataPt => \$data, DataPos => $dataPos );
     my $tot = $psb ? Get64u(\$data, 0) : Get32u(\$data, 0); # length of layer and mask info
-    my $len = $psb ? Get64u(\$data, $psiz) : Get32u(\$data, $psiz); # length of layer info section
-    my $num = Get16s(\$data, $psiz * 2);
+    my $end = $raf->Tell() - $psiz - 2 + $tot;
+    $data = substr $data, $psiz;
+    my $len = $psb ? Get64u(\$data, 0) : Get32u(\$data, 0); # length of layer info section
+    my $num = Get16s(\$data, $psiz);
+    # check for Lr16 block if layers length is 0 (ref https://forums.adobe.com/thread/1540914)
+    if ($len == 0 and $num == 0 and $raf->Read($data,10) == 10 and
+        $data =~/^..8BIMLr16/s and $raf->Read($data, $psiz+2) == $psiz+2)
+    {
+        $len = $psb ? Get64u(\$data, 0) : Get32u(\$data, 0);
+        $num = Get16s(\$data, $psiz);
+    }
+    my $dataPos = $raf->Tell();
+    my %dinfo = ( DataPt => \$data, DataPos => $dataPos - length($data) );
     $num = -$num if $num < 0;       # (first channel is transparency data if negative)
-    $et->HandleTag($tagTablePtr, '_xcnt', $num, Start => $psiz*2, Size => 2, %dinfo); # LayerCount
+    $et->HandleTag($tagTablePtr, '_xcnt', $num, Start => $psiz, Size => 2, %dinfo); # LayerCount
     $et->VerboseDir('Layers', $num, $len);
-    $dataPos += $n; # point to start of layer information section
     my $oldIndent = $$et{INDENT};
     $$et{INDENT} .= '| ';
 
@@ -698,7 +727,7 @@ sub ProcessLayers($$$)
                 $et->HandleTag($tagTablePtr, $tag, '');
                 ++$count{$tag};
             }
-            $et->HandleTag($tagTablePtr, $tag, $data, %dinfo);
+            $et->HandleTag($tagTablePtr, $tag, undef, %dinfo);
             ++$count{$tag};
             $pos += $n; # step to start of next structure
         }
@@ -706,7 +735,7 @@ sub ProcessLayers($$$)
     }
     $$et{INDENT} = $oldIndent;
     # seek to the end of this section
-    return 0 unless $raf->Seek($dataPos - 2 - $psiz + $tot, 0);
+    return 0 unless $raf->Seek($end, 0);
     return 1;   # success!
 }
 
@@ -724,6 +753,20 @@ sub ProcessPhotoshop($$$)
     my $verbose = $et->Options('Verbose');
     my $success = 0;
 
+    # ignore non-standard XMP while in strict MWG compatibility mode
+    if (($Image::ExifTool::MWG::strict or $et->Options('Validate')) and
+        $$et{FILE_TYPE} =~ /^(JPEG|TIFF|PSD)$/)
+    {
+        my $path = $et->MetadataPath();
+        unless ($path =~ /^(JPEG-APP13-Photoshop|TIFF-IFD0-Photoshop|PSD)$/) {
+            if ($Image::ExifTool::MWG::strict) {
+                $et->Warn("Ignored non-standard Photoshop at $path");
+                return 1;
+            } else {
+                $et->Warn("Non-standard Photoshop at $path", 1);
+            }
+        }
+    }
     SetByteOrder('MM');     # Photoshop is always big-endian
     $verbose and $et->VerboseDir('Photoshop', 0, $$dirInfo{DirLen});
 
@@ -936,7 +979,7 @@ be preserved when copying Photoshop information via user-defined tags.
 
 =head1 AUTHOR
 
-Copyright 2003-2017, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

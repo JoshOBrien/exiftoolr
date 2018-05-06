@@ -21,7 +21,7 @@ sub ProcessKodakPatch($$$);
 sub WriteUnknownOrPreview($$$);
 sub FixLeicaBase($$;$);
 
-$VERSION = '1.99';
+$VERSION = '2.02';
 
 my $debug;          # set to 1 to enable debugging code
 
@@ -424,7 +424,7 @@ my $debug;          # set to 1 to enable debugging code
         # these maker notes have an extra 2 bytes after the entry count
         # - written by the PixPro S-1 (Note: Make is "JK Imaging, Ltd.", so check Model for "Kodak")
         Condition => q{
-            $$self{Model}=~/Kodak/i and
+            $$self{Model}=~/(Kodak|PixPro)/i and
             $$valPt =~ /^II\x2a\0\x08\0\0\0.\0\0\0/
         },
         SubDirectory => {
@@ -608,7 +608,7 @@ my $debug;          # set to 1 to enable debugging code
         # (T (Typ 701) starts with "LEICA\0\0x6", Make is "LEICA CAMERA AG")
         # (X (Typ 113) starts with "LEICA\0\0x7", Make is "LEICA CAMERA AG")
         # (X-U (Typ 113) starts with "LEICA\0\x10\0", Make is "LEICA CAMERA AG")
-        Condition => '$$valPt =~ /^LEICA\0[\x01\x04\x05\x06\x07\x10]\0/',
+        Condition => '$$valPt =~ /^LEICA\0[\x01\x04\x05\x06\x07\x10\x1a]\0/',
         SubDirectory => {
             TagTable => 'Image::ExifTool::Panasonic::Leica5',
             Start => '$valuePtr + 8',
@@ -656,7 +656,7 @@ my $debug;          # set to 1 to enable debugging code
     {
         Name => 'MakerNoteLeica8', # used by the Q (Type 116)
         # (Q (Typ 116) starts with "LEICA\0\x08\0", Make is "LEICA CAMERA AG")
-        # (SL (Typ 601) starts with "LEICA\0\x09\0", Make is "LEICA CAMERA AG")
+        # (SL (Typ 601) and CL start with "LEICA\0\x09\0", Make is "LEICA CAMERA AG")
         Condition => '$$valPt =~ /^LEICA\0[\x08\x09]\0/',
         SubDirectory => {
             TagTable => 'Image::ExifTool::Panasonic::Leica5',
@@ -665,8 +665,8 @@ my $debug;          # set to 1 to enable debugging code
         },
     },
     {
-        Name => 'MakerNoteLeica9', # used by the M9/M-Monochrom
-        # (M9 and M Monochrom start with "LEICA0\x03\0")
+        Name => 'MakerNoteLeica9', # used by the M10/S
+        # (M10 and S start with "LEICA0\x02\0")
         Condition => '$$self{Make} =~ /^Leica Camera AG/ and $$valPt =~ /^LEICA\0\x02\0/',
         SubDirectory => {
             TagTable => 'Image::ExifTool::Panasonic::Leica9',
@@ -793,6 +793,14 @@ my $debug;          # set to 1 to enable debugging code
         },
         SubDirectory => {
             TagTable => 'Image::ExifTool::Reconyx::Main',
+            ByteOrder => 'Little-endian',
+        },
+    },
+    {
+        Name => 'MakerNoteReconyx2',
+        Condition => '$$valPt =~ /^RECONYXUF\0/',
+        SubDirectory => {
+            TagTable => 'Image::ExifTool::Reconyx::Type2',
             ByteOrder => 'Little-endian',
         },
     },
@@ -1087,6 +1095,8 @@ sub GetMakerNoteOffset($)
         } else {
             push @offsets, 0;
         }
+    } elsif ($$et{TIFF_TYPE} eq 'SRW' and $make eq 'SAMSUNG' and $model eq 'EK-GN120') {
+        push @offsets, 40;  # patch to read most of the maker notes, but breaks PreviewIFD
     } elsif ($make eq 'FUJIFILM') {
         # some models have offset of 6, so allow that too (A345,A350,A360,A370)
         push @offsets, 4, 6;
@@ -1732,7 +1742,7 @@ maker notes in EXIF information.
 
 =head1 AUTHOR
 
-Copyright 2003-2017, Phil Harvey (phil at owl.phy.queensu.ca)
+Copyright 2003-2018, Phil Harvey (phil at owl.phy.queensu.ca)
 
 This library is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
