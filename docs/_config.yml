@@ -9,3 +9,11 @@ description: Read and modify EXIF data from R
 
 show_downloads: true
 
+## Use pandoc for md
+markdown: pandoc
+pandoc:
+  format: html5
+  extensions:
+    - smart
+    - mathjax
+    - highlight-style: pygments
