@@ -1,8 +1,7 @@
-title: exiftoolr
-
-description: Read and modify EXIF data from R
-
 theme: jekyll-theme-minimal
+
+title: exiftoolr
+description: Read and modify EXIF data from R
 
 show_downloads: true
 

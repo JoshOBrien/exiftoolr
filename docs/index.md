@@ -1,9 +1,40 @@
-## Well, give this a try
 
-**Here** is some `code`.
+# EXIF Data in R
 
-- Try
-- To
-- Keep
-- It
-- Simple
+Ever needed to read in EXIF data from images or other files in R?
+[ExifTool](http://www.sno.phy.queensu.ca/%7Ephil/exiftool/) by Phil
+Harvey is the most comprenesive tool available for reading, writing
+and editing meta information in a wide variety of files. ExifTool
+supports many different metadata formats including EXIF, GPS, IPTC,
+XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and
+ID3, as well as the maker notes of many digital cameras by Canon,
+Casio, FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
+Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
+Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
+Sanyo, Sigma/Foveon and Sony.
+
+`exiftoolr` provides a thin wrapper around ExifTool and allows one to
+read image file metadata with a simple command:
+
+```
+library(exiftoolr)
+read_exif("my_file.jpg")
+```
+
+## Installation
+
+[ExifTool](http://www.sno.phy.queensu.ca/%7Ephil/exiftool/) is written
+in Perl, so if you are on windows you need to install Perl before
+installing exiftoolr (easily done from [Strawberry
+Perl](http://www.strawberryperl.com/):
+[64-Bit](http://strawberryperl.com/download/5.22.1.2/strawberry-perl-5.22.1.2-64bit.msi)
+(most users),
+[32-Bit](http://strawberryperl.com/download/5.22.1.2/strawberry-perl-5.22.1.2-32bit.msi)
+(advanced)). Mac and linux users already have this installed. To
+install the exiftoolr package, use the `devtools::install_github()`
+command like this:
+
+```
+install.packages("devtools")
+devtools::install_github("JoshOBrien/exiftoolr")
+```
