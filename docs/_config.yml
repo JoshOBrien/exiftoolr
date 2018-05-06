@@ -1,4 +1,5 @@
 theme: jekyll-theme-minimal
+pygments: true
 highlighter: rouge
 
 title: exiftoolr
