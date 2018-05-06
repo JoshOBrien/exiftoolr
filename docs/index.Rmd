@@ -1,4 +1,7 @@
-
+```{r, echo=FALSE, include=FALSE, cache=FALSE}
+require(knitr)
+render_jekyll()
+```
 
 # EXIF Data in R
 
@@ -17,11 +20,10 @@ Sanyo, Sigma/Foveon and Sony.
 `exiftoolr` provides a thin wrapper around ExifTool and allows one to
 read image file metadata with a simple command:
 
-
-{% highlight r %}
+```{r eval=FALSE}
 library(exiftoolr)
 read_exif("my_file.jpg")
-{% endhighlight %}
+```
 
 ## Installation
 
@@ -36,8 +38,7 @@ Perl](http://www.strawberryperl.com/):
 install the exiftoolr package, use the `devtools::install_github()`
 command like this:
 
-
-{% highlight r %}
+```{r eval=FALSE}
 install.packages("devtools")
 devtools::install_github("JoshOBrien/exiftoolr")
-{% endhighlight %}
+```
