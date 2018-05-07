@@ -8,6 +8,6 @@ description: Read and modify EXIF data from R
 show_downloads: true
 
 
-plugins:
-  - jekyll-github-metadata
+## plugins:
+##   - jekyll-github-metadata
 
