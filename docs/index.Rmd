@@ -1,5 +1,10 @@
 ```{r, echo=FALSE, include=FALSE, cache=FALSE}
 require(knitr)
+require(highlight)
+knit_hooks$set( 
+  source = hl_hook_source, 
+  document = hl_hook_css
+)
 render_jekyll()
 ```
 

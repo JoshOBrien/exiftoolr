@@ -1,19 +1,14 @@
+repository: JoshOBrien/exiftoolr
+
 theme: jekyll-theme-minimal
-
-pygments: true
-
 
 title: exiftoolr
 description: Read and modify EXIF data from R
 
-
 show_downloads: true
 
-## Use pandoc for md
-markdown: pandoc
-pandoc:
-  format: html5
-  extensions:
-    - smart
-    - mathjax
-    - highlight-style: pygments
+
+gems:
+  - jekyll-github-metadata
+
+# 7212bbb605ba62bdf3eb6dac78c27394e0fb5d6d
