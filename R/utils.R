@@ -76,36 +76,51 @@ configure_exifr <- function(command = NULL,
 
 ##' @export
 ##' @importFrom curl curl_download
-install_exiftool <- function(command = NULL,
-                             perl_path = NULL,
-                             install_url = NULL,
+install_exiftool <- function(install_url = NULL,
                              install_location = NULL,
+                             windows_exe = NULL,
                              quiet = FALSE) {
-    if(is.null(install_url)) {
-        install_url <- "http://paleolimbot.github.io/exifr/exiftool.zip"
+    ## Installing Windows executable?
+    if(is.null(windows_exe)) {
+        windows_exe <- is_windows()
     }
 
-    message("Attempting to install ExifTool from ",
-            install_url)
+    if(is.null(install_url)) {
+        install_url <-
+            if(windows_exe) {
+                "http://JoshOBrien.github.io/exiftoolr/exiftool.exe"
+            } else {
+                "http://JoshOBrien.github.io/exiftoolr/exiftool.zip"
+            }
+    }
+
+    if(!quiet) {
+        message("Attempting to install ExifTool from ", install_url)
+    }
 
     if(is.null(install_location)) {
-        ## define default install locations
+        ## Default install location
         install_location <- system.file(package = "exifr")
     }
 
-    ## find writable locations
+    ## Find writable locations
     write_dir <- find_writable(install_location)
 
-    ## attempt to download the file
+    ## Attempt to download the file
     download_file <- tempfile()
     on.exit(unlink(download_file))
     curl_download(install_url, download_file, quiet = quiet)
 
-    ## extract downloaded file
-    if(!quiet) message("Extracting exiftool to ", write_dir)
-    unzip(download_file, exdir = write_dir)
+    ##  downloaded file
+    if(!quiet) {
+        message("Installing ExifTool in ", write_dir)
+    }
+    if(windows_exe) {
+        file.rename(download_file, file.path(write_dir, "exiftool.exe"))
+    } else {
+        unzip(download_file, exdir = write_dir)
+    }
 }
-
 
 
 find_perl_paths <- function(perl_path = NULL) {
