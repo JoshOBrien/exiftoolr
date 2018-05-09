@@ -30,7 +30,7 @@ configure_exifr <- function(command = NULL,
         ## executable
         if(is_windows()) {
             internal_win_exe <-
-                system.file("__WINDOWS/exiftool.exe", package = "exifr")
+                system.file("exiftool/exiftool(-k).exe", package = "exiftoolr")
             if(nchar(internal_win_exe))
                 command <- c(command, internal_win_exe)
         }
@@ -86,9 +86,11 @@ install_exiftool <- function(install_url = NULL,
     }
 
     if(is.null(install_url)) {
+        ver <- current_exiftool_version()
+        base_url <- "https://sno.phy.queensu.ca/~phil/exiftool/exiftool-"
         install_url <-
             if(windows_exe) {
-                "http://JoshOBrien.github.io/exiftoolr/exiftool.exe"
+                paste0(base_url, ver, ".zip")
             } else {
                 "http://JoshOBrien.github.io/exiftoolr/exiftool.zip"
             }
@@ -116,8 +118,7 @@ install_exiftool <- function(install_url = NULL,
         message("Installing ExifTool in ", write_dir)
     }
     if(windows_exe) {
-        file.rename(download_file,
-                    file.path(write_dir, "exiftool", "exiftool.exe"))
+        unzip(download_file, exdir = file.path(write_dir, "exiftool"))
     } else {
         unzip(download_file, exdir = write_dir)
     }
@@ -205,3 +206,9 @@ find_writable <- function(install_location) {
 
 
 
+current_exiftool_version <- function() {
+    ## Holds current version of ExifTool, as announced by P. Harvey at:
+    ## http://u88.n24.queensu.ca/exiftool/forum/index.php?topic=3754.0
+    url <- "http://owl.phy.queensu.ca/~phil/exiftool/ver.txt"
+    readLines(url, warn=FALSE)
+}
