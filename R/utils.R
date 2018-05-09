@@ -100,7 +100,7 @@ install_exiftool <- function(install_url = NULL,
 
     if(is.null(install_location)) {
         ## Default install location
-        install_location <- system.file(package = "exifr")
+        install_location <- system.file(package = "exiftoolr")
     }
 
     ## Find writable locations
@@ -116,7 +116,8 @@ install_exiftool <- function(install_url = NULL,
         message("Installing ExifTool in ", write_dir)
     }
     if(windows_exe) {
-        file.rename(download_file, file.path(write_dir, "exiftool.exe"))
+        file.rename(download_file,
+                    file.path(write_dir, "exiftool", "exiftool.exe"))
     } else {
         unzip(download_file, exdir = write_dir)
     }
