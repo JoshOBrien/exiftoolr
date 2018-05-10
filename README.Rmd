@@ -67,7 +67,8 @@ image_files <-
     list.files(system.file("images", package = "exiftoolr"), 
                full.names = TRUE)
 exifinfo <- exif_read(image_files)
-exifinfo[, 1:10] ## Only display the first 10 columns
+dim(exifinfo)
+names(exifinfo) ## List of metadata fields read by ExifTool
 ```
 
 You'll notice there are a lot of columns! You can choose the exact
