@@ -12,12 +12,13 @@ Leaf, Minolta/Konica-Minolta, Motorola, Nikon, Nintendo,
 Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx,
 Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
 
-`exiftoolr` provides a thin wrapper around ExifTool and allows one to
+**exiftoolr** provides a thin wrapper around ExifTool and allows one to
 read image file metadata with a simple command:
+
 
 {% highlight r %}
 library(exiftoolr)
-read_exif("my_file.jpg")
+exif_read("my_file.jpg")
 {% endhighlight %}
 
 ## Installation
@@ -27,13 +28,13 @@ that relies a working local installation of Perl. Perl is typically
 present on most *NIX and Mac machines, but is not by default installed
 on Windows.
 
-To use ExifTool, Windows may want to install Perl (e.g. from
+To use ExifTool, Windows users may want to install Perl (e.g. from
 [Strawberry Perl][Strawberry]). Alternatively, they can use the
 stand-alone ExifTool executable kindly provided by Phil Harvey.
 
-To
-install the exiftoolr package, use the `devtools::install_github()`
-command like this:
+To install the **exiftoolr** package, use the
+`devtools::install_github()` command like this:
+
 
 
 {% highlight r %}
