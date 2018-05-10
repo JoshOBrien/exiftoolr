@@ -1,11 +1,9 @@
 
-##' Configure perl, ExifTool
+##' Configure Perl, ExifTool
 ##'
-##' @param command The exiftool command or location of exiftool.pl
-##' @param perl_path The path to the perl executable
-##' @param install_url The url from which exiftool could be installed
-##' @param install_location The location to install exiftool
-##' @param quiet Use quiet = FALSE to display status updates
+##' @param command Character string giving the exiftool command.
+##' @param perl_path Path to a Perl executable.
+##' @param quiet Should function should be chatty?
 ##'
 ##' @return The exiftool command, invisibly
 ##' @export
@@ -75,6 +73,15 @@ configure_exiftoolr <- function(command = NULL,
 }
 
 
+##' @param install_location Path to directory into which exiftool
+##'     should be installed.
+##' @param win_exe Logical. On Windows machines, should we install a
+##'     standalone Windows executable or the exiftool Perl
+##'     library. (The latter depends on an external installation of
+##'     Perl.) Default value, \code{NULL}, installs Windows executable
+##'     on Windows machines and Perl library on other operating
+##'     systems.
+##' @param quiet Logical.
 ##' @export
 ##' @importFrom curl curl_download
 install_exiftool <- function(install_location = NULL,
@@ -127,21 +134,17 @@ install_exiftool <- function(install_location = NULL,
         }
         unzip(tmpfile, exdir = win_exe_dir)
     } else {
-        ## Perl library (part of it)
+        ## Perl library
         untar(tmpfile, exdir = tmpdir)
         dd <- file.path(tmpdir, paste0("Image-ExifTool-", ver))
         if(!dir.exists(file.path(write_dir, "lib"))) {
             dir.create(file.path(write_dir, "lib"))
         }
-        ## Copy the `lib` directory, main perl script, and README file
+        ## Instal the `lib` directory, main Perl script, and `README`
         file.copy(from = file.path(dd, c("lib", "exiftool", "README")),
                   to = write_dir,
                   recursive = TRUE,
                   overwrite = TRUE)
-        ## ## ... and the `exiftool` file
-        ## file.copy(from = file.path(dd, c("exiftool", "README")),
-        ##           to = write_dir,
-        ##           overwrite = TRUE)
     }
 }
 
