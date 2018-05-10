@@ -42,10 +42,10 @@
 ##' @examples
 ##' files <- dir(system.file(package = "exiftoolr", "images"),
 ##'                   pattern = "*.jpg", full.names = TRUE)
-##' exifinfo <- read_exif(files)
-##' read_exif(files, tags = c("filename", "imagesize"))
+##' exifinfo <- exif_read(files)
+##' exif_read(files, tags = c("filename", "imagesize"))
 ##'
-read_exif <- function(path, tags = NULL,
+exif_read <- function(path, tags = NULL,
                       recursive = FALSE,
                       args = NULL,
                       quiet = TRUE) {
@@ -102,7 +102,7 @@ read_exif <- function(path, tags = NULL,
 
     ## Construct and execute a call to Exiftool
     return_value <-
-        call_exiftool(args = args, fname = path, intern = TRUE)
+        exif_call(args = args, fname = path, intern = TRUE)
 
     ## Postprocess the results
     fromJSON(paste0(return_value, collapse = ""))
@@ -124,10 +124,10 @@ read_exif <- function(path, tags = NULL,
 ##' @export
 ##'
 ##' @examples
-##' call_exiftool()
+##' exif_call()
 ##' exiftool_version()
 ##'
-call_exiftool <- function(args = NULL,
+exif_call <- function(args = NULL,
                           fnames = NULL,
                           intern = FALSE,
                           ...) {
@@ -146,10 +146,10 @@ call_exiftool <- function(args = NULL,
     system(command, intern = intern, ...)
 }
 
-##' @rdname call_exiftool
+##' @rdname exif_call
 ##' @export
 exiftool_version <- function() {
-    as.numeric(call_exiftool(args = "-ver", intern = TRUE))
+    as.numeric(exif_call(args = "-ver", intern = TRUE))
 }
 
 ## private helper command to generate call to exiftool

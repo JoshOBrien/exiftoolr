@@ -77,8 +77,7 @@ configure_exiftoolr <- function(command = NULL,
 
 ##' @export
 ##' @importFrom curl curl_download
-install_exiftool <- function(install_url = NULL,
-                             install_location = NULL,
+install_exiftool <- function(install_location = NULL,
                              windows_exe = NULL,
                              quiet = FALSE) {
     ## Installing Windows executable?
@@ -86,16 +85,15 @@ install_exiftool <- function(install_url = NULL,
         windows_exe <- is_windows()
     }
 
-    if(is.null(install_url)) {
-        ver <- current_exiftool_version()
-        base_url <- "https://sno.phy.queensu.ca/~phil/exiftool/exiftool-"
-        install_url <-
-            if(windows_exe) {
-                paste0(base_url, ver, ".zip")
-            } else {
-                "http://JoshOBrien.github.io/exiftoolr/exiftool.zip"
-            }
-    }
+    ver <- current_exiftool_version()
+    base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
+    install_url <-
+        if(windows_exe) {
+            file.path(base_url, paste0("exiftool-", ver, ".zip"))
+        } else {
+            file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
+        }
+
 
     if(!quiet) {
         message("Attempting to install ExifTool from ", install_url)
@@ -110,9 +108,10 @@ install_exiftool <- function(install_url = NULL,
     write_dir <- find_writable(install_location)
 
     ## Attempt to download the file
-    download_file <- tempfile()
-    on.exit(unlink(download_file))
-    curl_download(install_url, download_file, quiet = quiet)
+    tmpdir <- tempdir()
+    tmpfile <- file.path(tmpdir, "xx")
+    on.exit(unlink(tmpfile))
+    curl_download(install_url, tmpfile, quiet = quiet)
 
     ##  downloaded file
     if(!quiet) {
@@ -123,9 +122,23 @@ install_exiftool <- function(install_url = NULL,
         if(!dir.exists(win_exe_dir)) {
             dir.create(win_exe_dir)
         }
-        unzip(download_file, exdir = win_exe_dir)
+        unzip(tmpfile, exdir = win_exe_dir)
     } else {
-        unzip(download_file, exdir = write_dir)
+        untar(tmpfile, exdir = tmpdir)
+        dd <- file.path(tmpdir, paste0("Image-ExifTool-", ver))
+        if(!dir.exists(file.path(write_dir, "exiftool", "lib"))) {
+            dir.create(file.path(write_dir, "exiftool", "lib"))
+        }
+        ## Copy the `lib` directory ...
+        file.copy(from = file.path(dd, "lib"),
+                  to = file.path(write_dir, "exiftool"),
+                  recursive = TRUE,
+                  overwrite = TRUE)
+        ## ... and the `exiftool` file
+        file.copy(from = file.path(dd, "exiftool"),
+                  to = file.path(write_dir, "exiftool"),
+                  overwrite = TRUE)
+        ## unzip(tmpfile, exdir = write_dir)
     }
 }
 
