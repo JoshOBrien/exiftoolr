@@ -11,10 +11,9 @@
 ##' @export
 ##'
 configure_exiftoolr <- function(command = NULL,
-                            perl_path = NULL,
-                            install_url = NULL,
-                            install_location = NULL,
-                            quiet = FALSE) {
+                                perl_path = NULL,
+                                allow_win_exe = TRUE,
+                                quiet = FALSE) {
     ## Configure Perl (returning NULL if none found)
     if(is.null(perl_path)) {
         perl_path <- configure_perl(quiet = quiet)
@@ -23,21 +22,22 @@ configure_exiftoolr <- function(command = NULL,
     if(is.null(command)) {
         ## Construct default list of possible commands/locations
         ##
-        ## (a) In case command has already been set by previous call
-        ## to configure_exiftoolr()
-        command <- get_exiftool_command()
+        ## ## (a) In case command has already been set by previous call
+        ## ## to configure_exiftoolr()
+        ## command <- get_exiftool_command()
+        ##
         ## (b) On Windows, check for a locally installed standalone
         ## executable
-        if(is_windows()) {
+        if(allow_win_exe & is_windows()) {
             internal_win_exe <-
                 system.file("exiftool/win_exe/exiftool(-k).exe",
                             package = "exiftoolr")
             if(nchar(internal_win_exe))
-                command <- c(command, internal_win_exe)
+                command <- internal_win_exe
         }
         ## (c) Maybe "exiftool" is on search path?
         command <- c(command, "exiftool")
-        ## (d) Check for locally installed ExifTool Perls cripts
+        ## (d) Check for locally installed ExifTool Perl scripts
         if(!is.null(perl_path)) {
             internal_exiftool <-
                 system.file("exiftool/exiftool", package = "exiftoolr")
@@ -78,17 +78,19 @@ configure_exiftoolr <- function(command = NULL,
 ##' @export
 ##' @importFrom curl curl_download
 install_exiftool <- function(install_location = NULL,
-                             windows_exe = NULL,
+                             win_exe = NULL,
                              quiet = FALSE) {
     ## Installing Windows executable?
-    if(is.null(windows_exe)) {
-        windows_exe <- is_windows()
+    if(is.null(win_exe)) {
+        win_exe <- is_windows()
     }
 
+    ## Construct URL of file to be downloaded, uncompressed, &
+    ## installed
     ver <- current_exiftool_version()
     base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
     install_url <-
-        if(windows_exe) {
+        if(win_exe) {
             file.path(base_url, paste0("exiftool-", ver, ".zip"))
         } else {
             file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
@@ -101,7 +103,7 @@ install_exiftool <- function(install_location = NULL,
 
     if(is.null(install_location)) {
         ## Default install location
-        install_location <- system.file(package = "exiftoolr")
+        install_location <- system.file("exiftool", package = "exiftoolr")
     }
 
     ## Find writable locations
@@ -113,32 +115,33 @@ install_exiftool <- function(install_location = NULL,
     on.exit(unlink(tmpfile))
     curl_download(install_url, tmpfile, quiet = quiet)
 
-    ##  downloaded file
+    ## Install downloaded file
     if(!quiet) {
         message("Installing ExifTool in ", write_dir)
     }
-    if(windows_exe) {
-        win_exe_dir <- file.path(write_dir, "exiftool/win_exe")
+    if(win_exe) {
+        ## Windows executable
+        win_exe_dir <- file.path(write_dir, "win_exe")
         if(!dir.exists(win_exe_dir)) {
             dir.create(win_exe_dir)
         }
         unzip(tmpfile, exdir = win_exe_dir)
     } else {
+        ## Perl library (part of it)
         untar(tmpfile, exdir = tmpdir)
         dd <- file.path(tmpdir, paste0("Image-ExifTool-", ver))
-        if(!dir.exists(file.path(write_dir, "exiftool", "lib"))) {
-            dir.create(file.path(write_dir, "exiftool", "lib"))
+        if(!dir.exists(file.path(write_dir, "lib"))) {
+            dir.create(file.path(write_dir, "lib"))
         }
-        ## Copy the `lib` directory ...
-        file.copy(from = file.path(dd, "lib"),
-                  to = file.path(write_dir, "exiftool"),
+        ## Copy the `lib` directory, main perl script, and README file
+        file.copy(from = file.path(dd, c("lib", "exiftool", "README")),
+                  to = write_dir,
                   recursive = TRUE,
                   overwrite = TRUE)
-        ## ... and the `exiftool` file
-        file.copy(from = file.path(dd, "exiftool"),
-                  to = file.path(write_dir, "exiftool"),
-                  overwrite = TRUE)
-        ## unzip(tmpfile, exdir = write_dir)
+        ## ## ... and the `exiftool` file
+        ## file.copy(from = file.path(dd, c("exiftool", "README")),
+        ##           to = write_dir,
+        ##           overwrite = TRUE)
     }
 }
 

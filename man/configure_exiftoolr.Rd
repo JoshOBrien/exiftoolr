@@ -5,8 +5,8 @@
 \alias{configure_perl}
 \title{Configure perl, ExifTool}
 \usage{
-configure_exiftoolr(command = NULL, perl_path = NULL, install_url = NULL,
-  install_location = NULL, quiet = FALSE)
+configure_exiftoolr(command = NULL, perl_path = NULL,
+  allow_win_exe = TRUE, quiet = FALSE)
 
 configure_perl(perl_path = NULL, quiet = FALSE)
 }
@@ -15,11 +15,11 @@ configure_perl(perl_path = NULL, quiet = FALSE)
 
 \item{perl_path}{The path to the perl executable}
 
+\item{quiet}{Use quiet = FALSE to display status updates}
+
 \item{install_url}{The url from which exiftool could be installed}
 
 \item{install_location}{The location to install exiftool}
-
-\item{quiet}{Use quiet = FALSE to display status updates}
 }
 \value{
 The exiftool command, invisibly

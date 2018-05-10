@@ -52,8 +52,8 @@ exif_read <- function(path, tags = NULL,
 
     ## Ensure that exiftoolr is properly configured
     if(!is_exiftoolr_configured()) {
-        configure_exiftoolr(quiet = TRUE, install_url = TRUE)
-        message("Using ExifTool version ", exiftool_version(), "\n")
+        configure_exiftoolr(quiet = quiet)
+        message("Using ExifTool version ", exif_version(), "\n")
     }
 
     ## ---- general input processing ----
@@ -125,7 +125,7 @@ exif_read <- function(path, tags = NULL,
 ##'
 ##' @examples
 ##' exif_call()
-##' exiftool_version()
+##' exif_version()
 ##'
 exif_call <- function(args = NULL,
                           fnames = NULL,
@@ -148,7 +148,7 @@ exif_call <- function(args = NULL,
 
 ##' @rdname exif_call
 ##' @export
-exiftool_version <- function() {
+exif_version <- function() {
     as.numeric(exif_call(args = "-ver", intern = TRUE))
 }
 

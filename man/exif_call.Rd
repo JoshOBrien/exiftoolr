@@ -2,12 +2,12 @@
 % Please edit documentation in R/exif_read.R
 \name{exif_call}
 \alias{exif_call}
-\alias{exiftool_version}
+\alias{exif_version}
 \title{Call exiftool from R}
 \usage{
 exif_call(args = NULL, fnames = NULL, intern = FALSE, ...)
 
-exiftool_version()
+exif_version()
 }
 \arguments{
 \item{args}{List of non-shell quoted arguments (e.g. \code{-n
@@ -29,6 +29,6 @@ Uses \code{system()} to run a basic call to \code{exiftool}.
 }
 \examples{
 exif_call()
-exiftool_version()
+exif_version()
 
 }
