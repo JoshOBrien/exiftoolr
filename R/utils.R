@@ -3,7 +3,10 @@
 ##'
 ##' @param command Character string giving the exiftool command.
 ##' @param perl_path Path to a Perl executable.
-##' @param quiet Should function should be chatty?
+##' @param allow_win_exe Logical. If running on a Windows machine, and
+##'     if a standalone exiftool executable is available, should it be
+##'     used?
+##' @param quiet Logical. Should function should be chatty?
 ##'
 ##' @return The exiftool command, invisibly
 ##' @export
@@ -72,7 +75,8 @@ configure_exiftoolr <- function(command = NULL,
             "doing install_exiftool().")
 }
 
-
+## Install ExifTool on the local machine
+##
 ##' @param install_location Path to directory into which exiftool
 ##'     should be installed.
 ##' @param win_exe Logical. On Windows machines, should we install a
@@ -84,6 +88,7 @@ configure_exiftoolr <- function(command = NULL,
 ##' @param quiet Logical.
 ##' @export
 ##' @importFrom curl curl_download
+##' @importFrom utils untar unzip
 install_exiftool <- function(install_location = NULL,
                              win_exe = NULL,
                              quiet = FALSE) {

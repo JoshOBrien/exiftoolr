@@ -15,7 +15,11 @@ configure_perl(perl_path = NULL, quiet = FALSE)
 
 \item{perl_path}{Path to a Perl executable.}
 
-\item{quiet}{Should function should be chatty?}
+\item{allow_win_exe}{Logical. If running on a Windows machine, and
+if a standalone exiftool executable is available, should it be
+used?}
+
+\item{quiet}{Logical. Should function should be chatty?}
 }
 \value{
 The exiftool command, invisibly

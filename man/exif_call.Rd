@@ -28,7 +28,8 @@ The exit code if \code{intern=FALSE}, or the standard
 Uses \code{system()} to run a basic call to \code{exiftool}.
 }
 \examples{
+\dontrun{
 exif_call()
 exif_version()
-
+}
 }

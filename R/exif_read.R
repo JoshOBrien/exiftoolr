@@ -40,11 +40,12 @@
 ##' @export
 ##'
 ##' @examples
+##' \dontrun{
 ##' files <- dir(system.file(package = "exiftoolr", "images"),
 ##'                   pattern = "*.jpg", full.names = TRUE)
 ##' exifinfo <- exif_read(files)
 ##' exif_read(files, tags = c("filename", "imagesize"))
-##'
+##' }
 exif_read <- function(path, tags = NULL,
                       recursive = FALSE,
                       args = NULL,
@@ -102,7 +103,7 @@ exif_read <- function(path, tags = NULL,
 
     ## Construct and execute a call to Exiftool
     return_value <-
-        exif_call(args = args, fname = path, intern = TRUE)
+        exif_call(args = args, fnames = path, intern = TRUE)
 
     ## Postprocess the results
     fromJSON(paste0(return_value, collapse = ""))
@@ -124,13 +125,14 @@ exif_read <- function(path, tags = NULL,
 ##' @export
 ##'
 ##' @examples
+##' \dontrun{
 ##' exif_call()
 ##' exif_version()
-##'
+##' }
 exif_call <- function(args = NULL,
-                          fnames = NULL,
-                          intern = FALSE,
-                          ...) {
+                      fnames = NULL,
+                      intern = FALSE,
+                      ...) {
     ## Exiftool command
     exiftoolpath <- get_exiftool_command()
     if(is.null(exiftoolpath)) {

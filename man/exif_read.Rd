@@ -51,9 +51,10 @@ Note that binary tags such as thumbnails are loaded as
 base64-encoded strings that start with "base64:".
 }
 \examples{
+\dontrun{
 files <- dir(system.file(package = "exiftoolr", "images"),
                   pattern = "*.jpg", full.names = TRUE)
 exifinfo <- exif_read(files)
 exif_read(files, tags = c("filename", "imagesize"))
-
+}
 }
