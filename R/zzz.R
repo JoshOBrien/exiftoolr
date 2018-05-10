@@ -1,17 +1,17 @@
 .globals <- new.env(parent = emptyenv())
-.globals$exifr_configured <- FALSE
+.globals$exiftoolr_configured <- FALSE
 .globals$exiftool_command <- NULL
 .globals$perl_path <- NULL
 
 
-is_exifr_configured <- function() {
-    .globals$exifr_configured
+is_exiftoolr_configured <- function() {
+    .globals$exiftoolr_configured
 }
 
 ## Replacing `options(exifr.exiftoolcommand = com)`
 set_exiftool_command <- function(com) {
     .globals$exiftool_command <- com
-    .globals$exifr_configured <- TRUE
+    .globals$exiftoolr_configured <- TRUE
 }
 
 ## Replacing `getOption("exifr.exiftoolcommand")`

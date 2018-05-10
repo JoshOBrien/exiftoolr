@@ -10,7 +10,7 @@
 ##' @return The exiftool command, invisibly
 ##' @export
 ##'
-configure_exifr <- function(command = NULL,
+configure_exiftoolr <- function(command = NULL,
                             perl_path = NULL,
                             install_url = NULL,
                             install_location = NULL,
@@ -24,13 +24,14 @@ configure_exifr <- function(command = NULL,
         ## Construct default list of possible commands/locations
         ##
         ## (a) In case command has already been set by previous call
-        ## to configure_exifr()
+        ## to configure_exiftoolr()
         command <- get_exiftool_command()
         ## (b) On Windows, check for a locally installed standalone
         ## executable
         if(is_windows()) {
             internal_win_exe <-
-                system.file("exiftool/exiftool(-k).exe", package = "exiftoolr")
+                system.file("exiftool/win_exe/exiftool(-k).exe",
+                            package = "exiftoolr")
             if(nchar(internal_win_exe))
                 command <- c(command, internal_win_exe)
         }
@@ -39,7 +40,7 @@ configure_exifr <- function(command = NULL,
         ## (d) Check for locally installed ExifTool Perls cripts
         if(!is.null(perl_path)) {
             internal_exiftool <-
-                system.file("exiftool/exiftool.pl", package = "exifr")
+                system.file("exiftool/exiftool", package = "exiftoolr")
             if(nchar(internal_exiftool)) {
                 command <-
                     c(command,
@@ -47,7 +48,7 @@ configure_exifr <- function(command = NULL,
         }
         }
     } else {
-        ## For commands supplied as argument to configure_exifr(), if
+        ## For commands supplied as argument to configure_exiftoolr(), if
         ## Perl is present, try the command with and without prepended
         ## invocation of Perl
         if(!is.null(perl_path)) {
@@ -69,8 +70,8 @@ configure_exifr <- function(command = NULL,
     }
 
     message("No functioning version of Exiftool has been found. To download\n",
-            "and install a local version into the exifr package, try doing\n",
-            "install_exiftool().")
+            "and install a local version into the exiftoolr package, try\n",
+            "doing install_exiftool().")
 }
 
 
@@ -118,7 +119,11 @@ install_exiftool <- function(install_url = NULL,
         message("Installing ExifTool in ", write_dir)
     }
     if(windows_exe) {
-        unzip(download_file, exdir = file.path(write_dir, "exiftool"))
+        win_exe_dir <- file.path(write_dir, "exiftool/win_exe")
+        if(!dir.exists(win_exe_dir)) {
+            dir.create(win_exe_dir)
+        }
+        unzip(download_file, exdir = win_exe_dir)
     } else {
         unzip(download_file, exdir = write_dir)
     }
@@ -127,13 +132,13 @@ install_exiftool <- function(install_url = NULL,
 
 find_perl_paths <- function(perl_path = NULL) {
     paths <- character(0)
-    if(!is.na(Sys.getenv("EXIFR_PERL_PATH", unset = NA))) {
-        paths <- c(paths, Sys.getenv("EXIFR_PERL_PATH"))
+    if(!is.na(Sys.getenv("EXIFTOOLR_PERL_PATH", unset = NA))) {
+        paths <- c(paths, Sys.getenv("EXIFTOOLR_PERL_PATH"))
     }
 }
 
 
-##' @rdname configure_exifr
+##' @rdname configure_exiftoolr
 ##' @export
 configure_perl <- function(perl_path = NULL, quiet = FALSE) {
     if(is.null(perl_path)) {

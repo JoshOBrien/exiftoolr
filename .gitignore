@@ -2,4 +2,4 @@ inst/__MACOSX/*
 inst/__WINDOWS/*
 docs/_site/*
 /docs/Gemfile.lock
-^exiftool/*
+/exiftool/*

@@ -40,7 +40,7 @@
 ##' @export
 ##'
 ##' @examples
-##' files <- dir(system.file(package = "exifr", "images"),
+##' files <- dir(system.file(package = "exiftoolr", "images"),
 ##'                   pattern = "*.jpg", full.names = TRUE)
 ##' exifinfo <- read_exif(files)
 ##' read_exif(files, tags = c("filename", "imagesize"))
@@ -50,9 +50,9 @@ read_exif <- function(path, tags = NULL,
                       args = NULL,
                       quiet = TRUE) {
 
-    ## Ensure that exifr is properly configured
-    if(!is_exifr_configured()) {
-        configure_exifr(quiet = TRUE, install_url = TRUE)
+    ## Ensure that exiftoolr is properly configured
+    if(!is_exiftoolr_configured()) {
+        configure_exiftoolr(quiet = TRUE, install_url = TRUE)
         message("Using ExifTool version ", exiftool_version(), "\n")
     }
 

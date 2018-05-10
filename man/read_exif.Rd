@@ -51,7 +51,7 @@ Note that binary tags such as thumbnails are loaded as
 base64-encoded strings that start with "base64:".
 }
 \examples{
-files <- dir(system.file(package = "exifr", "images"),
+files <- dir(system.file(package = "exiftoolr", "images"),
                   pattern = "*.jpg", full.names = TRUE)
 exifinfo <- read_exif(files)
 read_exif(files, tags = c("filename", "imagesize"))
