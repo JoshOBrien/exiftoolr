@@ -9,49 +9,61 @@ knitr::opts_chunk$set(
 options(width=120)
 ```
 
-# exiftoolr
+# ExifTool functionality from R
 
-Ever needed to read in EXIF data from images or other files in R?
-Phil Harvey's [ExifTool][exiftool-home] by Phil Harvey is the most
-comprehensive tool available for reading, writing and editing meta
-information in a wide variety of files. ExifTool supports many
+Phil Harvey's [ExifTool][ExifTool-home] is an excellent and
+comprehensive open source utility for reading, writing and editing
+meta information in a wide variety of files. ExifTool supports many
 different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
 GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well
 as the maker notes of many digital cameras by Canon, Casio, FLIR,
 FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta,
 Motorola, Nikon, Nintendo, Olympus/Epson, Panasonic/Leica,
 Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon
-and Sony. This package provides a thin wrapper around
-[ExifTool][exiftool-home] allowing the reading of image file metadata
-with a single command.
+and Sony.
 
-## Installation
+The **exiftoolr** package provides a thin wrapper around a local
+installation of ExifTool, giving users easy access to
+[ExifTool][ExifTool-home] functionality from within R. The package can
+be configured () to use an already existing ExifTool
+installation. Alternatively, the utility function
+`exiftoolr::install_exiftool()` (run just once following package
+installation) can be used to download and install the most up-to-date
+version of ExifTool into the **exiftoolr** package directory. 
 
-You will need Perl to use **exiftoolr**, which may already be
-installed on your system (Mac, Linux). 
-
-To use ExifTool, Windows users may want to install Perl (e.g. from
-[Strawberry Perl][Strawberry]). Alternatively, they can use the
-stand-alone ExifTool executable kindly provided by Phil Harvey.
+A simple call to `exiftoolr::exif_read()` then reads metadata from one
+or more image or other files, while the function
+`exiftoolr::exif_call()` supports more general calls to underlying
+ExifTool utility.
 
 
-Mac users can also install ExifTool directly from
-[sourceforge](https://sourceforge.net/projects/exiftool/files/), which
-is not necessary but may be useful if ExifTool is to be used outside
-of R.
+## ExifTool and Perl
 
-You can install **exiftoolr** from GitHub with:
+ExifTool is written and primarily distributed as a Perl library which
+can be used on any computer with a working Perl installation. Those
+include most Linux and Mac machines, which typically have Perl
+installed by default. Machines running Windows often do **not** have
+Perl installed (though it may be easily installed using installers
+distributed by [Strawberry Perl][Strawberry-Perl] or [Active State
+Perl][ActiveState-Perl]).
+
+Windows users without Perl do not, though, need to install Perl to
+accesss ExifTool's functionality. They instead have the option of
+installing stand-alone ExifTool compiled executable distributed on the
+ExifTool home page. Like the Perl library, the Windows executable can
+be downloaded using `exiftoolr::install_exiftool()`
+
+
+# Installation
+
+To install **exiftoolr** from GitHub, do:
 
 ```{r, gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("paleolimbot/exiftoolr")
+## install.packages("devtools")
+devtools::install_github("JoshOBrien/exiftoolr")
 ```
 
-If you can load the package, everything should be installed correctly:
 
-```{r}
-library(exiftoolr)
-```
 
 ## Example
 
@@ -60,9 +72,10 @@ It makes the most sense to use the `exif_read()` function with
 `recursive = TRUE`).
 
 ```{r, example}
+library(exiftoolr)
 image_files <-
-    list.files(system.file("images", package = "exiftoolr"), 
-               full.names = TRUE)
+    dir(system.file("images", package = "exiftoolr"), 
+        full.names = TRUE)
 exifinfo <- exif_read(image_files)
 dim(exifinfo)
 names(exifinfo) ## List of metadata fields read by ExifTool
@@ -102,5 +115,6 @@ out <- exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 cat(paste(out, collapse = "\n"))
 ```
 
-[exiftool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
-[Strawberry]: http://www.strawberryperl.com/
+[ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
+[Strawberry-Perl]: http://www.strawberryperl.com/
+[ActiveState-Perl]: https://www.activestate.com/activeperl/downloads
