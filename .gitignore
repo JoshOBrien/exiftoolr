@@ -3,3 +3,4 @@ inst/__WINDOWS/*
 docs/_site/*
 /docs/Gemfile.lock
 /exiftool/*
+/README.html

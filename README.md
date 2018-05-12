@@ -2,51 +2,62 @@
 
 
 
-# exiftoolr
+# ExifTool functionality from R
 
-Ever needed to read in EXIF data from images or other files in R?
-Phil Harvey's [ExifTool][exiftool-home] by Phil Harvey is the most
-comprehensive tool available for reading, writing and editing meta
-information in a wide variety of files. ExifTool supports many
+Phil Harvey's [ExifTool][ExifTool-home] is an excellent and
+comprehensive open source utility for reading, writing and editing
+meta information in a wide variety of files. ExifTool supports many
 different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
 GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well
 as the maker notes of many digital cameras by Canon, Casio, FLIR,
 FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta,
 Motorola, Nikon, Nintendo, Olympus/Epson, Panasonic/Leica,
 Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon
-and Sony. This package provides a thin wrapper around
-[ExifTool][exiftool-home] allowing the reading of image file metadata
-with a single command.
+and Sony.
 
-## Installation
+The **exiftoolr** package provides a thin wrapper around a local
+installation of ExifTool, giving users easy access to
+[ExifTool][ExifTool-home] functionality from within R. The package can
+be configured () to use an already existing ExifTool
+installation. Alternatively, the utility function
+`exiftoolr::install_exiftool()` (run just once following package
+installation) can be used to download and install the most up-to-date
+version of ExifTool into the **exiftoolr** package directory. 
 
-You will need Perl to use **exiftoolr**, which may already be
-installed on your system (Mac, Linux). 
-
-To use ExifTool, Windows users may want to install Perl (e.g. from
-[Strawberry Perl][Strawberry]). Alternatively, they can use the
-stand-alone ExifTool executable kindly provided by Phil Harvey.
+A simple call to `exiftoolr::exif_read()` then reads metadata from one
+or more image or other files, while the function
+`exiftoolr::exif_call()` supports more general calls to underlying
+ExifTool utility.
 
 
-Mac users can also install ExifTool directly from
-[sourceforge](https://sourceforge.net/projects/exiftool/files/), which
-is not necessary but may be useful if ExifTool is to be used outside
-of R.
+## ExifTool and Perl
 
-You can install **exiftoolr** from GitHub with:
+ExifTool is written and primarily distributed as a Perl library which
+can be used on any computer with a working Perl installation. Those
+include most Linux and Mac machines, which typically have Perl
+installed by default. Machines running Windows often do **not** have
+Perl installed (though it may be easily installed using installers
+distributed by [Strawberry Perl][Strawberry-Perl] or [Active State
+Perl][ActiveState-Perl]).
+
+Windows users without Perl do not, though, need to install Perl to
+accesss ExifTool's functionality. They instead have the option of
+installing stand-alone ExifTool compiled executable distributed on the
+ExifTool home page. Like the Perl library, the Windows executable can
+be downloaded using `exiftoolr::install_exiftool()`
+
+
+# Installation
+
+To install **exiftoolr** from GitHub, do:
 
 
 ```r
-# install.packages("devtools")
-devtools::install_github("paleolimbot/exiftoolr")
+## install.packages("devtools")
+devtools::install_github("JoshOBrien/exiftoolr")
 ```
 
-If you can load the package, everything should be installed correctly:
 
-
-```r
-library(exiftoolr)
-```
 
 ## Example
 
@@ -56,12 +67,14 @@ It makes the most sense to use the `exif_read()` function with
 
 
 ```r
+library(exiftoolr)
 image_files <-
-    list.files(system.file("images", package = "exiftoolr"), 
-               full.names = TRUE)
+    dir(system.file("images", package = "exiftoolr"), 
+        full.names = TRUE)
 exifinfo <- exif_read(image_files)
+#> Using ExifTool version 10.96
 dim(exifinfo)
-#> [1]   2 267
+#> [1]   4 267
 names(exifinfo) ## List of metadata fields read by ExifTool
 #>   [1] "SourceFile"                 "ExifToolVersion"            "FileName"                  
 #>   [4] "Directory"                  "FileSize"                   "FileModifyDate"            
@@ -76,48 +89,48 @@ names(exifinfo) ## List of metadata fields read by ExifTool
 #>  [31] "DateTimeOriginal"           "CreateDate"                 "ComponentsConfiguration"   
 #>  [34] "CompressedBitsPerPixel"     "ExposureCompensation"       "MaxApertureValue"          
 #>  [37] "MeteringMode"               "LightSource"                "Flash"                     
-#>  [40] "FocalLength"                "Warning"                    "ImageQuality"              
-#>  [43] "FirmwareVersion"            "WhiteBalance"               "FocusMode"                 
-#>  [46] "AFAreaMode"                 "ImageStabilization"         "MacroMode"                 
-#>  [49] "ShootingMode"               "Audio"                      "DataDump"                  
-#>  [52] "WhiteBalanceBias"           "FlashBias"                  "InternalSerialNumber"      
-#>  [55] "PanasonicExifVersion"       "ColorEffect"                "TimeSincePowerOn"          
-#>  [58] "BurstMode"                  "SequenceNumber"             "ContrastMode"              
-#>  [61] "NoiseReduction"             "SelfTimer"                  "Rotation"                  
-#>  [64] "AFAssistLamp"               "ColorMode"                  "OpticalZoomMode"           
-#>  [67] "ConversionLens"             "TravelDay"                  "WorldTimeLocation"         
-#>  [70] "ProgramISO"                 "AdvancedSceneType"          "FacesDetected"             
-#>  [73] "AFPointPosition"            "NumFacePositions"           "Face1Position"             
-#>  [76] "Face2Position"              "Face3Position"              "Face4Position"             
-#>  [79] "Face5Position"              "IntelligentExposure"        "FacesRecognized"           
-#>  [82] "RecognizedFace1Name"        "RecognizedFace1Position"    "RecognizedFace1Age"        
-#>  [85] "RecognizedFace2Name"        "RecognizedFace2Position"    "RecognizedFace2Age"        
-#>  [88] "RecognizedFace3Name"        "RecognizedFace3Position"    "RecognizedFace3Age"        
-#>  [91] "FlashWarning"               "Title"                      "BabyName"                  
-#>  [94] "Location"                   "IntelligentResolution"      "BurstSpeed"                
-#>  [97] "ClearRetouch"               "SweepPanoramaDirection"     "SweepPanoramaFieldOfView"  
-#> [100] "InternalNDFilter"           "ClearRetouchValue"          "MakerNoteVersion"          
-#> [103] "SceneMode"                  "WBRedLevel"                 "WBGreenLevel"              
-#> [106] "WBBlueLevel"                "FlashFired"                 "TextStamp"                 
-#> [109] "BabyAge"                    "Transform"                  "FlashpixVersion"           
-#> [112] "ColorSpace"                 "ExifImageWidth"             "ExifImageHeight"           
-#> [115] "InteropIndex"               "InteropVersion"             "SensingMethod"             
-#> [118] "FileSource"                 "SceneType"                  "CustomRendered"            
-#> [121] "ExposureMode"               "DigitalZoomRatio"           "FocalLengthIn35mmFormat"   
-#> [124] "SceneCaptureType"           "GainControl"                "Contrast"                  
-#> [127] "Saturation"                 "Sharpness"                  "OffsetSchema"              
-#> [130] "GPSVersionID"               "GPSLatitudeRef"             "GPSLongitudeRef"           
-#> [133] "GPSAltitudeRef"             "GPSTimeStamp"               "GPSSpeedRef"               
-#> [136] "GPSSpeed"                   "GPSDateStamp"               "PrintIMVersion"            
-#> [139] "Compression"                "ThumbnailOffset"            "ThumbnailLength"           
-#> [142] "MPFVersion"                 "NumberOfImages"             "MPImageFlags"              
-#> [145] "MPImageFormat"              "MPImageType"                "MPImageLength"             
-#> [148] "MPImageStart"               "DependentImage1EntryNumber" "DependentImage2EntryNumber"
-#> [151] "ImageWidth"                 "ImageHeight"                "EncodingProcess"           
-#> [154] "BitsPerSample"              "ColorComponents"            "YCbCrSubSampling"          
-#> [157] "AdvancedSceneMode"          "Aperture"                   "BlueBalance"               
-#> [160] "GPSAltitude"                "GPSDateTime"                "GPSLatitude"               
-#> [163] "GPSLongitude"               "GPSPosition"                "ImageSize"                 
+#>  [40] "FocalLength"                "ImageQuality"               "FirmwareVersion"           
+#>  [43] "WhiteBalance"               "FocusMode"                  "AFAreaMode"                
+#>  [46] "ImageStabilization"         "MacroMode"                  "ShootingMode"              
+#>  [49] "Audio"                      "DataDump"                   "WhiteBalanceBias"          
+#>  [52] "FlashBias"                  "InternalSerialNumber"       "PanasonicExifVersion"      
+#>  [55] "ColorEffect"                "TimeSincePowerOn"           "BurstMode"                 
+#>  [58] "SequenceNumber"             "ContrastMode"               "NoiseReduction"            
+#>  [61] "SelfTimer"                  "Rotation"                   "AFAssistLamp"              
+#>  [64] "ColorMode"                  "OpticalZoomMode"            "ConversionLens"            
+#>  [67] "TravelDay"                  "WorldTimeLocation"          "ProgramISO"                
+#>  [70] "AdvancedSceneType"          "FacesDetected"              "AFPointPosition"           
+#>  [73] "NumFacePositions"           "Face1Position"              "Face2Position"             
+#>  [76] "Face3Position"              "Face4Position"              "Face5Position"             
+#>  [79] "IntelligentExposure"        "FacesRecognized"            "RecognizedFace1Name"       
+#>  [82] "RecognizedFace1Position"    "RecognizedFace1Age"         "RecognizedFace2Name"       
+#>  [85] "RecognizedFace2Position"    "RecognizedFace2Age"         "RecognizedFace3Name"       
+#>  [88] "RecognizedFace3Position"    "RecognizedFace3Age"         "FlashWarning"              
+#>  [91] "Title"                      "BabyName"                   "Location"                  
+#>  [94] "IntelligentResolution"      "BurstSpeed"                 "ClearRetouch"              
+#>  [97] "SweepPanoramaDirection"     "SweepPanoramaFieldOfView"   "InternalNDFilter"          
+#> [100] "ClearRetouchValue"          "MakerNoteVersion"           "SceneMode"                 
+#> [103] "WBRedLevel"                 "WBGreenLevel"               "WBBlueLevel"               
+#> [106] "FlashFired"                 "TextStamp"                  "BabyAge"                   
+#> [109] "Transform"                  "FlashpixVersion"            "ColorSpace"                
+#> [112] "ExifImageWidth"             "ExifImageHeight"            "InteropIndex"              
+#> [115] "InteropVersion"             "SensingMethod"              "FileSource"                
+#> [118] "SceneType"                  "CustomRendered"             "ExposureMode"              
+#> [121] "DigitalZoomRatio"           "FocalLengthIn35mmFormat"    "SceneCaptureType"          
+#> [124] "GainControl"                "Contrast"                   "Saturation"                
+#> [127] "Sharpness"                  "OffsetSchema"               "GPSVersionID"              
+#> [130] "GPSLatitudeRef"             "GPSLongitudeRef"            "GPSAltitudeRef"            
+#> [133] "GPSTimeStamp"               "GPSSpeedRef"                "GPSSpeed"                  
+#> [136] "GPSDateStamp"               "PrintIMVersion"             "Compression"               
+#> [139] "ThumbnailOffset"            "ThumbnailLength"            "MPFVersion"                
+#> [142] "NumberOfImages"             "MPImageFlags"               "MPImageFormat"             
+#> [145] "MPImageType"                "MPImageLength"              "MPImageStart"              
+#> [148] "DependentImage1EntryNumber" "DependentImage2EntryNumber" "ImageWidth"                
+#> [151] "ImageHeight"                "EncodingProcess"            "BitsPerSample"             
+#> [154] "ColorComponents"            "YCbCrSubSampling"           "AdvancedSceneMode"         
+#> [157] "Aperture"                   "BlueBalance"                "GPSAltitude"               
+#> [160] "GPSDateTime"                "GPSLatitude"                "GPSLongitude"              
+#> [163] "GPSPosition"                "ImageSize"                  "Warning"                   
 #> [166] "Megapixels"                 "RedBalance"                 "ScaleFactor35efl"          
 #> [169] "ShutterSpeed"               "ThumbnailImage"             "CircleOfConfusion"         
 #> [172] "FOV"                        "FocalLength35efl"           "HyperfocalDistance"        
@@ -160,9 +173,11 @@ tags you want to extract using the `tags` argument:
 
 ```r
 exif_read(image_files, tags = c("filename", "imagesize"))
-#>                                     SourceFile       FileName ImageSize
-#> 1 C:/R/Library/exiftoolr/images/binary_tag.jpg binary_tag.jpg     30x25
-#> 2      C:/R/Library/exiftoolr/images/Canon.jpg      Canon.jpg       8x8
+#>                                              SourceFile                FileName ImageSize
+#> 1          C:/R/Library/exiftoolr/images/binary_tag.jpg          binary_tag.jpg     30x25
+#> 2 C:/R/Library/exiftoolr/images/binary_tag.jpg_original binary_tag.jpg_original     30x25
+#> 3               C:/R/Library/exiftoolr/images/Canon.jpg               Canon.jpg       8x8
+#> 4      C:/R/Library/exiftoolr/images/Canon.jpg_original      Canon.jpg_original       8x8
 ```
 
 ## Details
@@ -176,9 +191,11 @@ kind of special treatment.
 
 ```r
 exif_read(image_files, tags = c("filename", "imagesize"), quiet = FALSE)
-#>                                     SourceFile       FileName ImageSize
-#> 1 C:/R/Library/exiftoolr/images/binary_tag.jpg binary_tag.jpg     30x25
-#> 2      C:/R/Library/exiftoolr/images/Canon.jpg      Canon.jpg       8x8
+#>                                              SourceFile                FileName ImageSize
+#> 1          C:/R/Library/exiftoolr/images/binary_tag.jpg          binary_tag.jpg     30x25
+#> 2 C:/R/Library/exiftoolr/images/binary_tag.jpg_original binary_tag.jpg_original     30x25
+#> 3               C:/R/Library/exiftoolr/images/Canon.jpg               Canon.jpg       8x8
+#> 4      C:/R/Library/exiftoolr/images/Canon.jpg_original      Canon.jpg_original       8x8
 ```
 
 You can also roll-your-own `exiftool` call by using
@@ -199,11 +216,22 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 #>   "ImageSize": "30x25"
 #> },
 #> {
+#>   "SourceFile": "C:/R/Library/exiftoolr/images/binary_tag.jpg_original",
+#>   "FileName": "binary_tag.jpg_original",
+#>   "ImageSize": "30x25"
+#> },
+#> {
 #>   "SourceFile": "C:/R/Library/exiftoolr/images/Canon.jpg",
 #>   "FileName": "Canon.jpg",
+#>   "ImageSize": "8x8"
+#> },
+#> {
+#>   "SourceFile": "C:/R/Library/exiftoolr/images/Canon.jpg_original",
+#>   "FileName": "Canon.jpg_original",
 #>   "ImageSize": "8x8"
 #> }]
 ```
 
-[exiftool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
-[Strawberry]: http://www.strawberryperl.com/
+[ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
+[Strawberry-Perl]: http://www.strawberryperl.com/
+[ActiveState-Perl]: https://www.activestate.com/activeperl/downloads
