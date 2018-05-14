@@ -2,13 +2,10 @@
 % Please edit documentation in R/utils.R
 \name{configure_exiftoolr}
 \alias{configure_exiftoolr}
-\alias{configure_perl}
-\title{Configure Perl, ExifTool}
+\title{Configure package to point to ExifTool and Perl}
 \usage{
 configure_exiftoolr(command = NULL, perl_path = NULL,
   allow_win_exe = TRUE, quiet = FALSE)
-
-configure_perl(perl_path = NULL, quiet = FALSE)
 }
 \arguments{
 \item{command}{Character string giving the exiftool command.}
@@ -25,5 +22,5 @@ used?}
 The exiftool command, invisibly
 }
 \description{
-Configure Perl, ExifTool
+Configure package to point to ExifTool and Perl
 }
