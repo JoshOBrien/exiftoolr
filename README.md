@@ -13,23 +13,28 @@ installation. Alternatively, the utility function `install_exiftool()`
 and install the most up-to-date version of ExifTool into the
 **exiftoolr** package directory.
 
-A simple call to `exif_read()` then reads metadata from one or more
-image or other files, while the function `exif_call()` supports more
-general calls to underlying ExifTool utility.
+A simple call to `exif_read()` will then read metadata from one or
+more image or other files into a `data.frame` with one row per file
+and one column per metadata field. The function `exif_call()` supports
+more general calls to the underlying ExifTool utility (some examples
+of which are displayed [here][ExifTool-examples]).
 
 
 ## What is ExifTool?
 
 Phil Harvey's [ExifTool][ExifTool-home] is an excellent and
 comprehensive open source utility for reading, writing and editing
-meta information in a wide variety of files. ExifTool supports many
-different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
-GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well
-as the maker notes of many digital cameras by Canon, Casio, FLIR,
-FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta,
-Motorola, Nikon, Nintendo, Olympus/Epson, Panasonic/Leica,
-Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon
-and Sony.
+meta information in a wide variety of files. As noted on the project
+homepage: 
+
+> ExifTool supports many different metadata formats including EXIF, GPS,
+> IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
+> and ID3, as well as the maker notes of many digital cameras by Canon,
+> Casio, FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
+> Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
+> Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
+> Sanyo, Sigma/Foveon and Sony.
+
 
 
 ## ExifTool and Perl
@@ -46,7 +51,7 @@ Windows users without Perl do not, though, need to install Perl to
 accesss ExifTool's functionality. They instead have the option of
 installing stand-alone ExifTool compiled executable distributed on the
 ExifTool home page. Like the Perl library, the Windows executable can
-be downloaded using `exiftool()`
+be downloaded using `exiftoolr::install_exiftool()`
 
 
 ## Installation and setup
@@ -71,9 +76,8 @@ exiftoolr::install_exiftool()
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
 and ExifTool, and in most cases will need no hints to find them. For
 situations in which you need more control over which Perl or Exiftool
-is used, use the `configure_exiftool()` function or, alternatively,
-set the environment variables `"ET_PERL_PATH"` and/or
-`"ET_EXIFTOOL_PATH"`.
+is used, use the `configure_exiftool` and/or `configure_perl`
+executables or, alternatively, set the `
 
 
 ## Usage
@@ -88,6 +92,7 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
+#> Using ExifTool version 10.96
 dim(exifinfo)
 #> [1]   2 267
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
@@ -101,11 +106,11 @@ names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
 #> [29] "SensitivityType"         "ExifVersion"             "DateTimeOriginal"        "CreateDate"             
 #> [33] "ComponentsConfiguration" "CompressedBitsPerPixel"  "ExposureCompensation"    "MaxApertureValue"       
 #> [37] "MeteringMode"            "LightSource"             "Flash"                   "FocalLength"            
-#> [41] "ImageQuality"            "FirmwareVersion"         "WhiteBalance"            "FocusMode"              
-#> [45] "AFAreaMode"              "ImageStabilization"      "MacroMode"               "ShootingMode"           
-#> [49] "Audio"                   "DataDump"                "WhiteBalanceBias"        "FlashBias"              
-#> [53] "InternalSerialNumber"    "PanasonicExifVersion"    "ColorEffect"             "TimeSincePowerOn"       
-#> [57] "BurstMode"               "SequenceNumber"          "ContrastMode"            "NoiseReduction"
+#> [41] "Warning"                 "ImageQuality"            "FirmwareVersion"         "WhiteBalance"           
+#> [45] "FocusMode"               "AFAreaMode"              "ImageStabilization"      "MacroMode"              
+#> [49] "ShootingMode"            "Audio"                   "DataDump"                "WhiteBalanceBias"       
+#> [53] "FlashBias"               "InternalSerialNumber"    "PanasonicExifVersion"    "ColorEffect"            
+#> [57] "TimeSincePowerOn"        "BurstMode"               "SequenceNumber"          "ContrastMode"
 ```
 
 You'll notice there are a lot of columns! You can choose the exact
@@ -147,5 +152,6 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
+[ExifTool-examples]: http://owl.phy.queensu.ca/~phil/exiftool/examples.html
 [Strawberry-Perl]: http://www.strawberryperl.com/
 [ActiveState-Perl]: https://www.activestate.com/activeperl/downloads
