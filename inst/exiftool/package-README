@@ -1,0 +1,3 @@
+This is the directory into which `install_exiftool()` will, by default, 
+install the external ExifTool library or binary executable used by the
+package.
