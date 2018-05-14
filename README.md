@@ -22,10 +22,9 @@ of which are displayed [here][ExifTool-examples]).
 
 ## What is ExifTool?
 
-Phil Harvey's [ExifTool][ExifTool-home] is an excellent and
-comprehensive open source utility for reading, writing and editing
-meta information in a wide variety of files. As noted on the project
-homepage: 
+Phil Harvey's ExifTool is an excellent and comprehensive open source
+utility for reading, writing and editing meta information in a wide
+variety of files. As noted on the [project homepage][ExifTool-home]:
 
 > ExifTool supports many different metadata formats including EXIF, GPS,
 > IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
@@ -82,9 +81,8 @@ executables or, alternatively, set the `
 
 ## Usage
 
-It makes the most sense to use the `exif_read()` function with
-`list.files()`, but it will also process directories (when using
-`recursive = TRUE`).
+`exif_read()` will quickly read metadata from one or more image files,
+returning the results in a plain `data.frame`: 
 
 
 ```r
@@ -92,7 +90,6 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 10.96
 dim(exifinfo)
 #> [1]   2 267
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
@@ -113,8 +110,8 @@ names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
 #> [57] "TimeSincePowerOn"        "BurstMode"               "SequenceNumber"          "ContrastMode"
 ```
 
-You'll notice there are a lot of columns! You can choose the exact
-tags you want to extract using the `tags` argument:
+As you can see, there are a lot of columns! To extract only those
+tags that are actually needed, use the `tags` argument:
 
 
 ```r
@@ -124,9 +121,23 @@ exif_read(image_files, tags = c("filename", "imagesize"))
 #> 2      C:/R/Library/exiftoolr/images/Canon.jpg      Canon.jpg       8x8
 ```
 
-You can also roll your own call to ExifTool with the function
-`exif_call()`. For the previous example, it would look something like
-this:
+The `tags` argument also accepts simple regular expressions. For
+instance, to extract all fields with names containing the substring
+`"GPS"`, you could use the following call:
+
+
+```r
+exif_read(image_files[1], tags = "*GPS*")[,-1]
+#>   GPSVersionID GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed GPSDateStamp
+#> 1      2 3 0 0              N               E              0     15:00:59           K 14.04868   2017:09:22
+#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude       GPSPosition
+#> 1    263.5279 2017:09:22 15:00:59Z    48.70413     6.250123 48.70413 6.250123
+```
+
+
+To access more general ExifTool functionality, you can use the
+function `exif_call()` to roll your own call to ExifTool. For the
+previous example, it would look something like this:
 
 
 ```r
@@ -134,19 +145,6 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
           fnames = image_files)
 ```
 
-
-```
-#> [{
-#>   "SourceFile": "C:/R/Library/exiftoolr/images/binary_tag.jpg",
-#>   "FileName": "binary_tag.jpg",
-#>   "ImageSize": "30x25"
-#> },
-#> {
-#>   "SourceFile": "C:/R/Library/exiftoolr/images/Canon.jpg",
-#>   "FileName": "Canon.jpg",
-#>   "ImageSize": "8x8"
-#> }]
-```
 
 
 
