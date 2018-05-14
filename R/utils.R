@@ -13,26 +13,33 @@
 ##'     operating systems.
 ##' @param quiet Logical.
 ##' @export
-##' @importFrom curl curl_download
+##' @importFrom curl curl_download has_internet
 ##' @importFrom utils untar unzip
 install_exiftool <- function(install_location = NULL,
                              win_exe = NULL,
                              quiet = FALSE) {
+    base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
+
     ## Installing Windows executable?
     if(is.null(win_exe)) {
         win_exe <- is_windows()
     }
 
+    if(!has_internet()) {
+        stop("No internet connection detected, so cannot download ExifTool ",
+             "from:\n  ", base_url)
+    }
+
     ## Construct URL of file to be downloaded, uncompressed, &
     ## installed
     ver <- current_exiftool_version()
-    base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
     install_url <-
         if(win_exe) {
             file.path(base_url, paste0("exiftool-", ver, ".zip"))
         } else {
             file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
         }
+
 
 
     if(!quiet) {
