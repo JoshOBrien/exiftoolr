@@ -8,6 +8,7 @@ is_exiftoolr_configured <- function() {
     .globals$exiftoolr_configured
 }
 
+
 set_exiftool_command <- function(com) {
     .globals$exiftool_command <- com
     .globals$exiftoolr_configured <- TRUE
