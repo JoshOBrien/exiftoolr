@@ -27,6 +27,8 @@ configure_exiftoolr <- function(command = NULL,
         ## ## to configure_exiftoolr()
         ## command <- get_exiftool_command()
         ##
+        ## (a) Try path stored in environment variable
+        command <- env_exiftoool_path()
         ## (b) On Windows, check for a locally installed standalone
         ## executable
         if(allow_win_exe & is_windows()) {
@@ -34,7 +36,7 @@ configure_exiftoolr <- function(command = NULL,
                 system.file("exiftool/win_exe/exiftool(-k).exe",
                             package = "exiftoolr")
             if(nchar(internal_win_exe))
-                command <- internal_win_exe
+                command <- c(command, internal_win_exe)
         }
         ## (c) Maybe "exiftool" is on search path?
         command <- c(command, "exiftool")
@@ -154,11 +156,14 @@ install_exiftool <- function(install_location = NULL,
 }
 
 
-find_perl_paths <- function(perl_path = NULL) {
-    paths <- character(0)
-    if(!is.na(Sys.getenv("EXIFTOOLR_PERL_PATH", unset = NA))) {
-        paths <- c(paths, Sys.getenv("EXIFTOOLR_PERL_PATH"))
-    }
+env_perl_path <- function() {
+    path <- Sys.getenv("ET_PERL_PATH")
+    if(is.na(path)) character(0) else path
+}
+
+env_exiftoool_path <- function() {
+    path <- Sys.getenv("ET_EXIFTOOL_PATH")
+    if(is.na(path)) character(0) else path
 }
 
 
@@ -168,6 +173,7 @@ configure_perl <- function(perl_path = NULL, quiet = FALSE) {
     if(is.null(perl_path)) {
         ## use default list of possible locations
         perl_path <- c(get_perl_path(),
+                       env_perl_path(),
                        "perl",
                        "C:\\Perl64\\bin\\perl",
                        "C:\\Perl\\bin\\perl",
@@ -241,3 +247,9 @@ current_exiftool_version <- function() {
     url <- "http://owl.phy.queensu.ca/~phil/exiftool/ver.txt"
     readLines(url, warn=FALSE)
 }
+
+
+is_windows <- function() {
+    .Platform$OS.type == "windows"
+}
+
