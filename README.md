@@ -7,10 +7,10 @@
 The **exiftoolr** package provides a thin wrapper around a local
 installation of [ExifTool][ExifTool-home], giving users easy access to
 ExifTool functionality from within R. The package can be configured to
-use an already existing ExifTool installation. Alternatively, the
-utility function `install_exiftool()`, run just once following package
-installation, can be used to download and install the most up-to-date
-version of ExifTool into the **exiftoolr** package directory.
+use an already existing ExifTool installation. Alternatively, running
+the function `install_exiftool()` just once following package
+installation will download and install the most up-to-date version of
+ExifTool into the **exiftoolr** package directory.
 
 A simple call to `exif_read()` will then read metadata from one or
 more image or other files into a `data.frame` with one column per
