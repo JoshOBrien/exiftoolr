@@ -5,19 +5,18 @@
 # ExifTool functionality from R
 
 The **exiftoolr** package provides a thin wrapper around a local
-installation of ExifTool, giving users easy access to
-[ExifTool][ExifTool-home] functionality from within R. The package can
-be configured () to use an already existing ExifTool
-installation. Alternatively, the utility function `install_exiftool()`
-(run just once following package installation) can be used to download
-and install the most up-to-date version of ExifTool into the
-**exiftoolr** package directory.
+installation of [ExifTool][ExifTool-home], giving users easy access to
+ExifTool functionality from within R. The package can be configured to
+use an already existing ExifTool installation. Alternatively, the
+utility function `install_exiftool()`, run just once following package
+installation, can be used to download and install the most up-to-date
+version of ExifTool into the **exiftoolr** package directory.
 
 A simple call to `exif_read()` will then read metadata from one or
-more image or other files into a `data.frame` with one row per file
-and one column per metadata field. The function `exif_call()` supports
-more general calls to the underlying ExifTool utility (some examples
-of which are displayed [here][ExifTool-examples]).
+more image or other files into a `data.frame` with one column per
+metadata field and one row per file. The function `exif_call()`
+supports more general calls to the underlying ExifTool utility (some
+examples of which are displayed [here][ExifTool-examples]).
 
 
 ## What is ExifTool?
@@ -38,19 +37,18 @@ variety of files. As noted on the [project homepage][ExifTool-home]:
 
 ## ExifTool and Perl
 
-ExifTool is written and primarily distributed as a Perl library which
-can be used on any computer with a working Perl installation. Those
-include most Linux and Mac machines, which typically have Perl
-installed by default. Machines running Windows often do **not** have
-Perl installed (though it may be easily installed using installers
-distributed by [Strawberry Perl][Strawberry-Perl] or [Active State
-Perl][ActiveState-Perl]).
+ExifTool is written and distributed as a Perl library. It can thus be
+used "out of the box" on any computer that (like most Linux and Mac
+machines) has a working Perl installation. Windows machines often do
+**not** have Perl installed (though easy-to-use installers are
+available from, e.g., [Strawberry Perl][Strawberry-Perl] and [Active
+State Perl][ActiveState-Perl]).
 
-Windows users without Perl do not, though, need to install Perl to
-accesss ExifTool's functionality. They instead have the option of
-installing stand-alone ExifTool compiled executable distributed on the
-ExifTool home page. Like the Perl library, the Windows executable can
-be downloaded using `exiftoolr::install_exiftool()`
+Windows users do not, however, need to install Perl to accesss
+ExifTool's functionality. They may instead install the standalone
+ExifTool executable distributed on the ExifTool home page. Like the
+Perl library, the Windows executable can be downloaded and installed
+using the function `install_exiftool()`.
 
 
 ## Installation and setup
@@ -74,9 +72,10 @@ exiftoolr::install_exiftool()
 
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
 and ExifTool, and in most cases will need no hints to find them. For
-situations in which you need more control over which Perl or Exiftool
-is used, use the `configure_exiftool` and/or `configure_perl`
-executables or, alternatively, set the `
+situations in which want more control over which Perl or ExifTool is
+used, set their paths with either an explicit call to
+`configure_exiftool()` or by setting the environment variables
+`"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
 ## Usage
