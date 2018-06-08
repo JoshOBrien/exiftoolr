@@ -2,16 +2,16 @@ Package: exiftoolr
 Type: Package
 Title: EXIF Image Data in R
 Version: 0.0.1
-Date: 2018-05-03
+Date: 2018-06-08
 Authors@R: c(person("Joshua", "O'Brien", role = c("aut", "cre"),
                     email = "joshmobrien@gmail.com"),
              person("Phil", "Harvey", role = "aut"))
 Maintainer: Joshua O'Brien <joshmobrien@gmail.com>
 Description: Reads EXIF data using ExifTool
     <http://www.sno.phy.queensu.ca/~phil/exiftool/> and returns
-    results as a data frame.  ExifTool supports many different
-    metadata formats including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF,
-    ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the
+    results as a data frame. ExifTool supports many different metadata
+    formats including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
+    Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the
     maker notes of many digital cameras by Canon, Casio, DJI, FLIR,
     FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
     Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,

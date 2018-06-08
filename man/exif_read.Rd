@@ -8,7 +8,7 @@ exif_read(path, tags = NULL, recursive = FALSE, args = NULL,
   quiet = TRUE)
 }
 \arguments{
-\item{path}{A vector of filenames}
+\item{path}{A vector of filenames.}
 
 \item{tags}{A vector of tags to output. It is a good idea to
 specify this when reading large numbers of files, as it
@@ -16,16 +16,18 @@ decreases the output overhead significantly. Spaces will be
 stripped in the output data frame. This parameter is not
 case-sensitive.}
 
-\item{recursive}{TRUE to pass the "-r" option to ExifTool}
+\item{recursive}{TRUE to pass the "-r" option to ExifTool.}
 
-\item{args}{Additional arguments}
+\item{args}{Additional arguments.}
 
-\item{quiet}{Use FALSE to display diagnostic information}
+\item{quiet}{Use FALSE to display diagnostic information. Default
+value is \code{TRUE}}
 }
 \value{
-A data frame with columns SourceFile and one per tag read
-    in each file. The number of rows may differ, particularly if
-    recursive is set to TRUE, but in general will be one per file.
+A data frame with one row per file processed. The first
+    column, named \code{"SourceFile"} gives the name(s) of the
+    processed files. Subsequent columns contain info from the tags
+    read from those files.
 }
 \description{
 Reads EXIF data into a \code{data.frame} by calling Phil Harvey's
@@ -34,7 +36,7 @@ ExifTool command-line application.
 \details{
 From the
 \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-website}: ExifTool is a platform-independent Perl library plus a
+website}: "ExifTool is a platform-independent Perl library plus a
 command-line application for reading, writing and editing meta
 information in a wide variety of files. ExifTool supports many
 different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
@@ -43,12 +45,15 @@ well as the maker notes of many digital cameras by Canon, Casio,
 FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
 Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
-Sanyo, Sigma/Foveon and Sony. For more information, see the
+Sanyo, Sigma/Foveon and Sony."
+
+(For more information, see the
 \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-website}.
+website}.)
 
 Note that binary tags such as thumbnails are loaded as
-base64-encoded strings that start with "base64:".
+\href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
+strings} that start with \code{"base64:"}.
 }
 \examples{
 \dontrun{

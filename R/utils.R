@@ -1,17 +1,19 @@
 
 ##' Install ExifTool on the local machine
 ##'
-##' @param install_location Path to directory into which exiftool
+##' @param install_location Path to the directory into which ExifTool
 ##'     should be installed. If \code{NULL} (the default),
-##'     installation will be into the \pkg{exiftoolr} package's
+##'     installation will be into the (initially empty)
+##'     \code{exiftool} folder in the \pkg{exiftoolr} package's
 ##'     directory tree.
 ##' @param win_exe Logical. On Windows machines, should we install a
 ##'     standalone Windows executable or the exiftool Perl library?
-##'     (The latter depends on an external installation of Perl.)  If
-##'     \code{NULL} (the default) the function installs Windows
-##'     executable on Windows machines and Perl library on other
-##'     operating systems.
-##' @param quiet Logical.
+##'     (The latter relies, for its execution, on an existing
+##'     installation of Perl being present on the user's machine.)  If
+##'     set to \code{NULL}, the default, the function installs the
+##'     Windows executable on Windows machines and the Perl library on
+##'     other operating systems.
+##' @param quiet Logical.  Should function should be chatty?
 ##' @export
 ##' @importFrom curl curl_download has_internet
 ##' @importFrom utils untar unzip

@@ -3,7 +3,7 @@
 \name{exif_call}
 \alias{exif_call}
 \alias{exif_version}
-\title{Call exiftool from R}
+\title{Call ExifTool from R}
 \usage{
 exif_call(args = NULL, fnames = NULL, intern = FALSE, ...)
 
@@ -13,12 +13,12 @@ exif_version()
 \item{args}{List of non-shell quoted arguments (e.g. \code{-n
 -csv})}
 
-\item{fnames}{Character vector giving one or more file paths}
+\item{fnames}{A character vector giving one or more file paths.}
 
 \item{intern}{\code{TRUE} if output should be returned as a
-character vector.}
+character vector. Default value is \code{FALSE}.}
 
-\item{...}{Additional arguments to be passed to \code{system()}}
+\item{...}{Additional arguments to be passed to \code{system()}.}
 }
 \value{
 The exit code if \code{intern=FALSE}, or the standard

@@ -6,7 +6,7 @@
 ##'
 ##' From the
 ##' \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-##' website}: ExifTool is a platform-independent Perl library plus a
+##' website}: "ExifTool is a platform-independent Perl library plus a
 ##' command-line application for reading, writing and editing meta
 ##' information in a wide variety of files. ExifTool supports many
 ##' different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
@@ -15,26 +15,30 @@
 ##' FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
 ##' Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 ##' Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
-##' Sanyo, Sigma/Foveon and Sony. For more information, see the
+##' Sanyo, Sigma/Foveon and Sony."
+##'
+##' (For more information, see the
 ##' \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-##' website}.
+##' website}.)
 ##'
 ##' Note that binary tags such as thumbnails are loaded as
-##' base64-encoded strings that start with "base64:".
+##' \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
+##' strings} that start with \code{"base64:"}.
 ##'
-##' @param path A vector of filenames
+##' @param path A vector of filenames.
 ##' @param tags A vector of tags to output. It is a good idea to
 ##'     specify this when reading large numbers of files, as it
 ##'     decreases the output overhead significantly. Spaces will be
 ##'     stripped in the output data frame. This parameter is not
 ##'     case-sensitive.
-##' @param recursive TRUE to pass the "-r" option to ExifTool
-##' @param args Additional arguments
-##' @param quiet Use FALSE to display diagnostic information
-##'
-##' @return A data frame with columns SourceFile and one per tag read
-##'     in each file. The number of rows may differ, particularly if
-##'     recursive is set to TRUE, but in general will be one per file.
+##' @param recursive TRUE to pass the "-r" option to ExifTool.
+##' @param args Additional arguments.
+##' @param quiet Use FALSE to display diagnostic information. Default
+##'     value is \code{TRUE}
+##' @return A data frame with one row per file processed. The first
+##'     column, named \code{"SourceFile"} gives the name(s) of the
+##'     processed files. Subsequent columns contain info from the tags
+##'     read from those files.
 ##'
 ##' @importFrom jsonlite fromJSON
 ##' @export
@@ -110,16 +114,15 @@ exif_read <- function(path, tags = NULL,
 }
 
 
-##' Call exiftool from R
+##' Call ExifTool from R
 ##'
 ##' Uses \code{system()} to run a basic call to \code{exiftool}.
 ##' @param args List of non-shell quoted arguments (e.g. \code{-n
 ##'     -csv})
-##' @param fnames Character vector giving one or more file paths
+##' @param fnames A character vector giving one or more file paths.
 ##' @param intern \code{TRUE} if output should be returned as a
-##'     character vector.
-##' @param ... Additional arguments to be passed to \code{system()}
-##'
+##'     character vector. Default value is \code{FALSE}.
+##' @param ... Additional arguments to be passed to \code{system()}.
 ##' @return The exit code if \code{intern=FALSE}, or the standard
 ##'     output as a character vector if \code{intern=TRUE}.
 ##' @export
@@ -151,7 +154,10 @@ exif_call <- function(args = NULL,
 ##' @rdname exif_call
 ##' @export
 exif_version <- function() {
-    as.numeric(exif_call(args = "-ver", intern = TRUE))
+    if(!is_exiftoolr_configured()) {
+        configure_exiftoolr()
+    }
+    exif_call(args = "-ver", intern = TRUE)
 }
 
 ## private helper command to generate call to exiftool
