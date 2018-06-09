@@ -1,18 +1,18 @@
 
-##' Install ExifTool on the local machine
+##' Install current version of ExifTool
 ##'
 ##' @param install_location Path to the directory into which ExifTool
 ##'     should be installed. If \code{NULL} (the default),
 ##'     installation will be into the (initially empty)
 ##'     \code{exiftool} folder in the \pkg{exiftoolr} package's
 ##'     directory tree.
-##' @param win_exe Logical. On Windows machines, should we install a
-##'     standalone Windows executable or the exiftool Perl library?
-##'     (The latter relies, for its execution, on an existing
-##'     installation of Perl being present on the user's machine.)  If
-##'     set to \code{NULL}, the default, the function installs the
-##'     Windows executable on Windows machines and the Perl library on
-##'     other operating systems.
+##' @param win_exe Logical, only used on Windows machines. Should we
+##'     install a standalone ExifTool Windows executable or the
+##'     ExifTool Perl library?  (The latter relies, for its execution,
+##'     on an existing installation of Perl being present on the
+##'     user's machine.)  If set to \code{NULL} (the default) the
+##'     function installs the Windows executable on Windows machines
+##'     and the Perl library on other operating systems.
 ##' @param quiet Logical.  Should function should be chatty?
 ##' @export
 ##' @importFrom curl curl_download has_internet
@@ -28,21 +28,19 @@ install_exiftool <- function(install_location = NULL,
     }
 
     if(!has_internet()) {
-        stop("No internet connection detected, so cannot download ExifTool ",
-             "from:\n  ", base_url)
+        stop("No internet connection detected, so cannot download ",
+             "ExifTool from:\n  ", base_url)
     }
 
     ## Construct URL of file to be downloaded, uncompressed, &
     ## installed
     ver <- current_exiftool_version()
     install_url <-
-        if(win_exe) {
+        if(win_exe & is_windows()) {
             file.path(base_url, paste0("exiftool-", ver, ".zip"))
         } else {
             file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
         }
-
-
 
     if(!quiet) {
         message("Attempting to install ExifTool from ", install_url)
@@ -89,34 +87,6 @@ install_exiftool <- function(install_location = NULL,
 }
 
 
-is_windows <- function() {
-    .Platform$OS.type == "windows"
-}
-
-find_writable <- function(install_location) {
-    for(il in install_location) {
-        testfile <- file.path(il, ".dummyfile")
-        file.create(testfile, showWarnings = FALSE)
-        if(file.exists(testfile)) {
-            unlink(testfile)
-            return(il)
-        }
-    }
-
-    stop("Could not find a writable directory in which to install ExifTool. Tried ",
-         paste(install_location, collapse = ", "))
-}
-
-
-
-
-
-
-
-
-
-
-
 ##' Configure package to point to ExifTool and Perl
 ##'
 ##' @param command Character string giving the exiftool command.
@@ -146,7 +116,7 @@ configure_exiftoolr <- function(command = NULL,
         ## command <- get_exiftool_command()
         ##
         ## (a) Try path stored in environment variable
-        command <- env_exiftoool_path()
+        command <- env_exiftool_path()
         ## (b) On Windows, check for a locally installed standalone
         ## executable
         if(allow_win_exe & is_windows()) {
@@ -190,10 +160,11 @@ configure_exiftoolr <- function(command = NULL,
         }
     }
 
-    message("No functioning version of Exiftool has been found. To download\n",
-            "and install a local version into the exiftoolr package, try\n",
-            "doing install_exiftool().")
+    message("No functioning version of Exiftool has been found. To\n",
+            "download and install a local version into the exiftoolr\n",
+            "package, try doing install_exiftool().")
 }
+
 
 configure_perl <- function(perl_path = NULL, quiet = FALSE) {
     if(is.null(perl_path)) {
@@ -218,17 +189,6 @@ configure_perl <- function(perl_path = NULL, quiet = FALSE) {
     ##         paste(perl_path, collapse = ", "),
     ##         '. Specify perl location using set_perl_path("my/path/to/perl")')
     return(NULL)
-}
-
-
-env_perl_path <- function() {
-    path <- Sys.getenv("ET_PERL_PATH")
-    if(is.na(path)) character(0) else path
-}
-
-env_exiftoool_path <- function() {
-    path <- Sys.getenv("ET_EXIFTOOL_PATH")
-    if(is.na(path)) character(0) else path
 }
 
 
@@ -262,10 +222,48 @@ test_exiftool <- function(command, quiet = TRUE) {
 }
 
 
+env_perl_path <- function() {
+    path <- Sys.getenv("ET_PERL_PATH")
+    if(is.na(path)) character(0) else path
+}
+
+env_exiftool_path <- function() {
+    path <- Sys.getenv("ET_EXIFTOOL_PATH")
+    if(is.na(path)) character(0) else path
+}
+
+
+is_windows <- function() {
+    .Platform$OS.type == "windows"
+}
+
+find_writable <- function(install_location) {
+    for(il in install_location) {
+        testfile <- file.path(il, ".dummyfile")
+        file.create(testfile, showWarnings = FALSE)
+        if(file.exists(testfile)) {
+            unlink(testfile)
+            return(il)
+        }
+    }
+    stop("Could not find a writable directory in which to install ExifTool.",
+         " Tried ", paste(install_location, collapse = ", "))
+}
+
+
+
 current_exiftool_version <- function() {
     ## Holds current version of ExifTool, as announced by P. Harvey at:
     ## http://u88.n24.queensu.ca/exiftool/forum/index.php?topic=3754.0
     url <- "http://owl.phy.queensu.ca/~phil/exiftool/ver.txt"
     readLines(url, warn=FALSE)
 }
+
+
+
+
+
+
+
+
 

@@ -16,18 +16,23 @@ decreases the output overhead significantly. Spaces will be
 stripped in the output data frame. This parameter is not
 case-sensitive.}
 
-\item{recursive}{TRUE to pass the "-r" option to ExifTool.}
+\item{recursive}{\code{TRUE} to pass the \code{"-r"} option to
+ExifTool.}
 
 \item{args}{Additional arguments.}
 
-\item{quiet}{Use FALSE to display diagnostic information. Default
-value is \code{TRUE}}
+\item{quiet}{Use \code{FALSE} to display diagnostic
+information. Default value is \code{TRUE}}
 }
 \value{
 A data frame with one row per file processed. The first
     column, named \code{"SourceFile"} gives the name(s) of the
     processed files. Subsequent columns contain info from the tags
     read from those files.
+
+    Note that binary tags such as thumbnails are loaded as
+    \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
+    strings} that start with \code{"base64:"}.
 }
 \description{
 Reads EXIF data into a \code{data.frame} by calling Phil Harvey's
@@ -50,10 +55,6 @@ Sanyo, Sigma/Foveon and Sony."
 (For more information, see the
 \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
 website}.)
-
-Note that binary tags such as thumbnails are loaded as
-\href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
-strings} that start with \code{"base64:"}.
 }
 \examples{
 \dontrun{
@@ -62,4 +63,7 @@ files <- dir(system.file(package = "exiftoolr", "images"),
 exifinfo <- exif_read(files)
 exif_read(files, tags = c("filename", "imagesize"))
 }
+}
+\references{
+\url{http://www.sno.phy.queensu.ca/~phil/exiftool/}
 }

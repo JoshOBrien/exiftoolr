@@ -17,13 +17,9 @@
 ##' Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 ##' Sanyo, Sigma/Foveon and Sony."
 ##'
-##' (For more information, see the
+##' For more information, see the
 ##' \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-##' website}.)
-##'
-##' Note that binary tags such as thumbnails are loaded as
-##' \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
-##' strings} that start with \code{"base64:"}.
+##' website}.
 ##'
 ##' @param path A vector of filenames.
 ##' @param tags A vector of tags to output. It is a good idea to
@@ -31,15 +27,20 @@
 ##'     decreases the output overhead significantly. Spaces will be
 ##'     stripped in the output data frame. This parameter is not
 ##'     case-sensitive.
-##' @param recursive TRUE to pass the "-r" option to ExifTool.
+##' @param recursive \code{TRUE} to pass the \code{"-r"} option to
+##'     ExifTool.
 ##' @param args Additional arguments.
-##' @param quiet Use FALSE to display diagnostic information. Default
-##'     value is \code{TRUE}
+##' @param quiet Use \code{FALSE} to display diagnostic
+##'     information. Default value is \code{TRUE}
 ##' @return A data frame with one row per file processed. The first
 ##'     column, named \code{"SourceFile"} gives the name(s) of the
 ##'     processed files. Subsequent columns contain info from the tags
 ##'     read from those files.
 ##'
+##'     Note that binary tags such as thumbnails are loaded as
+##'     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
+##'     strings} that start with \code{"base64:"}.
+##' @references \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}
 ##' @importFrom jsonlite fromJSON
 ##' @export
 ##'
