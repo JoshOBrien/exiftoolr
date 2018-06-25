@@ -55,7 +55,6 @@ exif_read <- function(path, tags = NULL,
                       recursive = FALSE,
                       args = NULL,
                       quiet = TRUE) {
-
     ## Ensure that exiftoolr is properly configured
     if(!is_exiftoolr_configured()) {
         configure_exiftoolr(quiet = quiet)
@@ -108,7 +107,7 @@ exif_read <- function(path, tags = NULL,
 
     ## Construct and execute a call to Exiftool
     return_value <-
-        exif_call(args = args, fnames = path, intern = TRUE)
+        exif_call(args = args, path = path, intern = TRUE)
 
     ## Postprocess the results
     fromJSON(paste0(return_value, collapse = ""))
@@ -118,9 +117,10 @@ exif_read <- function(path, tags = NULL,
 ##' Call ExifTool from R
 ##'
 ##' Uses \code{system()} to run a basic call to \code{exiftool}.
-##' @param args List of non-shell quoted arguments (e.g. \code{-n
-##'     -csv})
-##' @param fnames A character vector giving one or more file paths.
+##' @param args Character vector of arguments, each written in same
+##'     form as you would if writing them on the command line
+##'     (e.g. \code{"-n"} or \code{"-csv"})
+##' @param path A character vector giving one or more file paths.
 ##' @param intern \code{TRUE} if output should be returned as a
 ##'     character vector. Default value is \code{FALSE}.
 ##' @param ... Additional arguments to be passed to \code{system()}.
@@ -130,13 +130,47 @@ exif_read <- function(path, tags = NULL,
 ##'
 ##' @examples
 ##' \dontrun{
-##' exif_call()
 ##' exif_version()
+##'
+##' files <- dir(system.file(package = "exiftoolr", "images"),
+##'                   pattern = "*.jpg", full.names = TRUE)
+##' ## Reads the same tags as running:
+##' ## exif_read(files, tags = c("filename", "imagesize"))
+##' exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
+##'           path = files)
+##'
+##' temp <- tempfile()
+##' file.copy(files[1], temp)
+##'
+##' ## Make a temporary copy of a jpeg file
+##' temp <- tempfile()
+##' file.copy(system.file(package = "exiftoolr", "images", "binary_tag.jpg"),
+##'           temp)
+##'
+##' ## Set "Artist" field
+##' exif_read(temp, tags="artist")
+##' exif_call(path = temp, args = "-Artist=me")
+##' exif_read(temp, tags="artist")
+##'
+##' ## Remove all but a few essential fields
+##' length(exif_read(temp))
+##' exif_call(path = temp, args = "-all=")
+##' length(exif_read(temp))
+##' exif_read(temp)
+##'
+##' unlink(temp)
 ##' }
 exif_call <- function(args = NULL,
-                      fnames = NULL,
+                      path = NULL,
                       intern = FALSE,
+                      quiet = FALSE,
                       ...) {
+    ## Ensure that exiftoolr is properly configured
+    if(!is_exiftoolr_configured()) {
+        configure_exiftoolr(quiet = quiet)
+        message("Using ExifTool version ", exif_version(), "\n")
+    }
+
     ## Exiftool command
     exiftoolpath <- get_exiftool_command()
     if(is.null(exiftoolpath)) {
@@ -144,7 +178,7 @@ exif_call <- function(args = NULL,
     }
 
     ## Put all 'command-line' arguments in a file
-    argfile <- construct_argfile(args = args, fnames = fnames)
+    argfile <- construct_argfile(args = args, path = path)
     on.exit(unlink(argfile))
 
     ## Construct and then execute the command-line call
@@ -154,16 +188,13 @@ exif_call <- function(args = NULL,
 
 ##' @rdname exif_call
 ##' @export
-exif_version <- function() {
-    if(!is_exiftoolr_configured()) {
-        configure_exiftoolr()
-    }
-    exif_call(args = "-ver", intern = TRUE)
+exif_version <- function(quiet = TRUE) {
+    exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 }
 
 ## private helper command to generate call to exiftool
-construct_argfile <- function(args, fnames) {
-    all_args <- c(args, fnames)
+construct_argfile <- function(args, path) {
+    all_args <- c(args, path)
     tmpfile <- tempfile("args.cmd")
     writeLines(all_args, tmpfile, sep="\n")
     tmpfile

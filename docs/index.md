@@ -22,17 +22,17 @@ exif_read(path = c("my_file_1.jpg", "my_file_2.jpg"))
 
 ## Basic installation
 
-To install the **exiftoolr** package, run the following:
+To download and install **exiftoolr**, run the following:
 
 
 {% highlight r %}
-install.packages("devtools")
+if(!require(devtools)) {install.packages("devtools")}
 devtools::install_github("JoshOBrien/exiftoolr")
 {% endhighlight %}
 
 Before using the package, you will need to have a working local copy
 of ExifTool installed on your computer.  Because **exiftoolr** does
-not ship with an installation of ExifTool you will likely want to run
+not ship with an included copy of ExifTool you will likely want to run
 the following (just once following package installation) to download
 and install the latest version of ExifTool into your local
 **exiftoolr** package directory:
@@ -43,20 +43,26 @@ library(exiftoolr)
 install_exiftool()
 {% endhighlight %}
 
+Finally, to check that ExifTool has been properly installed, run:
+
+
+{% highlight r %}
+exif_version()
+{% endhighlight %}
+	   
 
 ### More installation details
 
-
-[ExifTool][exiftool-home] is written and distributed as Perl library
-that relies on a working local installation of Perl. Perl is present
-on most *NIX and Mac machines, but is not by default installed on
-Windows machines. Fortunately, for Windows users, Phil Harvey
+[ExifTool][exiftool-home] is written and primarily distributed as Perl
+library that relies on a working local installation of Perl. Perl is
+present on most *NIX and Mac machines, but is not by default installed
+on Windows machines. Fortunately, for Windows users, Phil Harvey
 distributes a stand-alone ExifTool executable that does not require
 Perl. (Windows users who do have Perl installed (from, for example,
 [Strawberry Perl][Strawberry]) may of course alternatively use the
 Perl library).
 
-Depending on your operating system, running `install_exiftool()` will
+Depending on one's operating system, running `install_exiftool()` will
 install either the ExifTool Perl library (on *NIX and Mac machines) or
 a stand-alone executable that works without a local Perl installation
 (on Windows machines). For more details, see the `install_exiftool`

@@ -52,9 +52,9 @@ Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 Sanyo, Sigma/Foveon and Sony."
 
-(For more information, see the
+For more information, see the
 \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-website}.)
+website}.
 }
 \examples{
 \dontrun{

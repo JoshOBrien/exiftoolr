@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{install_exiftool}
 \alias{install_exiftool}
-\title{Install ExifTool on the local machine}
+\title{Install current version of ExifTool}
 \usage{
 install_exiftool(install_location = NULL, win_exe = NULL, quiet = FALSE)
 }
@@ -13,16 +13,16 @@ installation will be into the (initially empty)
 \code{exiftool} folder in the \pkg{exiftoolr} package's
 directory tree.}
 
-\item{win_exe}{Logical. On Windows machines, should we install a
-standalone Windows executable or the exiftool Perl library?
-(The latter relies, for its execution, on an existing
-installation of Perl being present on the user's machine.)  If
-set to \code{NULL}, the default, the function installs the
-Windows executable on Windows machines and the Perl library on
-other operating systems.}
+\item{win_exe}{Logical, only used on Windows machines. Should we
+install a standalone ExifTool Windows executable or the
+ExifTool Perl library?  (The latter relies, for its execution,
+on an existing installation of Perl being present on the
+user's machine.)  If set to \code{NULL} (the default) the
+function installs the Windows executable on Windows machines
+and the Perl library on other operating systems.}
 
 \item{quiet}{Logical.  Should function should be chatty?}
 }
 \description{
-Install ExifTool on the local machine
+Install current version of ExifTool
 }
