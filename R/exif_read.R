@@ -124,13 +124,17 @@ exif_read <- function(path, tags = NULL,
 ##' @param intern \code{TRUE} if output should be returned as a
 ##'     character vector. Default value is \code{FALSE}.
 ##' @param ... Additional arguments to be passed to \code{system()}.
-##' @return The exit code if \code{intern=FALSE}, or the standard
-##'     output as a character vector if \code{intern=TRUE}.
+##' @details For examples of the command-line calls to ExifTool (all
+##'     of which can be reproduced by calls to \code{exif_call}), see
+##'     \url{https://owl.phy.queensu.ca/~phil/exiftool/examples.html}.
+##' @return The exit code if \code{intern = FALSE}, or the standard
+##'     output as a character vector if \code{intern = TRUE}.
 ##' @export
 ##'
 ##' @examples
 ##' \dontrun{
-##' exif_version()
+##' ## Equivalent to running exif_version()
+##' exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 ##'
 ##' files <- dir(system.file(package = "exiftoolr", "images"),
 ##'                   pattern = "*.jpg", full.names = TRUE)
@@ -139,18 +143,15 @@ exif_read <- function(path, tags = NULL,
 ##' exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 ##'           path = files)
 ##'
-##' temp <- tempfile()
-##' file.copy(files[1], temp)
-##'
 ##' ## Make a temporary copy of a jpeg file
 ##' temp <- tempfile()
 ##' file.copy(system.file(package = "exiftoolr", "images", "binary_tag.jpg"),
 ##'           temp)
 ##'
 ##' ## Set "Artist" field
-##' exif_read(temp, tags="artist")
+##' exif_read(temp, tags = "artist")
 ##' exif_call(path = temp, args = "-Artist=me")
-##' exif_read(temp, tags="artist")
+##' exif_read(temp, tags = "artist")
 ##'
 ##' ## Remove all but a few essential fields
 ##' length(exif_read(temp))
@@ -188,6 +189,9 @@ exif_call <- function(args = NULL,
 
 ##' @rdname exif_call
 ##' @export
+##' \dontrun{
+##' exif_version()
+##' }
 exif_version <- function(quiet = TRUE) {
     exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 }
