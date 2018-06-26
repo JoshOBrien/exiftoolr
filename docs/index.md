@@ -1,5 +1,7 @@
 
 
+## Overview
+
 Phil Harvey's [ExifTool][exiftool-home] is the most comprensive tool
 available for reading, writing and editing the metadata contained in a
 wide variety of files. ExifTool supports many different metadata
@@ -51,7 +53,7 @@ exif_version()
 {% endhighlight %}
 	   
 
-### More installation details
+## More installation details
 
 [ExifTool][exiftool-home] is written and primarily distributed as Perl
 library that relies on a working local installation of Perl. Perl is
@@ -67,8 +69,6 @@ install either the ExifTool Perl library (on *NIX and Mac machines) or
 a stand-alone executable that works without a local Perl installation
 (on Windows machines). For more details, see the `install_exiftool`
 help page.
-
-
 
 
 
