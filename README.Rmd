@@ -63,6 +63,7 @@ using the function `install_exiftool()`.
 To install **exiftoolr** from GitHub, do:
 
 ```{r, gh-installation, eval = FALSE}
+if(!require(devtools)) {install.packages("devtools")}
 devtools::install_github("JoshOBrien/exiftoolr")
 ```
 

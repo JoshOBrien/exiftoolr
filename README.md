@@ -57,6 +57,7 @@ To install **exiftoolr** from GitHub, do:
 
 
 ```r
+if(!require(devtools)) {install.packages("devtools")}
 devtools::install_github("JoshOBrien/exiftoolr")
 ```
 
@@ -89,6 +90,7 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
+#> Using ExifTool version 11.03
 dim(exifinfo)
 #> [1]   2 267
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
@@ -142,6 +144,7 @@ previous example, it would look something like this:
 ```r
 exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
           fnames = image_files)
+#> Error in system(command, intern = intern, ...): unused argument (fnames = image_files)
 ```
 
 
