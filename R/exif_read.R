@@ -123,6 +123,8 @@ exif_read <- function(path, tags = NULL,
 ##' @param path A character vector giving one or more file paths.
 ##' @param intern \code{TRUE} if output should be returned as a
 ##'     character vector. Default value is \code{FALSE}.
+##' @param quiet Use \code{FALSE} to display diagnostic
+##'     information. Default value is \code{FALSE}.
 ##' @param ... Additional arguments to be passed to \code{system()}.
 ##' @details For examples of the command-line calls to ExifTool (all
 ##'     of which can be reproduced by calls to \code{exif_call}), see
@@ -189,6 +191,8 @@ exif_call <- function(args = NULL,
 
 ##' @rdname exif_call
 ##' @export
+##'
+##' @examples
 ##' \dontrun{
 ##' exif_version()
 ##' }

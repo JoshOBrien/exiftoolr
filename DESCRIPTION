@@ -6,7 +6,7 @@ Date: 2018-06-08
 Authors@R: c(person("Joshua", "O'Brien", role = c("aut", "cre"),
                     email = "joshmobrien@gmail.com"),
              person("Phil", "Harvey", role = "aut"))
-Maintainer: Joshua O'Brien <joshmobrien@gmail.com>
+Main	     tainer: Joshua O'Brien <joshmobrien@gmail.com>
 Description: Reads EXIF data using ExifTool
     <http://www.sno.phy.queensu.ca/~phil/exiftool/> and returns
     results as a data frame. ExifTool supports many different metadata
@@ -17,6 +17,7 @@ Description: Reads EXIF data using ExifTool
     Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
     Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
     Sanyo, Sigma/Foveon and Sony.
+Encoding: UTF-8
 License: GPL-2
 LazyData: TRUE
 Imports:
@@ -25,4 +26,4 @@ Imports:
 SystemRequirements: Perl
 URL: https://github.com/JoshOBrien/exiftoolr
 BugReports: https://github.com/JoshOBrien/exiftoolr/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000

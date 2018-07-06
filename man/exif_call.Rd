@@ -5,9 +5,10 @@
 \alias{exif_version}
 \title{Call ExifTool from R}
 \usage{
-exif_call(args = NULL, path = NULL, intern = FALSE, ...)
+exif_call(args = NULL, path = NULL, intern = FALSE, quiet = FALSE,
+  ...)
 
-exif_version()
+exif_version(quiet = TRUE)
 }
 \arguments{
 \item{args}{Character vector of arguments, each written in same
@@ -22,15 +23,21 @@ character vector. Default value is \code{FALSE}.}
 \item{...}{Additional arguments to be passed to \code{system()}.}
 }
 \value{
-The exit code if \code{intern=FALSE}, or the standard
-    output as a character vector if \code{intern=TRUE}.
+The exit code if \code{intern = FALSE}, or the standard
+    output as a character vector if \code{intern = TRUE}.
 }
 \description{
 Uses \code{system()} to run a basic call to \code{exiftool}.
 }
+\details{
+For examples of the command-line calls to ExifTool (all
+    of which can be reproduced by calls to \code{exif_call}), see
+    \url{https://owl.phy.queensu.ca/~phil/exiftool/examples.html}.
+}
 \examples{
 \dontrun{
-exif_version()
+## Equivalent to running exif_version()
+exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 
 files <- dir(system.file(package = "exiftoolr", "images"),
                   pattern = "*.jpg", full.names = TRUE)
@@ -39,18 +46,15 @@ files <- dir(system.file(package = "exiftoolr", "images"),
 exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
           path = files)
 
-temp <- tempfile()
-file.copy(files[1], temp)
-
 ## Make a temporary copy of a jpeg file
 temp <- tempfile()
 file.copy(system.file(package = "exiftoolr", "images", "binary_tag.jpg"),
           temp)
 
 ## Set "Artist" field
-exif_read(temp, tags="artist")
+exif_read(temp, tags = "artist")
 exif_call(path = temp, args = "-Artist=me")
-exif_read(temp, tags="artist")
+exif_read(temp, tags = "artist")
 
 ## Remove all but a few essential fields
 length(exif_read(temp))
@@ -59,5 +63,8 @@ length(exif_read(temp))
 exif_read(temp)
 
 unlink(temp)
+}
+\dontrun{
+exif_version()
 }
 }
