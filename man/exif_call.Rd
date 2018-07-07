@@ -20,6 +20,9 @@ form as you would if writing them on the command line
 \item{intern}{\code{TRUE} if output should be returned as a
 character vector. Default value is \code{FALSE}.}
 
+\item{quiet}{Use \code{FALSE} to display diagnostic
+information. Default value is \code{FALSE}.}
+
 \item{...}{Additional arguments to be passed to \code{system()}.}
 }
 \value{
