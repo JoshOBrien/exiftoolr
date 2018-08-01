@@ -4,11 +4,10 @@
 
 Phil Harvey's [ExifTool][exiftool-home] is the most comprensive tool
 available for reading, writing and editing the metadata contained in a
-wide variety of files. 
-
-**exiftoolr** is an R package that provides a thin wrapper around
-ExifTool and allows one to read image file metadata from one or more
-files into a `data.frame` with a simple command:
+wide variety of files.  **exiftoolr** is an R package that provides a
+thin wrapper around ExifTool and allows one to read image file
+metadata from one or more files into a `data.frame` with a simple
+command:
 
 
 {% highlight r %}
