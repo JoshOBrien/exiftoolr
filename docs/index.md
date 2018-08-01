@@ -4,17 +4,11 @@
 
 Phil Harvey's [ExifTool][exiftool-home] is the most comprensive tool
 available for reading, writing and editing the metadata contained in a
-wide variety of files. ExifTool supports many different metadata
-formats including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile,
-Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker notes of
-many digital cameras by Canon, Casio, FLIR, FujiFilm, GE, HP,
-JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
-Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
-Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
+wide variety of files. 
 
-The R package **exiftoolr** provides a thin wrapper around ExifTool
-and allows one to read image file metadata from one or more files into
-a `data.frame` with a simple command:
+**exiftoolr** is an R package that provides a thin wrapper around
+ExifTool and allows one to read image file metadata from one or more
+files into a `data.frame` with a simple command:
 
 
 {% highlight r %}
@@ -32,12 +26,11 @@ if(!require(devtools)) {install.packages("devtools")}
 devtools::install_github("JoshOBrien/exiftoolr")
 {% endhighlight %}
 
-Before using the package, you will need to have a working local copy
-of ExifTool installed on your computer.  Because **exiftoolr** does
-not ship with an included copy of ExifTool you will likely want to run
-the following (just once following package installation) to download
-and install the latest version of ExifTool into your local
-**exiftoolr** package directory:
+Before using the package, you will need a working copy of ExifTool
+installed on your computer. **exiftoolr** does not ship with a copy of
+ExifTool. Instead, it provides a convenience function that allows you
+to effortlessly download and install the latest version of ExifTool
+into your local **exiftoolr** package directory:
 
 
 {% highlight r %}
@@ -45,7 +38,7 @@ library(exiftoolr)
 install_exiftool()
 {% endhighlight %}
 
-Finally, to check that ExifTool has been properly installed, run:
+To check that ExifTool has been properly installed, run:
 
 
 {% highlight r %}
