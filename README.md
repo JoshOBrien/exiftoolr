@@ -37,6 +37,28 @@ variety of files. As noted on the [project homepage][ExifTool-home]:
 > Sanyo, Sigma/Foveon and Sony.
 
 
+## Why another R package for reading image file metadata?
+
+Several existing R packages read EXIF metadata from image files. The
+[**exif**](https://CRAN.R-project.org/package=exif),
+[**exiv**](https://github.com/hrbrmstr/exiv), and
+[**magick**](https://CRAN.R-project.org/package=magick) packages, all
+include functions (`exif::read_exif()`, `exiv::read_exif()`, and
+`magick::image_attributes()`, respectively) that extract files' EXIF
+data. In many files, though, EXIF tags comprise only a subset of the
+metadata, and even  well as EXIF maker notes and (despite its name) ExifTool
+reads data stored in many additional metadata formats.
+
+The [**exifr**](https://CRAN.R-project.org/package=exifr) package,
+like **exiftoolr**, provides a thin wrapper around ExifTool. The two
+packages thus provide similar functionality, and differ mainly in
+their support for easy installation and configuration on all operating
+systems. **exiftoolr** was designed to make it as easy for Windows
+users -- even those without Python installations -- to access ExifTool
+functionality as it is for *NIX and Mac users. Relative to **exifr**,
+**exiftoolr** also makes it easier to update ExifTool to its most
+current version.
+
 ## ExifTool and Perl
 
 ExifTool is written and distributed as a Perl library. It can thus be
