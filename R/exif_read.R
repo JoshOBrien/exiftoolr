@@ -32,10 +32,10 @@
 ##' @param args Additional arguments.
 ##' @param quiet Use \code{FALSE} to display diagnostic
 ##'     information. Default value is \code{TRUE}
-##' @return A data frame with one row per file processed. The first
-##'     column, named \code{"SourceFile"} gives the name(s) of the
-##'     processed files. Subsequent columns contain info from the tags
-##'     read from those files.
+##' @return A data frame of class \code{"exiftoolr"} with one row per
+##'     file processed. The first column, named \code{"SourceFile"}
+##'     gives the name(s) of the processed files. Subsequent columns
+##'     contain info from the tags read from those files.
 ##'
 ##'     Note that binary tags such as thumbnails are loaded as
 ##'     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
@@ -110,7 +110,10 @@ exif_read <- function(path, tags = NULL,
         exif_call(args = args, path = path, intern = TRUE)
 
     ## Postprocess the results
-    fromJSON(paste0(return_value, collapse = ""))
+    return_value <- fromJSON(paste0(return_value, collapse = ""))
+    class(return_value) <- c("exiftoolr", class(return_value))
+
+    return_value
 }
 
 

@@ -25,10 +25,10 @@ ExifTool.}
 information. Default value is \code{TRUE}}
 }
 \value{
-A data frame with one row per file processed. The first
-    column, named \code{"SourceFile"} gives the name(s) of the
-    processed files. Subsequent columns contain info from the tags
-    read from those files.
+A data frame of class \code{"exiftoolr"} with one row per
+    file processed. The first column, named \code{"SourceFile"}
+    gives the name(s) of the processed files. Subsequent columns
+    contain info from the tags read from those files.
 
     Note that binary tags such as thumbnails are loaded as
     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded

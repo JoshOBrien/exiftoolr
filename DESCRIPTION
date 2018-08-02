@@ -1,12 +1,12 @@
 Package: exiftoolr
 Type: Package
 Title: EXIF Image Data in R
-Version: 0.0.1
-Date: 2018-06-08
+Version: 0.0.2
+Date: 2018-08-02
 Authors@R: c(person("Joshua", "O'Brien", role = c("aut", "cre"),
                     email = "joshmobrien@gmail.com"),
              person("Phil", "Harvey", role = "aut"))
-Main	     tainer: Joshua O'Brien <joshmobrien@gmail.com>
+Maintainer: Joshua O'Brien <joshmobrien@gmail.com>
 Description: Reads EXIF data using ExifTool
     <http://www.sno.phy.queensu.ca/~phil/exiftool/> and returns
     results as a data frame. ExifTool supports many different metadata
@@ -26,4 +26,4 @@ Imports:
 SystemRequirements: Perl
 URL: https://github.com/JoshOBrien/exiftoolr
 BugReports: https://github.com/JoshOBrien/exiftoolr/issues
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0

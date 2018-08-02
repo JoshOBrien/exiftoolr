@@ -260,6 +260,21 @@ current_exiftool_version <- function() {
 }
 
 
+##' @export
+print.exiftoolr <- function(x) {
+    trunc64 <- function(X) {
+        paste0(substr(X, 1, 60), "[..", nchar(X) - 60, " more..]")
+    }
+    ii <- which(grepl("base64:.{53,}", x[1,]))
+    if(length(ii)) {
+        for(i in ii) {
+            x[, i] <- trunc64(x[, i])
+        }
+    }
+    NextMethod(x)
+}
+
+
 
 
 
