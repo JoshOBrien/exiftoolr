@@ -49,15 +49,17 @@ data. In many files, though, EXIF tags comprise only a subset of the
 metadata, and even  well as EXIF maker notes and (despite its name) ExifTool
 reads data stored in many additional metadata formats.
 
-The [**exifr**](https://CRAN.R-project.org/package=exifr) package,
-like **exiftoolr**, provides a thin wrapper around ExifTool. The two
-packages thus provide similar functionality, and differ mainly in
-their support for easy installation and configuration on all operating
-systems. **exiftoolr** was designed to make it as easy for Windows
-users -- even those without Python installations -- to access ExifTool
-functionality as it is for *NIX and Mac users. Relative to **exifr**,
-**exiftoolr** also makes it easier to update ExifTool to its most
-current version.
+The [**exifr**](https://CRAN.R-project.org/package=exifr) package (of
+which **exiftoolr** is essentially a much modified fork) is much more
+similar in the functionality that it provides. Both packages construct
+a thin wrapper around ExifTool, and so inherit its excellent support
+for a large variety of file types and metadata formats. The packages
+differ mainly in their support for easy installation and configuration
+on all operating systems. **exiftoolr**, in particular, was designed
+to make it as easy for Windows users -- even those without Python
+installations -- to access ExifTool functionality as it is for *NIX
+and Mac users. Relative to **exifr**, **exiftoolr** also makes it
+easier to update ExifTool to its most current version.
 
 ## ExifTool and Perl
 
