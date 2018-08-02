@@ -1,7 +1,5 @@
 
 
-## Overview
-
 Phil Harvey's [ExifTool][exiftool-home] is the most comprensive tool
 available for reading, writing and editing the metadata contained in a
 wide variety of files.  **exiftoolr** is an R package that provides a
@@ -15,7 +13,7 @@ library(exiftoolr)
 exif_read(path = c("my_file_1.jpg", "my_file_2.jpg"))
 {% endhighlight %}
 
-## Basic installation
+## Installation
 
 To download and install **exiftoolr**, run the following:
 
@@ -25,11 +23,11 @@ if(!require(devtools)) {install.packages("devtools")}
 devtools::install_github("JoshOBrien/exiftoolr")
 {% endhighlight %}
 
-Before using the package, you will need a working copy of ExifTool
-installed on your computer. **exiftoolr** does not ship with a copy of
-ExifTool. Instead, it provides a convenience function that allows you
-to effortlessly download and install the latest version of ExifTool
-into your local **exiftoolr** package directory:
+To use the package, you will need a working copy of ExifTool on your
+computer. **exiftoolr** does not ship with a copy of
+ExifTool. Instead, it provides a convenience function with which you
+can easily download and install the latest version of ExifTool into
+your local **exiftoolr** package directory:
 
 
 {% highlight r %}
