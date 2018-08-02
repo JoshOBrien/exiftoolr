@@ -4,19 +4,22 @@
 
 # ExifTool functionality from R
 
-The **exiftoolr** package provides a thin wrapper around a local
-installation of [ExifTool][ExifTool-home], giving users easy access to
-ExifTool functionality from within R. The package can be configured to
-use an already existing ExifTool installation. Alternatively, running
-the function `install_exiftool()` just once following package
-installation will download and install the most up-to-date version of
-ExifTool into the **exiftoolr** package directory.
+The **exiftoolr** R package provides a thin wrapper around a local
+installation of [ExifTool][ExifTool-home], giving its users easy
+access to ExifTool functionality from within R. **exiftoolr** can be
+configured to use any ExifTool installation, but many or most users
+will prefer to simply run `install_exiftool()` once following package
+installation to download and install the most up-to-date version of
+ExifTool into the **exiftoolr** package
+directory. (`install_exiftool()` can also be run subsequently, at any
+time, to update the installed ExifTool to the most recent version.)
 
-A simple call to `exif_read()` will then read metadata from one or
-more image or other files into a `data.frame` with one column per
-metadata field and one row per file. The function `exif_call()`
-supports more general calls to the underlying ExifTool utility (some
-examples of which are displayed [here][ExifTool-examples]).
+Once the package is installed and set up, a simple call to
+`exif_read()` can be used to read metadata from one or more files into
+a `data.frame` with one column per metadata field and one row per
+file. Another function, `exif_call()`, supports more general calls to
+the underlying ExifTool utility, examples of which are displayed
+[here][ExifTool-examples].
 
 
 ## What is ExifTool?
@@ -32,7 +35,6 @@ variety of files. As noted on the [project homepage][ExifTool-home]:
 > Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 > Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 > Sanyo, Sigma/Foveon and Sony.
-
 
 
 ## ExifTool and Perl
@@ -90,9 +92,9 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 11.03
+#> Using ExifTool version 11.08
 dim(exifinfo)
-#> [1]   2 267
+#> [1]   2 268
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
 #>  [1] "SourceFile"              "ExifToolVersion"         "FileName"                "Directory"              
 #>  [5] "FileSize"                "FileModifyDate"          "FileAccessDate"          "FileCreateDate"         
