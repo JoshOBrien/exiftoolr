@@ -21,6 +21,46 @@ file. Another function, `exif_call()`, supports more general calls to
 the underlying ExifTool utility, examples of which are displayed
 [here][ExifTool-examples].
 
+## Example
+
+First up, an example of what ExifTool (via **exiftoolr**) can do. Say
+that you have an image onto which you would like to add a bit of text
+indicating the time and place at which it was taken. Here is a photo
+taken in the LaSal mountains in southeastern Utah, USA.
+
+![](img/LaSals.jpg)
+
+Here is one way to do that, using **exiftoolr** to extract the
+relevant data, and the (excellent)
+[**magick**](https://CRAN.R-project.org/package=magick) package to
+annotate the image with it:
+
+
+```r
+library(exiftoolr)
+library(magick)
+
+## Read and extract image metadata
+dat <- exif_read("LaSals.jpg")
+DateTime  <- dat[["CreateDate"]]
+Longitude <- dat[["GPSLongitude"]]
+Latitude  <- dat[["GPSLatitude"]]
+
+## Prepare annotation text
+txt <- paste0(DateTime, "\n",
+              "Longitude: ", round(Longitude, 5), "\n",
+              "Latitude:  ", round(Latitude, 5))
+
+## Annotate image and write to file
+out <- image_annotate(image_read(infile), txt,
+                      gravity = "northwest", color = "red",
+                      boxcolor = adjustcolor("black", alpha=0.2),
+                      size = 15, location = "+10+10")
+image_write(out, "LaSals_annotated.jpg")
+```
+
+![](img/LaSals_annotated.jpg)
+
 
 ## What is ExifTool?
 
@@ -35,46 +75,6 @@ variety of files. As noted on the [project homepage][ExifTool-home]:
 > Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 > Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 > Sanyo, Sigma/Foveon and Sony.
-
-
-## Why another R package for reading image file metadata?
-
-Several existing R packages read EXIF metadata from image files. The
-[**exif**](https://CRAN.R-project.org/package=exif),
-[**exiv**](https://github.com/hrbrmstr/exiv), and
-[**magick**](https://CRAN.R-project.org/package=magick) packages, all
-include functions (`exif::read_exif()`, `exiv::read_exif()`, and
-`magick::image_attributes()`, respectively) that extract files' EXIF
-data. In many files, though, EXIF tags comprise only a subset of the
-metadata, and even  well as EXIF maker notes and (despite its name) ExifTool
-reads data stored in many additional metadata formats.
-
-The [**exifr**](https://CRAN.R-project.org/package=exifr) package (of
-which **exiftoolr** is essentially a much modified fork) is much more
-similar in the functionality that it provides. Both packages construct
-a thin wrapper around ExifTool, and so inherit its excellent support
-for a large variety of file types and metadata formats. The packages
-differ mainly in their support for easy installation and configuration
-on all operating systems. **exiftoolr**, in particular, was designed
-to make it as easy for Windows users -- even those without Python
-installations -- to access ExifTool functionality as it is for *NIX
-and Mac users. Relative to **exifr**, **exiftoolr** also makes it
-easier to update ExifTool to its most current version.
-
-## ExifTool and Perl
-
-ExifTool is written and distributed as a Perl library. It can thus be
-used "out of the box" on any computer that (like most Linux and Mac
-machines) has a working Perl installation. Windows machines often do
-**not** have Perl installed (though easy-to-use installers are
-available from, e.g., [Strawberry Perl][Strawberry-Perl] and [Active
-State Perl][ActiveState-Perl]).
-
-Windows users do not, however, need to install Perl to accesss
-ExifTool's functionality. They may instead install the standalone
-ExifTool executable distributed on the ExifTool home page. Like the
-Perl library, the Windows executable can be downloaded and installed
-using the function `install_exiftool()`.
 
 
 ## Installation and setup
@@ -116,7 +116,6 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 11.08
 dim(exifinfo)
 #> [1]  2 99
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
@@ -175,43 +174,47 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 #> Error in system(command, intern = intern, ...): unused argument (fnames = image_files)
 ```
 
-## Example
 
-Say that you have an image onto which you would like to add a bit of
-text indicating the time and place at which it was taken. Here is an
-example:
+## Why another R package for reading image file metadata?
 
-![](img/LaSals.jpg)
+Several existing R packages can read EXIF metadata from image
+files. The [**exif**](https://CRAN.R-project.org/package=exif),
+[**exiv**](https://github.com/hrbrmstr/exiv), and
+[**magick**](https://CRAN.R-project.org/package=magick) packages, all
+include functions (`exif::read_exif()`, `exiv::read_exif()`, and
+`magick::image_attributes()`, respectively) that extract files' EXIF
+data. In many files, though, EXIF tags comprise only a subset of the
+metadata, and even well as EXIF maker notes and (despite its name)
+ExifTool reads data stored in many additional metadata formats.
 
-Here is one way to do that, using **exiftoolr** to extract the
-relevant data, and the (excellent) **magick** package to annotate the
-image with it:
+The [**exifr**](https://CRAN.R-project.org/package=exifr) package (of
+which **exiftoolr** is essentially a much modified fork) is much more
+similar in the functionality that it provides. Both packages construct
+a thin wrapper around ExifTool, and so inherit its excellent support
+for a large variety of file types and metadata formats. The packages
+differ mainly in their support for easy installation and configuration
+on all operating systems. **exiftoolr**, in particular, was designed
+to make it as easy for Windows users -- even those without Python
+installations -- to access ExifTool functionality as it is for *NIX
+and Mac users. Relative to **exifr**, **exiftoolr** also makes it
+easier to update ExifTool to its most current version.
+
+## ExifTool and Perl
+
+ExifTool is written and distributed as a Perl library. It can thus be
+used "out of the box" on any computer that (like most Linux and Mac
+machines) has a working Perl installation. Windows machines often do
+**not** have Perl installed (though easy-to-use installers are
+available from, e.g., [Strawberry Perl][Strawberry-Perl] and [Active
+State Perl][ActiveState-Perl]).
+
+Windows users do not, however, need to install Perl to accesss
+ExifTool's functionality. They may instead install the standalone
+ExifTool executable distributed on the ExifTool home page. Like the
+Perl library, the Windows executable can be downloaded and installed
+using the function `install_exiftool()`.
 
 
-```r
-library(exiftoolr)
-library(magick)
-
-## Read and extract image metadata
-dat <- exif_read("LaSals.jpg")
-DateTime  <- dat[["CreateDate"]]
-Longitude <- dat[["GPSLongitude"]]
-Latitude  <- dat[["GPSLatitude"]]
-
-## Prepare annotation text
-txt <- paste0(DateTime, "\n",
-              "Longitude: ", round(Longitude, 5), "\n",
-              "Latitude:  ", round(Latitude, 5))
-
-## Annotate image and write to file
-out <- image_annotate(image_read(infile), txt,
-                      gravity = "northwest", color = "red",
-                      boxcolor = adjustcolor("black", alpha=0.2),
-                      size = 15, location = "+10+10")
-image_write(out, "LaSals_annotated.jpg")
-```
-
-![](img/LaSals_annotated.jpg)
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
