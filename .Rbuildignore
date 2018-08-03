@@ -1,4 +1,5 @@
 ^README\.Rmd$
+^README\.md$
 ^README\.html$
 ^exiftool/.*
 ^docs/.*
