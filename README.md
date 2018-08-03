@@ -116,6 +116,7 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
+#> Using ExifTool version 11.08
 dim(exifinfo)
 #> [1]  2 99
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
@@ -176,7 +177,39 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 
 ## Example
 
+Say that you have an image onto which you would like to add a bit of
+text indicating the time and place at which it was taken. Here is an
+example:
+
 ![](img/LaSals.jpg)
+
+Here is one way to do that, using **exiftoolr** to extract the
+relevant data, and the (excellent) **magick** package to annotate the
+image with it:
+
+
+```r
+library(exiftoolr)
+library(magick)
+
+## Read and extract image metadata
+dat <- exif_read("LaSals.jpg")
+DateTime  <- dat[["CreateDate"]]
+Longitude <- dat[["GPSLongitude"]]
+Latitude  <- dat[["GPSLatitude"]]
+
+## Prepare annotation text
+txt <- paste0(DateTime, "\n",
+              "Longitude: ", round(Longitude, 5), "\n",
+              "Latitude:  ", round(Latitude, 5))
+
+## Annotate image and write to file
+out <- image_annotate(image_read(infile), txt,
+                      gravity = "northwest", color = "red",
+                      boxcolor = adjustcolor("black", alpha=0.2),
+                      size = 15, location = "+10+10")
+image_write(out, "LaSals_annotated.jpg")
+```
 
 ![](img/LaSals_annotated.jpg)
 
