@@ -2,7 +2,7 @@
 % Please edit documentation in R/exif_read.R
 \name{exif_read}
 \alias{exif_read}
-\title{Read EXIF data from files}
+\title{Read EXIF and other metadata from files}
 \usage{
 exif_read(path, tags = NULL, recursive = FALSE, args = NULL,
   quiet = TRUE)
@@ -32,11 +32,14 @@ A data frame of class \code{"exiftoolr"} with one row per
 
     Note that binary tags such as thumbnails are loaded as
     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
-    strings} that start with \code{"base64:"}.
+    strings} that start with \code{"base64:"}. Although these are
+    truncated in printed versions of the returned
+    \code{data.frame}, they are left unaltered in the
+    \code{data.frame} itself.
 }
 \description{
-Reads EXIF data into a \code{data.frame} by calling Phil Harvey's
-ExifTool command-line application.
+Reads EXIF and other metadata into a \code{data.frame} by calling
+Phil Harvey's ExifTool command-line application.
 }
 \details{
 From the

@@ -261,7 +261,7 @@ current_exiftool_version <- function() {
 
 
 ##' @export
-print.exiftoolr <- function(x) {
+print.exiftoolr <- function(x, ...) {
     trunc64 <- function(X) {
         paste0(substr(X, 1, 60), "[..", nchar(X) - 60, " more..]")
     }
@@ -273,7 +273,7 @@ print.exiftoolr <- function(x) {
             x[, i] <- trunc64(x[, i])
         }
     }
-    NextMethod(x)
+    NextMethod(x, ...)
 }
 
 

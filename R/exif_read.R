@@ -1,8 +1,8 @@
 
-##' Read EXIF data from files
+##' Read EXIF and other metadata from files
 ##'
-##' Reads EXIF data into a \code{data.frame} by calling Phil Harvey's
-##' ExifTool command-line application.
+##' Reads EXIF and other metadata into a \code{data.frame} by calling
+##' Phil Harvey's ExifTool command-line application.
 ##'
 ##' From the
 ##' \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
@@ -39,7 +39,10 @@
 ##'
 ##'     Note that binary tags such as thumbnails are loaded as
 ##'     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
-##'     strings} that start with \code{"base64:"}.
+##'     strings} that start with \code{"base64:"}. Although these are
+##'     truncated in printed versions of the returned
+##'     \code{data.frame}, they are left unaltered in the
+##'     \code{data.frame} itself.
 ##' @references \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}
 ##' @importFrom jsonlite fromJSON
 ##' @export
@@ -138,22 +141,22 @@ exif_read <- function(path, tags = NULL,
 ##'
 ##' @examples
 ##' \dontrun{
-##' ## Equivalent to running exif_version()
-##' exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 ##'
-##' files <- dir(system.file(package = "exiftoolr", "images"),
-##'                   pattern = "*.jpg", full.names = TRUE)
-##' ## Reads the same tags as running:
-##' ## exif_read(files, tags = c("filename", "imagesize"))
-##' exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
-##'           path = files)
+##' ## Find local ExifTool version using exif_version() or exif_call()
+##' exif_version()
+##' exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 ##'
 ##' ## Make a temporary copy of a jpeg file
 ##' temp <- tempfile()
-##' file.copy(system.file(package = "exiftoolr", "images", "binary_tag.jpg"),
+##' file.copy(system.file(package = "exiftoolr", "images", "LaSals.jpg"),
 ##'           temp)
 ##'
-##' ## Set "Artist" field
+##' ## Both of the following extract the same tags:
+##' exif_read(files, tags = c("filename", "imagesize"))
+##' exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
+##'           path = temp)
+##'
+##' ## Set value of a new "Artist" field in photo's metadata
 ##' exif_read(temp, tags = "artist")
 ##' exif_call(path = temp, args = "-Artist=me")
 ##' exif_read(temp, tags = "artist")
@@ -194,11 +197,6 @@ exif_call <- function(args = NULL,
 
 ##' @rdname exif_call
 ##' @export
-##'
-##' @examples
-##' \dontrun{
-##' exif_version()
-##' }
 exif_version <- function(quiet = TRUE) {
     exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 }

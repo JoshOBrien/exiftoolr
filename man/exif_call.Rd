@@ -39,22 +39,22 @@ For examples of the command-line calls to ExifTool (all
 }
 \examples{
 \dontrun{
-## Equivalent to running exif_version()
-exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 
-files <- dir(system.file(package = "exiftoolr", "images"),
-                  pattern = "*.jpg", full.names = TRUE)
-## Reads the same tags as running:
-## exif_read(files, tags = c("filename", "imagesize"))
-exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
-          path = files)
+## Find local ExifTool version using exif_version() or exif_call()
+exif_version()
+exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 
 ## Make a temporary copy of a jpeg file
 temp <- tempfile()
-file.copy(system.file(package = "exiftoolr", "images", "binary_tag.jpg"),
+file.copy(system.file(package = "exiftoolr", "images", "LaSals.jpg"),
           temp)
 
-## Set "Artist" field
+## Both of the following extract the same tags:
+exif_read(files, tags = c("filename", "imagesize"))
+exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
+          path = temp)
+
+## Set value of a new "Artist" field in photo's metadata
 exif_read(temp, tags = "artist")
 exif_call(path = temp, args = "-Artist=me")
 exif_read(temp, tags = "artist")
@@ -66,8 +66,5 @@ length(exif_read(temp))
 exif_read(temp)
 
 unlink(temp)
-}
-\dontrun{
-exif_version()
 }
 }
