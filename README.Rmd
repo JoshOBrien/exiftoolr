@@ -149,8 +149,11 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
           fnames = image_files)
 ```
 
+## Example
 
+![](img/LaSals.jpg)
 
+![](img/LaSals_annotated.jpg)
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/

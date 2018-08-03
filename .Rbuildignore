@@ -2,3 +2,4 @@
 ^README\.html$
 ^exiftool/.*
 ^docs/.*
+^img$

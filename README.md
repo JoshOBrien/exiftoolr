@@ -118,23 +118,23 @@ image_files <- dir(system.file("images", package = "exiftoolr"),
 exifinfo <- exif_read(image_files)
 #> Using ExifTool version 11.08
 dim(exifinfo)
-#> [1]   2 268
+#> [1]  2 99
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
 #>  [1] "SourceFile"              "ExifToolVersion"         "FileName"                "Directory"              
 #>  [5] "FileSize"                "FileModifyDate"          "FileAccessDate"          "FileCreateDate"         
 #>  [9] "FilePermissions"         "FileType"                "FileTypeExtension"       "MIMEType"               
-#> [13] "JFIFVersion"             "ExifByteOrder"           "Make"                    "Model"                  
-#> [17] "Orientation"             "XResolution"             "YResolution"             "ResolutionUnit"         
-#> [21] "Software"                "ModifyDate"              "Artist"                  "YCbCrPositioning"       
-#> [25] "ExposureTime"            "FNumber"                 "ExposureProgram"         "ISO"                    
-#> [29] "SensitivityType"         "ExifVersion"             "DateTimeOriginal"        "CreateDate"             
-#> [33] "ComponentsConfiguration" "CompressedBitsPerPixel"  "ExposureCompensation"    "MaxApertureValue"       
-#> [37] "MeteringMode"            "LightSource"             "Flash"                   "FocalLength"            
-#> [41] "Warning"                 "ImageQuality"            "FirmwareVersion"         "WhiteBalance"           
-#> [45] "FocusMode"               "AFAreaMode"              "ImageStabilization"      "MacroMode"              
-#> [49] "ShootingMode"            "Audio"                   "DataDump"                "WhiteBalanceBias"       
-#> [53] "FlashBias"               "InternalSerialNumber"    "PanasonicExifVersion"    "ColorEffect"            
-#> [57] "TimeSincePowerOn"        "BurstMode"               "SequenceNumber"          "ContrastMode"
+#> [13] "ExifByteOrder"           "Make"                    "Model"                   "Orientation"            
+#> [17] "XResolution"             "YResolution"             "ResolutionUnit"          "Software"               
+#> [21] "ModifyDate"              "YCbCrPositioning"        "ExposureTime"            "FNumber"                
+#> [25] "ExposureProgram"         "ISO"                     "ExifVersion"             "DateTimeOriginal"       
+#> [29] "CreateDate"              "ComponentsConfiguration" "ShutterSpeedValue"       "ApertureValue"          
+#> [33] "BrightnessValue"         "ExposureCompensation"    "MeteringMode"            "Flash"                  
+#> [37] "FocalLength"             "SubjectArea"             "RunTimeFlags"            "RunTimeValue"           
+#> [41] "RunTimeEpoch"            "RunTimeScale"            "AccelerationVector"      "SubSecTimeOriginal"     
+#> [45] "SubSecTimeDigitized"     "FlashpixVersion"         "ColorSpace"              "ExifImageWidth"         
+#> [49] "ExifImageHeight"         "SensingMethod"           "SceneType"               "ExposureMode"           
+#> [53] "WhiteBalance"            "DigitalZoomRatio"        "FocalLengthIn35mmFormat" "SceneCaptureType"       
+#> [57] "LensInfo"                "LensMake"                "LensModel"               "GPSLatitudeRef"
 ```
 
 As you can see, there are a lot of columns! To extract only those
@@ -143,9 +143,9 @@ tags that are actually needed, use the `tags` argument:
 
 ```r
 exif_read(image_files, tags = c("filename", "imagesize"))
-#>                                     SourceFile       FileName ImageSize
-#> 1 C:/R/Library/exiftoolr/images/binary_tag.jpg binary_tag.jpg     30x25
-#> 2      C:/R/Library/exiftoolr/images/Canon.jpg      Canon.jpg       8x8
+#>                                 SourceFile   FileName ImageSize
+#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg LaSals.jpg   640x480
+#> 2 C:/R/Library/exiftoolr/images/Lizard.jpg Lizard.jpg 4032x3024
 ```
 
 The `tags` argument also accepts simple regular expressions. For
@@ -155,10 +155,12 @@ instance, to extract all fields with names containing the substring
 
 ```r
 exif_read(image_files[1], tags = "*GPS*")[,-1]
-#>   GPSVersionID GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed GPSDateStamp
-#> 1      2 3 0 0              N               E              0     15:00:59           K 14.04868   2017:09:22
-#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude       GPSPosition
-#> 1    263.5279 2017:09:22 15:00:59Z    48.70413     6.250123 48.70413 6.250123
+#>   GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed GPSImgDirectionRef
+#> 1              N               W              0     23:05:36           K        0                  T
+#>   GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError GPSAltitude
+#> 1        107.2073                 T       107.2073   2016:09:21                    5    2257.414
+#>            GPSDateTime GPSLatitude GPSLongitude                        GPSPosition
+#> 1 2016:09:21 23:05:36Z    39.64798    -111.3705 39.6479805555556 -111.370505555556
 ```
 
 
@@ -173,8 +175,11 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 #> Error in system(command, intern = intern, ...): unused argument (fnames = image_files)
 ```
 
+## Example
 
+![](img/LaSals.jpg)
 
+![](img/LaSals_annotated.jpg)
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
