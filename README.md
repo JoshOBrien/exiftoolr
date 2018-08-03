@@ -114,6 +114,7 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
+#> Using ExifTool version 11.08
 dim(exifinfo)
 #> [1]  2 99
 names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
@@ -140,24 +141,23 @@ instance, to extract all fields with names containing the substring
 
 
 ```r
-exif_read(image_files[1], tags = "*GPS*")[,-1]
-#>   GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed GPSImgDirectionRef
-#> 1              N               W              0     23:05:36           K        0                  T
-#>   GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError GPSAltitude
-#> 1        107.2073                 T       107.2073   2016:09:21                    5    2257.414
-#>            GPSDateTime GPSLatitude GPSLongitude                        GPSPosition
-#> 1 2016:09:21 23:05:36Z    39.64798    -111.3705 39.6479805555556 -111.370505555556
+exif_read(image_files[1], tags = "*GPS*")
+#>                                 SourceFile GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef
+#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg              N               W              0     23:05:36           K
+#>   GPSSpeed GPSImgDirectionRef GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError
+#> 1        0                  T        107.2073                 T       107.2073   2016:09:21                    5
+#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude                        GPSPosition
+#> 1    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705 39.6479805555556 -111.370505555556
 ```
 
 
 To access more general ExifTool functionality, you can use the
-function `exif_call()` to roll your own call to ExifTool. For the
+function `exif_call()` to roll your own ExifTool call. For the
 previous example, it would look something like this:
 
 
 ```r
-exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
-          path = image_files)
+exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])
 ```
 
 
