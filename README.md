@@ -116,7 +116,6 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 11.08
 dim(exifinfo)
 #> [1]  2 99
 names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
@@ -177,9 +176,9 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 
 ## Example
 
-![](img/LaSals.jpg)
+![](img/LaSals.jpg =200x)
 
-![](img/LaSals_annotated.jpg)
+![](img/LaSals_annotated.jpg =100x)
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
