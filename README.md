@@ -176,9 +176,9 @@ exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
 
 ## Example
 
-![](img/LaSals.jpg =200x)
+![](img/LaSals.jpg)
 
-![](img/LaSals_annotated.jpg =100x)
+![](img/LaSals_annotated.jpg)
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
