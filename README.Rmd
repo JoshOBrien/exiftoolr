@@ -11,15 +11,28 @@ options(width = 115)
 
 # ExifTool functionality from R
 
+[ExifTool][ExifTool-home] is an excellent and comprehensive open
+source utility for reading, writing and editing meta information in a
+wide variety of files. As noted on the [project
+homepage][ExifTool-home]:
+
+> ExifTool supports many different metadata formats including EXIF, GPS,
+> IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
+> and ID3, as well as the maker notes of many digital cameras by Canon,
+> Casio, FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
+> Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
+> Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
+> Sanyo, Sigma/Foveon and Sony.
+
 The **exiftoolr** R package provides a thin wrapper around a local
-installation of [ExifTool][ExifTool-home], giving its users easy
-access to ExifTool functionality from within R. **exiftoolr** can be
-configured to use any ExifTool installation, but many or most users
-will prefer to simply run `install_exiftool()` once following package
-installation to download and install the most up-to-date version of
-ExifTool into the **exiftoolr** package
-directory. (`install_exiftool()` can also be run subsequently, at any
-time, to update the installed ExifTool to the most recent version.)
+installation of ExifTool, giving its users easy access to ExifTool
+functionality from within R. **exiftoolr** can be configured to use
+any ExifTool installation, but many or most users will prefer to
+simply run `install_exiftool()` once following package installation to
+download and install the most up-to-date version of ExifTool into the
+**exiftoolr** package directory. (`install_exiftool()` can also be run
+subsequently, at any time, to update the installed ExifTool to the
+most recent version.)
 
 Once the package is installed and set up, a simple call to
 `exif_read()` can be used to read metadata from one or more files into
@@ -68,22 +81,7 @@ image_write(out, "LaSals_annotated.jpg")
 ![](img/LaSals_annotated.jpg)
 
 
-## What is ExifTool?
-
-Phil Harvey's ExifTool is an excellent and comprehensive open source
-utility for reading, writing and editing meta information in a wide
-variety of files. As noted on the [project homepage][ExifTool-home]:
-
-> ExifTool supports many different metadata formats including EXIF, GPS,
-> IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
-> and ID3, as well as the maker notes of many digital cameras by Canon,
-> Casio, FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
-> Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
-> Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
-> Sanyo, Sigma/Foveon and Sony.
-
-
-## Installation and setup
+# Installation and setup
 
 To install **exiftoolr** from GitHub, do:
 
@@ -109,7 +107,7 @@ used, set their paths with either an explicit call to
 `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
-## Usage
+# Usage
 
 `exif_read()` will quickly read metadata from one or more image files,
 returning the results in a plain `data.frame`: 
@@ -120,7 +118,7 @@ image_files <- dir(system.file("images", package = "exiftoolr"),
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
 dim(exifinfo)
-names(exifinfo)[1:60] ## List the first 60 metadata fields read by ExifTool
+names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
 ```
 
 As you can see, there are a lot of columns! To extract only those
@@ -145,11 +143,11 @@ previous example, it would look something like this:
 
 ```{r}
 exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
-          fnames = image_files)
+          path = image_files)
 ```
 
 
-## Why another R package for reading image file metadata?
+# Why another R package for reading image file metadata?
 
 Several existing R packages can read EXIF metadata from image
 files. The [**exif**](https://CRAN.R-project.org/package=exif),
@@ -165,33 +163,16 @@ The [**exifr**](https://CRAN.R-project.org/package=exifr) package (of
 which **exiftoolr** is essentially a much modified fork) is much more
 similar in the functionality that it provides. Both packages construct
 a thin wrapper around ExifTool, and so inherit its excellent support
-for a large variety of file types and metadata formats. The packages
-differ mainly in their support for easy installation and configuration
-on all operating systems. **exiftoolr**, in particular, was designed
-to make it as easy for Windows users -- even those without Python
-installations -- to access ExifTool functionality as it is for *NIX
-and Mac users. Relative to **exifr**, **exiftoolr** also makes it
-easier to update ExifTool to its most current version.
-
-## ExifTool and Perl
-
-ExifTool is written and distributed as a Perl library. It can thus be
-used "out of the box" on any computer that (like most Linux and Mac
-machines) has a working Perl installation. Windows machines often do
-**not** have Perl installed (though easy-to-use installers are
-available from, e.g., [Strawberry Perl][Strawberry-Perl] and [Active
-State Perl][ActiveState-Perl]).
-
-Windows users do not, however, need to install Perl to accesss
-ExifTool's functionality. They may instead install the standalone
-ExifTool executable distributed on the ExifTool home page. Like the
-Perl library, the Windows executable can be downloaded and installed
-using the function `install_exiftool()`.
-
+for a large variety of file types and many metadata formats beyond
+EXIF tags. The packages differ mainly in their support for easy
+installation and configuration on all operating
+systems. **exiftoolr**, in particular, was designed to make it as easy
+for Windows users -- even those without Python installations -- to
+access ExifTool functionality as it is for *NIX and Mac
+users. Relative to **exifr**, **exiftoolr** also makes it easier to
+update ExifTool to its most current version.
 
 
 
 [ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
 [ExifTool-examples]: http://owl.phy.queensu.ca/~phil/exiftool/examples.html
-[Strawberry-Perl]: http://www.strawberryperl.com/
-[ActiveState-Perl]: https://www.activestate.com/activeperl/downloads

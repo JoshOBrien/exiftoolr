@@ -17,13 +17,14 @@ Description: Reads EXIF data using ExifTool
     Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
     Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
     Sanyo, Sigma/Foveon and Sony.
-Encoding: UTF-8
 License: GPL-2
+URL: https://github.com/JoshOBrien/exiftoolr#readme
+BugReports: https://github.com/JoshOBrien/exiftoolr/issues
+SystemRequirements: Perl
 LazyData: TRUE
 Imports:
     curl,
     jsonlite
-SystemRequirements: Perl
-URL: https://github.com/JoshOBrien/exiftoolr
-BugReports: https://github.com/JoshOBrien/exiftoolr/issues
+Encoding: UTF-8
+Language: en-US
 RoxygenNote: 6.1.0
