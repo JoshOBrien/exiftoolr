@@ -160,9 +160,9 @@ configure_exiftoolr <- function(command = NULL,
         }
     }
 
-    message("No functioning version of Exiftool has been found. To\n",
-            "download and install a local version into the exiftoolr\n",
-            "package, try doing install_exiftool().")
+    stop("No functioning version of Exiftool has been found. To\n",
+         "download and install a local version into the exiftoolr\n",
+         "package, try doing install_exiftool().")
 }
 
 
