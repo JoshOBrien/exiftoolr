@@ -135,8 +135,8 @@ exif_read <- function(path, tags = NULL,
 ##' @details For examples of the command-line calls to ExifTool (all
 ##'     of which can be reproduced by calls to \code{exif_call}), see
 ##'     \url{https://owl.phy.queensu.ca/~phil/exiftool/examples.html}.
-##' @return The exit code if \code{intern = FALSE}, or the standard
-##'     output as a character vector if \code{intern = TRUE}.
+##' @return The exit code (if \code{intern = FALSE}) or the standard
+##'     output as a character vector (if \code{intern = TRUE}).
 ##' @export
 ##'
 ##' @examples

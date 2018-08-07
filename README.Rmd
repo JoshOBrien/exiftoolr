@@ -137,9 +137,11 @@ exif_read(image_files[1], tags = "*GPS*")
 ```
 
 
-To access more general ExifTool functionality, you can use the
-function `exif_call()` to roll your own ExifTool call. For the
-previous example, it would look something like this:
+To access more general ExifTool functionality (many examples of which
+are shown
+[here](http://owl.phy.queensu.ca/~phil/exiftool/examples.html)), you
+can use the function `exif_call()` to roll your own ExifTool call. For
+the previous example, it would look something like this:
 
 ```{r, eval=FALSE}
 exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])

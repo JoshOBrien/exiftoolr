@@ -1,5 +1,5 @@
 
-##' Install current version of ExifTool
+##' Download and install the current version of ExifTool
 ##'
 ##' @param install_location Path to the directory into which ExifTool
 ##'     should be installed. If \code{NULL} (the default),
@@ -7,10 +7,10 @@
 ##'     \code{exiftool} folder in the \pkg{exiftoolr} package's
 ##'     directory tree.
 ##' @param win_exe Logical, only used on Windows machines. Should we
-##'     install a standalone ExifTool Windows executable or the
+##'     install the standalone ExifTool Windows executable or the
 ##'     ExifTool Perl library?  (The latter relies, for its execution,
 ##'     on an existing installation of Perl being present on the
-##'     user's machine.)  If set to \code{NULL} (the default) the
+##'     user's machine.)  If set to \code{NULL} (the default), the
 ##'     function installs the Windows executable on Windows machines
 ##'     and the Perl library on other operating systems.
 ##' @param quiet Logical.  Should function should be chatty?
@@ -87,7 +87,7 @@ install_exiftool <- function(install_location = NULL,
 }
 
 
-##' Configure package to point to ExifTool and Perl
+##' Configure package to point to ExifTool and/or Perl
 ##'
 ##' @param command Character string giving the exiftool command.
 ##' @param perl_path Path to a Perl executable.
@@ -95,8 +95,8 @@ install_exiftool <- function(install_location = NULL,
 ##'     if a standalone exiftool executable is available, should it be
 ##'     used?
 ##' @param quiet Logical. Should function should be chatty?
-##'
-##' @return The exiftool command, invisibly
+##' @return A character string giving the exiftool command, returned
+##'     invisibly.
 ##' @export
 ##'
 configure_exiftoolr <- function(command = NULL,
