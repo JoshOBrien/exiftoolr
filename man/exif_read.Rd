@@ -33,9 +33,9 @@ A data frame of class \code{"exiftoolr"} with one row per
     Note that binary tags such as thumbnails are loaded as
     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
     strings} that start with \code{"base64:"}. Although these are
-    truncated in printed versions of the returned
-    \code{data.frame}, they are left unaltered in the
-    \code{data.frame} itself.
+    truncated in the printed representation of the
+    \code{data.frame} returned by the function, they are left
+    unaltered in the \code{data.frame} itself.
 }
 \description{
 Reads EXIF and other metadata into a \code{data.frame} by calling

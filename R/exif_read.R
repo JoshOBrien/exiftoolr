@@ -40,9 +40,9 @@
 ##'     Note that binary tags such as thumbnails are loaded as
 ##'     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
 ##'     strings} that start with \code{"base64:"}. Although these are
-##'     truncated in printed versions of the returned
-##'     \code{data.frame}, they are left unaltered in the
-##'     \code{data.frame} itself.
+##'     truncated in the printed representation of the
+##'     \code{data.frame} returned by the function, they are left
+##'     unaltered in the \code{data.frame} itself.
 ##' @references \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}
 ##' @importFrom jsonlite fromJSON
 ##' @export

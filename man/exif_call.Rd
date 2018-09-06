@@ -26,8 +26,8 @@ information. Default value is \code{FALSE}.}
 \item{...}{Additional arguments to be passed to \code{system()}.}
 }
 \value{
-The exit code if \code{intern = FALSE}, or the standard
-    output as a character vector if \code{intern = TRUE}.
+The exit code (if \code{intern = FALSE}) or the standard
+    output as a character vector (if \code{intern = TRUE}).
 }
 \description{
 Uses \code{system()} to run a basic call to \code{exiftool}.

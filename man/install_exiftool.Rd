@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{install_exiftool}
 \alias{install_exiftool}
-\title{Install current version of ExifTool}
+\title{Download and install the current version of ExifTool}
 \usage{
 install_exiftool(install_location = NULL, win_exe = NULL,
   quiet = FALSE)
@@ -15,15 +15,15 @@ installation will be into the (initially empty)
 directory tree.}
 
 \item{win_exe}{Logical, only used on Windows machines. Should we
-install a standalone ExifTool Windows executable or the
+install the standalone ExifTool Windows executable or the
 ExifTool Perl library?  (The latter relies, for its execution,
 on an existing installation of Perl being present on the
-user's machine.)  If set to \code{NULL} (the default) the
+user's machine.)  If set to \code{NULL} (the default), the
 function installs the Windows executable on Windows machines
 and the Perl library on other operating systems.}
 
 \item{quiet}{Logical.  Should function should be chatty?}
 }
 \description{
-Install current version of ExifTool
+Download and install the current version of ExifTool
 }

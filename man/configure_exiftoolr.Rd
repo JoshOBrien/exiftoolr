@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{configure_exiftoolr}
 \alias{configure_exiftoolr}
-\title{Configure package to point to ExifTool and Perl}
+\title{Configure package to point to ExifTool and/or Perl}
 \usage{
 configure_exiftoolr(command = NULL, perl_path = NULL,
   allow_win_exe = TRUE, quiet = FALSE)
@@ -19,8 +19,9 @@ used?}
 \item{quiet}{Logical. Should function should be chatty?}
 }
 \value{
-The exiftool command, invisibly
+A character string giving the exiftool command, returned
+    invisibly.
 }
 \description{
-Configure package to point to ExifTool and Perl
+Configure package to point to ExifTool and/or Perl
 }
