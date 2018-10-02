@@ -13,39 +13,61 @@
 ##'     user's machine.)  If set to \code{NULL} (the default), the
 ##'     function installs the Windows executable on Windows machines
 ##'     and the Perl library on other operating systems.
+##' @param local_exiftool If installing ExifTool from a local "*.zip"
+##'     or ".tar.gz", supply the path to that file as a character
+##'     string. With default value, `NULL`, the function downloads
+##'     ExifTool from \url{https://sno.phy.queensu.ca/~phil/exiftool}
+##'     and then installs it.
 ##' @param quiet Logical.  Should function should be chatty?
 ##' @export
 ##' @importFrom curl curl_download has_internet
 ##' @importFrom utils untar unzip
 install_exiftool <- function(install_location = NULL,
                              win_exe = NULL,
+                             local_exiftool = NULL,
                              quiet = FALSE) {
-    base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
+    ##------------------------------------------------##
+    ## If needed, download ExifTool *.zip or *.tar.gz ##
+    ##------------------------------------------------##
+    if(is.null(local_exiftool)) {
+        base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
 
-    ## Installing Windows executable?
-    if(is.null(win_exe)) {
-        win_exe <- is_windows()
-    }
-
-    if(!has_internet()) {
-        stop("No internet connection detected, so cannot download ",
-             "ExifTool from:\n  ", base_url)
-    }
-
-    ## Construct URL of file to be downloaded, uncompressed, &
-    ## installed
-    ver <- current_exiftool_version()
-    install_url <-
-        if(win_exe & is_windows()) {
-            file.path(base_url, paste0("exiftool-", ver, ".zip"))
-        } else {
-            file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
+        ## Installing Windows executable?
+        if(is.null(win_exe)) {
+            win_exe <- is_windows()
         }
 
-    if(!quiet) {
-        message("Attempting to install ExifTool from ", install_url)
+        if(!has_internet()) {
+            stop("No internet connection detected, so cannot download ",
+                 "ExifTool from:\n  ", base_url)
+        }
+
+        ## Construct URL of file to be downloaded, uncompressed, &
+        ## installed
+        ver <- current_exiftool_version()
+        install_url <-
+            if(win_exe & is_windows()) {
+                file.path(base_url, paste0("exiftool-", ver, ".zip"))
+            } else {
+                file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
+            }
+
+        ## Attempt to download the file
+        if(!quiet) {
+            message("Attempting to download ExifTool from ", install_url)
+        }
+        tmpdir <- tempdir()
+        tmpfile <- file.path(tmpdir, "xx")
+        on.exit(unlink(tmpfile))
+        curl_download(install_url, tmpfile, quiet = quiet)
+    } else {
+        tmpfile <- local_exiftool
+        win_exe <- (tools::file_ext(tmpfile) == "zip")
     }
 
+    ##---------------------------##
+    ## Install *.zip or *.tar.gz ##
+    ##---------------------------##
     if(is.null(install_location)) {
         ## Default install location
         install_location <- system.file("exiftool", package = "exiftoolr")
@@ -53,17 +75,10 @@ install_exiftool <- function(install_location = NULL,
 
     ## Find writable locations
     write_dir <- find_writable(install_location)
-
-    ## Attempt to download the file
-    tmpdir <- tempdir()
-    tmpfile <- file.path(tmpdir, "xx")
-    on.exit(unlink(tmpfile))
-    curl_download(install_url, tmpfile, quiet = quiet)
-
-    ## Install downloaded file
     if(!quiet) {
         message("Installing ExifTool in ", write_dir)
     }
+
     if(win_exe) {
         ## Windows executable
         win_exe_dir <- file.path(write_dir, "win_exe")
@@ -78,7 +93,7 @@ install_exiftool <- function(install_location = NULL,
         if(!dir.exists(file.path(write_dir, "lib"))) {
             dir.create(file.path(write_dir, "lib"))
         }
-        ## Instal the `lib` directory, main Perl script, and `README`
+        ## Install the `lib` directory, main Perl script, and `README`
         file.copy(from = file.path(dd, c("lib", "exiftool", "README")),
                   to = write_dir,
                   recursive = TRUE,
