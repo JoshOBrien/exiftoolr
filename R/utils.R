@@ -213,7 +213,7 @@ test_perl <- function(command, quiet = TRUE) {
         suppressMessages(0 == try(system(command,
                                          ignore.stdout = TRUE,
                                          ignore.stderr = TRUE,
-                                         show.output.on.console = FALSE),
+                                         show.output.on.console = TRUE),
                                   silent=TRUE)))
 }
 
@@ -224,7 +224,7 @@ test_exiftool <- function(command, quiet = TRUE) {
             suppressMessages(0 == try(system(command,
                                              ignore.stdout = TRUE,
                                              ignore.stderr = TRUE,
-                                             show.output.on.console = FALSE),
+                                             show.output.on.console = TRUE),
                                       silent=TRUE)))
     if(command_works) {
         ## check that version is a numeric value like 10.96
