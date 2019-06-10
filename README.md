@@ -12,7 +12,7 @@ homepage][ExifTool-home]:
 > ExifTool supports many different metadata formats including EXIF, GPS,
 > IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
 > and ID3, as well as the maker notes of many digital cameras by Canon,
-> Casio, FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
+> Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
 > Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 > Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 > Sanyo, Sigma/Foveon and Sony.
@@ -114,7 +114,7 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 11.08
+#> Using ExifTool version 11.49
 dim(exifinfo)
 #> [1]  2 99
 names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
@@ -131,8 +131,8 @@ tags that are actually needed, use the `tags` argument:
 ```r
 exif_read(image_files, tags = c("filename", "imagesize"))
 #>                                 SourceFile   FileName ImageSize
-#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg LaSals.jpg   640x480
-#> 2 C:/R/Library/exiftoolr/images/Lizard.jpg Lizard.jpg 4032x3024
+#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg LaSals.jpg   640 480
+#> 2 C:/R/Library/exiftoolr/images/Lizard.jpg Lizard.jpg 4032 3024
 ```
 
 The `tags` argument also accepts simple regular expressions. For

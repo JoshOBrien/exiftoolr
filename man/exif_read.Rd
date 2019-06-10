@@ -50,7 +50,7 @@ information in a wide variety of files. ExifTool supports many
 different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
 GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as
 well as the maker notes of many digital cameras by Canon, Casio,
-FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
+DJI, FLIR, FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
 Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 Sanyo, Sigma/Foveon and Sony."

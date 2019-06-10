@@ -12,7 +12,7 @@
 ##' different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
 ##' GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as
 ##' well as the maker notes of many digital cameras by Canon, Casio,
-##' FLIR, FujiFilm, GE, HP, JVC/Victor, Kodak, Leaf,
+##' DJI, FLIR, FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
 ##' Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 ##' Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 ##' Sanyo, Sigma/Foveon and Sony."
@@ -141,33 +141,34 @@ exif_read <- function(path, tags = NULL,
 ##'
 ##' @examples
 ##' \dontrun{
-##'
 ##' ## Find local ExifTool version using exif_version() or exif_call()
 ##' exif_version()
 ##' exif_call(args = "-ver", intern = TRUE, quiet = quiet)
 ##'
-##' ## Make a temporary copy of a jpeg file
-##' temp <- tempfile()
-##' file.copy(system.file(package = "exiftoolr", "images", "LaSals.jpg"),
-##'           temp)
+##' ## Make temporary copies of a couple jpeg files
+##' tmpdir <- file.path(tempdir(), "images")
+##' file.copy(dir(system.file(package = "exiftoolr", "images"),
+##'               full.names = TRUE), tmpdir, recursive = TRUE)
+##' files <- dir(tmpdir, full.names = TRUE)
 ##'
 ##' ## Both of the following extract the same tags:
 ##' exif_read(files, tags = c("filename", "imagesize"))
 ##' exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
-##'           path = temp)
+##'           path = files, intern = TRUE)
 ##'
 ##' ## Set value of a new "Artist" field in photo's metadata
-##' exif_read(temp, tags = "artist")
-##' exif_call(path = temp, args = "-Artist=me")
-##' exif_read(temp, tags = "artist")
+##' file1 <- files[1]
+##' exif_read(file1, tags = "artist")
+##' exif_call(path = file1, args = "-Artist=me")
+##' exif_read(file1, tags = "artist")
 ##'
 ##' ## Remove all but a few essential fields
-##' length(exif_read(temp))
-##' exif_call(path = temp, args = "-all=")
-##' length(exif_read(temp))
-##' exif_read(temp)
+##' length(exif_read(file1))
+##' exif_call(path = file1, args = "-all=")
+##' length(exif_read(file1))
+##' exif_read(file1)
 ##'
-##' unlink(temp)
+##' unlink(files)
 ##' }
 exif_call <- function(args = NULL,
                       path = NULL,
