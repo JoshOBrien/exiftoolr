@@ -11,10 +11,9 @@ options(width = 115)
 
 # ExifTool functionality from R
 
-[ExifTool][ExifTool-home] is an excellent and comprehensive open
-source utility for reading, writing and editing meta information in a
-wide variety of files. As noted on the [project
-homepage][ExifTool-home]:
+[ExifTool][ExifTool-home] is a comprehensive open source utility for
+reading, writing and editing meta information in a wide variety of
+files. As noted on the [project homepage][ExifTool-home]:
 
 > ExifTool supports many different metadata formats including EXIF, GPS,
 > IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
@@ -51,7 +50,7 @@ taken in the LaSal mountains in southeastern Utah, USA.
 ![](img/LaSals.jpg)
 
 Here is one way to do that, using **exiftoolr** to extract the
-relevant data, and the (excellent)
+relevant data, and the
 [**magick**](https://CRAN.R-project.org/package=magick) package to
 annotate the image with it:
 
@@ -81,18 +80,28 @@ image_write(out, "LaSals_annotated.jpg")
 ![](img/LaSals_annotated.jpg)
 
 
-# Installation and setup
+# Installation
 
-To install **exiftoolr** from GitHub, do:
+Released versions of **exiftoolr** are available via
+[CRAN](https://cran.r-project.org/) and may be installed by doing:
+
+```{r, CRAN-installation, eval = FALSE}
+install.packages("devtools")
+```
+
+To install the most recent version from GitHub, do:
 
 ```{r, gh-installation, eval = FALSE}
 if(!require(devtools)) {install.packages("devtools")}
 devtools::install_github("JoshOBrien/exiftoolr")
 ```
 
-Then, to install a copy of the ExifTool library or executable into the
-**exiftoolr** package's directory tree, where calls to functions in
-the **exiftoolr** package will automatically find it, run
+
+# Setup
+
+To install a copy of the ExifTool library or executable into the
+installed **exiftoolr** package's directory tree, where calls to
+functions in the **exiftoolr** package will automatically find it, run
 `install_exiftool()`:
 
 ```{r, exiftool-installation, eval = FALSE}
@@ -100,17 +109,16 @@ exiftoolr::install_exiftool()
 ```
 
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
-and ExifTool, and in most cases will need no hints to find them. For
-situations in which want more control over which Perl or ExifTool is
-used, set their paths with either an explicit call to
-`configure_exiftool()` or by setting the environment variables
-`"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
+and ExifTool and in most cases will need no hints to find them. For
+direct control over which Perl or ExifTool is used, set their paths
+with either an explicit call to `configure_exiftool()` or by setting
+the environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
 # Usage
 
-`exif_read()` will quickly read metadata from one or more image files,
-returning the results in a plain `data.frame`: 
+`exif_read()` reads metadata from one or more image files, returning
+the results in a plain `data.frame`:
 
 ```{r, example}
 library(exiftoolr)
@@ -121,8 +129,8 @@ dim(exifinfo)
 names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
 ```
 
-As you can see, there are a lot of columns! To extract only those
-tags that are actually needed, use the `tags` argument:
+To extract only those tags that are actually needed, use the `tags`
+argument:
 
 ```{r}
 exif_read(image_files, tags = c("filename", "imagesize"))

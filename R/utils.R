@@ -75,17 +75,19 @@ install_exiftool <- function(install_location = NULL,
 
     ## Find writable locations
     write_dir <- find_writable(install_location)
+    if(win_exe) {
+        write_dir <- file.path(write_dir, "win_exe")
+    }
     if(!quiet) {
         message("Installing ExifTool in ", write_dir)
     }
 
     if(win_exe) {
         ## Windows executable
-        win_exe_dir <- file.path(write_dir, "win_exe")
-        if(!dir.exists(win_exe_dir)) {
-            dir.create(win_exe_dir)
+        if(!dir.exists(write_dir)) {
+            dir.create(write_dir)
         }
-        unzip(tmpfile, exdir = win_exe_dir)
+        unzip(tmpfile, exdir = write_dir)
     } else {
         ## Perl library
         untar(tmpfile, exdir = tmpdir)
