@@ -2,6 +2,8 @@
 ^README\.md$
 ^README\.html$
 ^inst/exiftool/win_exe/.*$
+^inst/exiftool/lib/.*$
+^inst/exiftool/exiftool$
 ^docs/.*
 ^img$
 ^TODO.org$

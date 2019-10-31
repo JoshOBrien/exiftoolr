@@ -59,7 +59,7 @@ exif_read <- function(path, tags = NULL,
                       args = NULL,
                       quiet = TRUE) {
     ## Ensure that exiftoolr is properly configured
-    if(!is_exiftoolr_configured()) {
+    if (!is_exiftoolr_configured()) {
         configure_exiftoolr(quiet = quiet)
         message("Using ExifTool version ", exif_version(), "\n")
     }
@@ -70,9 +70,9 @@ exif_read <- function(path, tags = NULL,
 
     ## check that all files exist (files that do not exist cause
     ## problems later, as do directories without recursive = TRUE)
-    if(recursive) {
+    if (recursive) {
         missing_dirs <- path[!dir.exists(path)]
-        if(length(missing_dirs)) {
+        if (length(missing_dirs)) {
             stop("Did you mean recursive = TRUE? ",
                  "The following directories are missing",
                  "(or are not directories): ",
@@ -80,18 +80,18 @@ exif_read <- function(path, tags = NULL,
         }
     } else {
         missing_files <- path[!file.exists(path) | dir.exists(path)]
-        if(length(missing_files)) {
+        if (length(missing_files)) {
             stop("Did you mean recursive = TRUE? ",
                  "The following files are missing (or are not files): ",
                  paste(missing_files, collapse = ", "))
         }
     }
 
-    if(recursive) {
+    if (recursive) {
         args <- c(args, "-r")
     }
 
-    if(!is.null(tags)) {
+    if (!is.null(tags)) {
         ## tags cannot have spaces...whitespace is stripped by ExifTool
         tags <- gsub("\\s", "", tags)
         args <- c(paste0("-", tags), args)
@@ -104,7 +104,7 @@ exif_read <- function(path, tags = NULL,
     ##   -b to ensure output is base64 encoded
     args <- unique(c("-n", "-j", "-q", "-b", args))
     ## an extra -q further silences warnings
-    if(quiet) {
+    if (quiet) {
         args <- c(args, "-q")
     }
 
@@ -176,14 +176,14 @@ exif_call <- function(args = NULL,
                       quiet = FALSE,
                       ...) {
     ## Ensure that exiftoolr is properly configured
-    if(!is_exiftoolr_configured()) {
+    if (!is_exiftoolr_configured()) {
         configure_exiftoolr(quiet = quiet)
         message("Using ExifTool version ", exif_version(), "\n")
     }
 
     ## Exiftool command
     exiftoolpath <- get_exiftool_command()
-    if(is.null(exiftoolpath)) {
+    if (is.null(exiftoolpath)) {
         stop("ExifTool not properly installed or configured")
     }
 
