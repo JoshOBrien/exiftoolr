@@ -18,9 +18,9 @@ ruby RUBY_VERSION
 gem "github-pages", group: :jekyll_plugins
 # gem "jekyll-github-metadata", group: :jekyll_plugins
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
-gem 'nokogiri', '~> 1.8.2'
+gem 'nokogiri', '>= 1.10.4'
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-   gem "jekyll-feed", "~> 0.6"
+   gem "jekyll-feed", ">= 0.10"
 end
