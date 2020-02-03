@@ -4,8 +4,7 @@
 \alias{exif_read}
 \title{Read EXIF and other metadata from files}
 \usage{
-exif_read(path, tags = NULL, recursive = FALSE, args = NULL,
-  quiet = TRUE)
+exif_read(path, tags = NULL, recursive = FALSE, args = NULL, quiet = TRUE)
 }
 \arguments{
 \item{path}{A vector of filenames.}

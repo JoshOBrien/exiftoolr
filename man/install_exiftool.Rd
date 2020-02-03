@@ -4,8 +4,12 @@
 \alias{install_exiftool}
 \title{Install ExifTool, downloading (by default) the current version}
 \usage{
-install_exiftool(install_location = NULL, win_exe = NULL,
-  local_exiftool = NULL, quiet = FALSE)
+install_exiftool(
+  install_location = NULL,
+  win_exe = NULL,
+  local_exiftool = NULL,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{install_location}{Path to the directory into which ExifTool

@@ -23,7 +23,8 @@ SystemRequirements: Perl
 LazyData: TRUE
 Imports:
     curl,
-    jsonlite
+    jsonlite,
+    zip
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

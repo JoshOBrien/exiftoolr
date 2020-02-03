@@ -24,7 +24,8 @@
 ##' @return Called for its side effect
 ##' @export
 ##' @importFrom curl curl_download has_internet
-##' @importFrom utils untar unzip
+##' @importFrom utils untar
+##' @importFrom zip unzip
 install_exiftool <- function(install_location = NULL,
                              win_exe = NULL,
                              local_exiftool = NULL,
@@ -71,6 +72,7 @@ install_exiftool <- function(install_location = NULL,
         if(!dir.exists(write_dir)) {
             dir.create(write_dir)
         }
+        ## This calls zip::unzip, not utils::unzip
         unzip(tmpfile, exdir = write_dir)
     } else {
         ## Perl library

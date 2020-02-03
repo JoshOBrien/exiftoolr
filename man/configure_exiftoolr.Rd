@@ -4,8 +4,12 @@
 \alias{configure_exiftoolr}
 \title{Configure package to point to ExifTool and/or Perl}
 \usage{
-configure_exiftoolr(command = NULL, perl_path = NULL,
-  allow_win_exe = TRUE, quiet = FALSE)
+configure_exiftoolr(
+  command = NULL,
+  perl_path = NULL,
+  allow_win_exe = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{command}{Character string giving the exiftool command.}
