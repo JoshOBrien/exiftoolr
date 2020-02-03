@@ -29,7 +29,7 @@ and the Perl library on other operating systems.}
 \item{local_exiftool}{If installing ExifTool from a local "*.zip"
 or ".tar.gz", supply the path to that file as a character
 string. With default value, `NULL`, the function downloads
-ExifTool from \url{https://sno.phy.queensu.ca/~phil/exiftool}
+ExifTool from \url{https://exiftool.org}
 and then installs it.}
 
 \item{quiet}{Logical.  Should function should be chatty?}

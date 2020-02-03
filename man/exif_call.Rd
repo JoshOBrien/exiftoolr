@@ -34,7 +34,7 @@ Uses \code{system()} to run a basic call to \code{exiftool}.
 \details{
 For examples of the command-line calls to ExifTool (all
     of which can be reproduced by calls to \code{exif_call}), see
-    \url{https://owl.phy.queensu.ca/~phil/exiftool/examples.html}.
+    \url{https://exiftool.org/examples.html}.
 }
 \examples{
 \dontrun{

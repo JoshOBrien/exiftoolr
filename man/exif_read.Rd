@@ -41,9 +41,8 @@ Reads EXIF and other metadata into a \code{data.frame} by calling
 Phil Harvey's ExifTool command-line application.
 }
 \details{
-From the
-\href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-website}: "ExifTool is a platform-independent Perl library plus a
+From the \href{https://exiftool.org}{ExifTool website}:
+"ExifTool is a platform-independent Perl library plus a
 command-line application for reading, writing and editing meta
 information in a wide variety of files. ExifTool supports many
 different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
@@ -54,8 +53,7 @@ Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
 Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 Sanyo, Sigma/Foveon and Sony."
 
-For more information, see the
-\href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
+For more information, see the \href{https://exiftool.org}{ExifTool
 website}.
 }
 \examples{
@@ -67,5 +65,5 @@ exif_read(files, tags = c("filename", "imagesize"))
 }
 }
 \references{
-\url{http://www.sno.phy.queensu.ca/~phil/exiftool/}
+\url{https://exiftool.org}
 }

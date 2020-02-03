@@ -4,9 +4,8 @@
 ##' Reads EXIF and other metadata into a \code{data.frame} by calling
 ##' Phil Harvey's ExifTool command-line application.
 ##'
-##' From the
-##' \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
-##' website}: "ExifTool is a platform-independent Perl library plus a
+##' From the \href{https://exiftool.org}{ExifTool website}:
+##' "ExifTool is a platform-independent Perl library plus a
 ##' command-line application for reading, writing and editing meta
 ##' information in a wide variety of files. ExifTool supports many
 ##' different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
@@ -17,8 +16,7 @@
 ##' Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 ##' Sanyo, Sigma/Foveon and Sony."
 ##'
-##' For more information, see the
-##' \href{http://www.sno.phy.queensu.ca/~phil/exiftool/}{ExifTool
+##' For more information, see the \href{https://exiftool.org}{ExifTool
 ##' website}.
 ##'
 ##' @param path A vector of filenames.
@@ -43,7 +41,7 @@
 ##'     truncated in the printed representation of the
 ##'     \code{data.frame} returned by the function, they are left
 ##'     unaltered in the \code{data.frame} itself.
-##' @references \url{http://www.sno.phy.queensu.ca/~phil/exiftool/}
+##' @references \url{https://exiftool.org}
 ##' @importFrom jsonlite fromJSON
 ##' @export
 ##'
@@ -134,7 +132,7 @@ exif_read <- function(path, tags = NULL,
 ##' @param ... Additional arguments to be passed to \code{system()}.
 ##' @details For examples of the command-line calls to ExifTool (all
 ##'     of which can be reproduced by calls to \code{exif_call}), see
-##'     \url{https://owl.phy.queensu.ca/~phil/exiftool/examples.html}.
+##'     \url{https://exiftool.org/examples.html}.
 ##' @return The exit code (if \code{intern = FALSE}) or the standard
 ##'     output as a character vector (if \code{intern = TRUE}).
 ##' @export
