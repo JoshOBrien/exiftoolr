@@ -176,8 +176,8 @@ find_writable <- function(install_location) {
 
 current_exiftool_version <- function() {
     ## Holds current version of ExifTool, as announced by P. Harvey at:
-    ## http://u88.n24.queensu.ca/exiftool/forum/index.php?topic=3754.0
-    url <- "http://owl.phy.queensu.ca/~phil/exiftool/ver.txt"
+    ## https://exiftool.org/forum/index.php?topic=3754.0
+    url <- "https://exiftool.org/ver.txt"
     readLines(url, warn=FALSE)
 }
 

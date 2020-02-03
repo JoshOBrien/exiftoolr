@@ -102,7 +102,7 @@ install_exiftool <- function(install_location = NULL,
 download_exiftool <- function(win_exe = FALSE,
                               download_path = NULL,
                               quiet = FALSE) {
-    base_url <- "https://sno.phy.queensu.ca/~phil/exiftool"
+    base_url <- "https://exiftool.org"
     ## Got internet?
     if(!has_internet()) {
         stop("No internet connection detected, so cannot download ",
