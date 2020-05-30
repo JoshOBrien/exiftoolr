@@ -146,10 +146,9 @@ exif_read(image_files[1], tags = "*GPS*")
 
 
 To access more general ExifTool functionality (many examples of which
-are shown
-[here](http://owl.phy.queensu.ca/~phil/exiftool/examples.html)), you
-can use the function `exif_call()` to roll your own ExifTool call. For
-the previous example, it would look something like this:
+are shown [here][ExifTool-examples]), you can use the
+function `exif_call()` to roll your own ExifTool call. For the
+previous example, it would look something like this:
 
 ```{r, eval=FALSE}
 exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])
@@ -168,13 +167,12 @@ data. In many files, though, EXIF tags comprise only a subset of the
 metadata, and even well as EXIF maker notes and (despite its name)
 ExifTool reads data stored in many additional metadata formats.
 
-The [**exifr**](https://CRAN.R-project.org/package=exifr) package (of
-which **exiftoolr** is essentially a much modified fork) is much more
-similar in the functionality that it provides. Both packages construct
-a thin wrapper around ExifTool, and so inherit its excellent support
-for a large variety of file types and many metadata formats beyond
-EXIF tags. The packages differ mainly in their support for easy
-installation and configuration on all operating
+The [**exifr**](https://CRAN.R-project.org/package=exifr) package is
+much more similar in the functionality that it provides. Both it and
+**exiftoolr** construct a thin wrapper around ExifTool, and so inherit
+its excellent support for a large variety of file types and many
+metadata formats beyond EXIF tags. The packages differ mainly in their
+support for easy installation and configuration on all operating
 systems. **exiftoolr**, in particular, was designed to make it as easy
 for Windows users -- even those without Python installations -- to
 access ExifTool functionality as it is for *NIX and Mac
@@ -183,5 +181,5 @@ update ExifTool to its most current version.
 
 
 
-[ExifTool-home]: http://www.sno.phy.queensu.ca/%7Ephil/exiftool/
-[ExifTool-examples]: http://owl.phy.queensu.ca/~phil/exiftool/examples.html
+[ExifTool-home]: https://exiftool.org/
+[ExifTool-examples]: https://exiftool.org/examples.html

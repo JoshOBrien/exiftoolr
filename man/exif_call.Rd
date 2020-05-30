@@ -40,13 +40,14 @@ For examples of the command-line calls to ExifTool (all
 \dontrun{
 ## Find local ExifTool version using exif_version() or exif_call()
 exif_version()
-exif_call(args = "-ver", intern = TRUE, quiet = quiet)
+exif_call(args = "-ver", intern = TRUE)
 
 ## Make temporary copies of a couple jpeg files
-tmpdir <- file.path(tempdir(), "images")
-file.copy(dir(system.file(package = "exiftoolr", "images"),
-              full.names = TRUE), tmpdir, recursive = TRUE)
-files <- dir(tmpdir, full.names = TRUE)
+tmpdir <- tempdir()
+src_files <- dir(system.file(package = "exiftoolr", "images"),
+                 full.names = TRUE)
+files <- file.path(tmpdir, basename(src_files))
+file.copy(src_files, files)
 
 ## Both of the following extract the same tags:
 exif_read(files, tags = c("filename", "imagesize"))
@@ -65,6 +66,7 @@ exif_call(path = file1, args = "-all=")
 length(exif_read(file1))
 exif_read(file1)
 
+## Clean up
 unlink(files)
 }
 }

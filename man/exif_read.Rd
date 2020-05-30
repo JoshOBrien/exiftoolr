@@ -59,8 +59,8 @@ website}.
 \examples{
 \dontrun{
 files <- dir(system.file(package = "exiftoolr", "images"),
-                  pattern = "*.jpg", full.names = TRUE)
-exifinfo <- exif_read(files)
+             pattern = "*.jpg", full.names = TRUE)
+exif_read(files)
 exif_read(files, tags = c("filename", "imagesize"))
 }
 }
