@@ -11,6 +11,11 @@ options(width = 115)
 
 # ExifTool functionality from R
 
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![License](https://JoshOBrien.github.io/badges/GPL2+.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![](http://www.r-pkg.org/badges/version/exiftoolr)](http://www.r-pkg.org/pkg/exiftoolr)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/exiftoolr)](http://www.r-pkg.org/pkg/exiftoolr)
+
 [ExifTool][ExifTool-home] is a comprehensive open source utility for
 reading, writing and editing meta information in a wide variety of
 files. As noted on the [project homepage][ExifTool-home]:

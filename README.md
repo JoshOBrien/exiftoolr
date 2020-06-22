@@ -4,6 +4,11 @@
 
 # ExifTool functionality from R
 
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![License](https://JoshOBrien.github.io/badges/GPL2+.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![](http://www.r-pkg.org/badges/version/exiftoolr)](http://www.r-pkg.org/pkg/exiftoolr)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/exiftoolr)](http://www.r-pkg.org/pkg/exiftoolr)
+
 [ExifTool][ExifTool-home] is a comprehensive open source utility for
 reading, writing and editing meta information in a wide variety of
 files. As noted on the [project homepage][ExifTool-home]:
@@ -139,9 +144,9 @@ argument:
 
 ```r
 exif_read(image_files, tags = c("filename", "imagesize"))
-#>                                    SourceFile   FileName ImageSize
-#> 1 C:/R/Library363/exiftoolr/images/LaSals.jpg LaSals.jpg   640 480
-#> 2 C:/R/Library363/exiftoolr/images/Lizard.jpg Lizard.jpg 4032 3024
+#>                                 SourceFile   FileName ImageSize
+#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg LaSals.jpg   640 480
+#> 2 C:/R/Library/exiftoolr/images/Lizard.jpg Lizard.jpg 4032 3024
 ```
 
 The `tags` argument also accepts simple regular expressions. For
@@ -151,14 +156,12 @@ instance, to extract all fields with names containing the substring
 
 ```r
 exif_read(image_files[1], tags = "*GPS*")
-#>                                    SourceFile GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp
-#> 1 C:/R/Library363/exiftoolr/images/LaSals.jpg              N               W              0     23:05:36
-#>   GPSSpeedRef GPSSpeed GPSImgDirectionRef GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp
-#> 1           K        0                  T        107.2073                 T       107.2073   2016:09:21
-#>   GPSHPositioningError GPSAltitude          GPSDateTime GPSLatitude GPSLongitude
-#> 1                    5    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705
-#>                          GPSPosition
-#> 1 39.6479805555556 -111.370505555556
+#>                                 SourceFile GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef
+#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg              N               W              0     23:05:36           K
+#>   GPSSpeed GPSImgDirectionRef GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError
+#> 1        0                  T        107.2073                 T       107.2073   2016:09:21                    5
+#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude                        GPSPosition
+#> 1    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705 39.6479805555556 -111.370505555556
 ```
 
 
