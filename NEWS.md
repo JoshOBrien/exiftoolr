@@ -1,4 +1,13 @@
+# Version 0.1.4
 
+* Fixed `exif_read()` to now allow repeated elements in `args=`. This
+  can be necessary when (to take one example) a user needs to
+  separately specify the encoding used in the image file names and in
+  the tags respectively. Now, a call like the following works as it
+  should:
+  
+      exif_read(path = myimage, 
+	            args = c("-charset", "exiftool=cp850", "-charset", "filename=cp1250"))
 
 # Version 0.1.1
 
