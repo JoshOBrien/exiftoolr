@@ -100,7 +100,7 @@ exif_read <- function(path, tags = NULL,
     ##   -j for JSON output
     ##   -q for quiet
     ##   -b to ensure output is base64 encoded
-    args <- unique(c("-n", "-j", "-q", "-b", args))
+    args <- c("-n", "-j", "-q", "-b", args)
     ## an extra -q further silences warnings
     if (quiet) {
         args <- c(args, "-q")
