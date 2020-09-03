@@ -6,7 +6,7 @@
   the tags respectively. Now, a call like the following works as it
   should:
   
-      exif_read(path = myimage, 
+      exif_read(path = "myimage.jpg", 
 	            args = c("-charset", "exiftool=cp850", "-charset", "filename=cp1250"))
 
 # Version 0.1.1
