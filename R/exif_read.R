@@ -30,6 +30,15 @@
 ##' @param args Additional arguments.
 ##' @param quiet Use \code{FALSE} to display diagnostic
 ##'     information. Default value is \code{TRUE}
+##' @param pipeline One of \code{"json"} (the default), \code{"csv"},
+##'     or \code{"both"}. Controls whether the exiftool executable,
+##'     behind the scenes, extracts metadata into a JSON data
+##'     structure or a tabular csv. The JSON structure does a better
+##'     job of faithfully maintaining information about the class of
+##'     each metadata field. The csv option is better for dealing with
+##'     non-ASCII character sets. To maintain both field class
+##'     information and handle non-ASCII character sets, use the
+##'     \code{"both"} option.
 ##' @return A data frame of class \code{"exiftoolr"} with one row per
 ##'     file processed. The first column, named \code{"SourceFile"}
 ##'     gives the name(s) of the processed files. Subsequent columns
@@ -43,6 +52,7 @@
 ##'     unaltered in the \code{data.frame} itself.
 ##' @references \url{https://exiftool.org}
 ##' @importFrom jsonlite fromJSON
+##' @importFrom data.table fread
 ##' @export
 ##'
 ##' @examples
@@ -55,7 +65,9 @@
 exif_read <- function(path, tags = NULL,
                       recursive = FALSE,
                       args = NULL,
-                      quiet = TRUE) {
+                      quiet = TRUE,
+                      pipeline = c("json", "csv", "both")) {
+    pipeline <- match.arg(pipeline)
     ## Ensure that exiftoolr is properly configured
     if (!is_exiftoolr_configured()) {
         configure_exiftoolr(quiet = quiet)
@@ -89,31 +101,59 @@ exif_read <- function(path, tags = NULL,
         args <- c(args, "-r")
     }
 
+    ## an extra -q further silences warnings
+    if (quiet) {
+        args <- c(args, "-q")
+    }
+
     if (!is.null(tags)) {
         ## tags cannot have spaces...whitespace is stripped by ExifTool
         tags <- gsub("\\s", "", tags)
         args <- c(paste0("-", tags), args)
     }
 
-    ## required args:
-    ##   -n for numeric output
-    ##   -j for JSON output
-    ##   -q for quiet
-    ##   -b to ensure output is base64 encoded
-    args <- c("-n", "-j", "-q", "-b", args)
-    ## an extra -q further silences warnings
-    if (quiet) {
-        args <- c(args, "-q")
+    if (pipeline %in% c("json", "both")) {
+        ## required args:
+        ##   -n for numeric output
+        ##   -j for JSON output
+        ##   -q for quiet
+        ##   -b to ensure output is base64 encoded
+        json_args <- c("-n", "-j", "-q", "-b", args)
+        ## Construct and execute a call to Exiftool
+        return_value <-
+            exif_call(args = json_args, path = path, intern = TRUE)
+        ## Postprocess the results
+        return_value <- fromJSON(paste0(return_value, collapse = ""))
     }
 
-    ## Construct and execute a call to Exiftool
-    return_value <-
-        exif_call(args = args, path = path, intern = TRUE)
+    if (pipeline %in% c("csv", "both")) {
+        ## required args:
+        ##   -n for numeric output
+        ##   -T for tabular output
+        ##   -csv for CSV output
+        ##   -api filter for handling tag values containing commas, double
+        ##        quotes, newline characters, or leading or trailing spaces.
+        ##   -q for quiet
+        ##   -b to ensure output is base64 encoded
+        filter <- '$_ = qq($_) if s/""/""""/g or /(^\\s+|\\s+$)/ or /[,\\n\\r]/'
+        filter <- shQuote(filter)
+        filter <- paste0("filter=", filter)
+        csv_args <- c("-n", "-T", "-csv", "-q", "-b", "-api", filter, args)
+        ## Use data read by json to get classes of each column
+        colClasses <- NULL
+        if (pipeline == "both") {
+            colClasses <- unname(sapply(return_value, class))
+        }
+        ## Construct and execute a call to Exiftool
+        return_value <-
+            exif_call(args = csv_args, path = path, intern = TRUE)
+        ## Postprocess the results
+        ## (Use fread because it does not convert "T" to TRUE and "F" to FALSE)
+        return_value <- fread(text = return_value, colClasses = colClasses,
+                              data.table = FALSE)
+    }
 
-    ## Postprocess the results
-    return_value <- fromJSON(paste0(return_value, collapse = ""))
     class(return_value) <- c("exiftoolr", class(return_value))
-
     return_value
 }
 

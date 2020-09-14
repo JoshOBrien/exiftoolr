@@ -24,7 +24,8 @@ LazyData: TRUE
 Imports:
     curl,
     jsonlite,
-    zip
+    zip,
+    data.table
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

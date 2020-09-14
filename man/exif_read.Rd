@@ -4,7 +4,14 @@
 \alias{exif_read}
 \title{Read EXIF and other metadata from files}
 \usage{
-exif_read(path, tags = NULL, recursive = FALSE, args = NULL, quiet = TRUE)
+exif_read(
+  path,
+  tags = NULL,
+  recursive = FALSE,
+  args = NULL,
+  quiet = TRUE,
+  pipeline = c("json", "csv", "both")
+)
 }
 \arguments{
 \item{path}{A vector of filenames.}
@@ -22,6 +29,16 @@ ExifTool.}
 
 \item{quiet}{Use \code{FALSE} to display diagnostic
 information. Default value is \code{TRUE}}
+
+\item{pipeline}{One of \code{"json"} (the default), \code{"csv"},
+or \code{"both"}. Controls whether the exiftool executable,
+behind the scenes, extracts metadata into a JSON data
+structure or a tabular csv. The JSON structure does a better
+job of faithfully maintaining information about the class of
+each metadata field. The csv option is better for dealing with
+non-ASCII character sets. To maintain both field class
+information and handle non-ASCII character sets, use the
+\code{"both"} option.}
 }
 \value{
 A data frame of class \code{"exiftoolr"} with one row per
