@@ -10,7 +10,7 @@ exif_read(
   recursive = FALSE,
   args = NULL,
   quiet = TRUE,
-  pipeline = c("json", "csv", "both")
+  pipeline = c("json", "csv")
 )
 }
 \arguments{
@@ -30,15 +30,14 @@ ExifTool.}
 \item{quiet}{Use \code{FALSE} to display diagnostic
 information. Default value is \code{TRUE}}
 
-\item{pipeline}{One of \code{"json"} (the default), \code{"csv"},
-or \code{"both"}. Controls whether the exiftool executable,
-behind the scenes, extracts metadata into a JSON data
-structure or a tabular csv. The JSON structure does a better
-job of faithfully maintaining information about the class of
-each metadata field. The csv option is better for dealing with
-non-ASCII character sets. To maintain both field class
-information and handle non-ASCII character sets, use the
-\code{"both"} option.}
+\item{pipeline}{One of \code{"json"} (the default) or
+\code{"csv"}. Controls whether the exiftool executable, behind
+the scenes, extracts metadata into a JSON data structure or a
+tabular csv. The JSON pipeline works well unless some of the
+values in the tag fields contain non-ASCII characters. If the
+fields do include non-ASCII characters, and you are needing to
+set the \code{"-charset"} option, use the \code{"csv"}
+pipeline instead.}
 }
 \value{
 A data frame of class \code{"exiftoolr"} with one row per

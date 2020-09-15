@@ -30,15 +30,14 @@
 ##' @param args Additional arguments.
 ##' @param quiet Use \code{FALSE} to display diagnostic
 ##'     information. Default value is \code{TRUE}
-##' @param pipeline One of \code{"json"} (the default), \code{"csv"},
-##'     or \code{"both"}. Controls whether the exiftool executable,
-##'     behind the scenes, extracts metadata into a JSON data
-##'     structure or a tabular csv. The JSON structure does a better
-##'     job of faithfully maintaining information about the class of
-##'     each metadata field. The csv option is better for dealing with
-##'     non-ASCII character sets. To maintain both field class
-##'     information and handle non-ASCII character sets, use the
-##'     \code{"both"} option.
+##' @param pipeline One of \code{"json"} (the default) or
+##'     \code{"csv"}. Controls whether the exiftool executable, behind
+##'     the scenes, extracts metadata into a JSON data structure or a
+##'     tabular csv. The JSON pipeline works well unless some of the
+##'     values in the tag fields contain non-ASCII characters. If the
+##'     fields do include non-ASCII characters, and you are needing to
+##'     set the \code{"-charset"} option, use the \code{"csv"}
+##'     pipeline instead.
 ##' @return A data frame of class \code{"exiftoolr"} with one row per
 ##'     file processed. The first column, named \code{"SourceFile"}
 ##'     gives the name(s) of the processed files. Subsequent columns
@@ -66,7 +65,7 @@ exif_read <- function(path, tags = NULL,
                       recursive = FALSE,
                       args = NULL,
                       quiet = TRUE,
-                      pipeline = c("json", "csv", "both")) {
+                      pipeline = c("json", "csv")) {
     pipeline <- match.arg(pipeline)
     ## Ensure that exiftoolr is properly configured
     if (!is_exiftoolr_configured()) {
@@ -112,43 +111,49 @@ exif_read <- function(path, tags = NULL,
         args <- c(paste0("-", tags), args)
     }
 
-    if (pipeline %in% c("json", "both")) {
-        ## required args:
-        ##   -n for numeric output
-        ##   -j for JSON output
-        ##   -q for quiet
-        ##   -b to ensure output is base64 encoded
-        json_args <- c("-n", "-j", "-q", "-b", args)
-        ## Construct and execute a call to Exiftool
-        return_value <-
-            exif_call(args = json_args, path = path, intern = TRUE)
-        ## Postprocess the results
-        return_value <- fromJSON(paste0(return_value, collapse = ""))
-    }
+    ##-----------------------------------------##
+    ## Process using JSON intermediate output  ##
+    ##-----------------------------------------##
 
-    if (pipeline %in% c("csv", "both")) {
+    ## required args:
+    ##   -n for numeric output
+    ##   -j for JSON output
+    ##   -q for quiet
+    ##   -b to ensure output is base64 encoded
+    json_args <- c("-n", "-j", "-q", "-b", args)
+    ## Construct and execute a call to Exiftool
+    return_value <-
+        exif_call(args = json_args, path = path, intern = TRUE)
+    ## Postprocess the results
+    return_value <- fromJSON(paste0(return_value, collapse = ""))
+
+
+    if (pipeline == "csv") {
         ## required args:
         ##   -n for numeric output
         ##   -T for tabular output
         ##   -csv for CSV output
-        ##   -api filter for handling tag values containing commas, double
+        ##   -api filter to properly handle tag values containing commas, double
         ##        quotes, newline characters, or leading or trailing spaces.
         ##   -q for quiet
         ##   -b to ensure output is base64 encoded
-        filter <- '$_ = qq($_) if s/""/""""/g or /(^\\s+|\\s+$)/ or /[,\\n\\r]/'
-        filter <- shQuote(filter)
+        filter <-
+          if (.Platform$OS.type == "windows") {
+             x <- '$_ = qq($_) if s/""/""""/g or /(^\\s+|\\s+$)/ or /[,\\n\\r]/'
+             shQuote(x)
+          } else {
+             x <- '$_ = qq{"$_"} if s/"/""/g or /(^\\s+|\\s+$)/ or /[,\\n\\r]/'
+             sQuote(x)
+          }
         filter <- paste0("filter=", filter)
         csv_args <- c("-n", "-T", "-csv", "-q", "-b", "-api", filter, args)
         ## Use data read by json to get classes of each column
-        colClasses <- NULL
-        if (pipeline == "both") {
-            colClasses <- unname(sapply(return_value, class))
-        }
+        colClasses <- unname(sapply(return_value, class))
         ## Construct and execute a call to Exiftool
         return_value <-
             exif_call(args = csv_args, path = path, intern = TRUE)
-        ## Postprocess the results
-        ## (Use fread because it does not convert "T" to TRUE and "F" to FALSE)
+        ## Postprocess the results. (Uses fread because it does not
+        ## convert "T" to TRUE and "F" to FALSE)
         return_value <- fread(text = return_value, colClasses = colClasses,
                               data.table = FALSE)
     }
