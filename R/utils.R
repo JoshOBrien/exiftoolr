@@ -189,7 +189,7 @@ print.exiftoolr <- function(x, ...) {
         paste0(substr(X, 1, 60), "[..", nchar(X) - 60, " more..]")
     }
     ## Find columns of "base64:" strings more than 60 characters long
-    ii <- which(grepl("base64:.{53,}", x[1,]))
+    ii <- which(grepl("base64:.{53,}", x[1,], perl = TRUE))
     ## Replace those with truncated strings
     if (length(ii)) {
         for(i in ii) {
