@@ -7,3 +7,5 @@
 ^docs/.*
 ^img$
 ^TODO.org$
+^tests/*
+^inst/tinytest/*

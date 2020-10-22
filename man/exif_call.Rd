@@ -5,7 +5,7 @@
 \alias{exif_version}
 \title{Call ExifTool from R}
 \usage{
-exif_call(args = NULL, path = NULL, intern = FALSE, quiet = FALSE, ...)
+exif_call(args = NULL, path = NULL, stdout = TRUE, quiet = FALSE, ...)
 
 exif_version(quiet = TRUE)
 }
@@ -16,17 +16,13 @@ form as you would if writing them on the command line
 
 \item{path}{A character vector giving one or more file paths.}
 
-\item{intern}{\code{TRUE} if output should be returned as a
-character vector. Default value is \code{FALSE}.}
-
 \item{quiet}{Use \code{FALSE} to display diagnostic
 information. Default value is \code{FALSE}.}
 
-\item{...}{Additional arguments to be passed to \code{system()}.}
+\item{...}{Additional arguments to be passed to \code{system2()}.}
 }
 \value{
-The exit code (if \code{intern = FALSE}) or the standard
-    output as a character vector (if \code{intern = TRUE}).
+The standard output as a character vector.
 }
 \description{
 Uses \code{system()} to run a basic call to \code{exiftool}.
@@ -40,7 +36,7 @@ For examples of the command-line calls to ExifTool (all
 \dontrun{
 ## Find local ExifTool version using exif_version() or exif_call()
 exif_version()
-exif_call(args = "-ver", intern = TRUE)
+exif_call(args = "-ver")
 
 ## Make temporary copies of a couple jpeg files
 tmpdir <- tempdir()
@@ -52,7 +48,7 @@ file.copy(src_files, files)
 ## Both of the following extract the same tags:
 exif_read(files, tags = c("filename", "imagesize"))
 exif_call(args = c("-n", "-j", "-q", "-filename", "-imagesize"),
-          path = files, intern = TRUE)
+          path = files)
 
 ## Set value of a new "Artist" field in photo's metadata
 file1 <- files[1]

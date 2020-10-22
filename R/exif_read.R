@@ -129,7 +129,9 @@ exif_read <- function(path, tags = NULL,
 
 
     if (pipeline == "csv") {
-        return_value_json <- return_value
+        ## Get name and class of each column read in via JSON
+        json_names <- names(return_value)
+        json_classes <- unname(sapply(return_value, class))
         ## required args:
         ##   -n for numeric output
         ##   -T for tabular output
@@ -148,19 +150,17 @@ exif_read <- function(path, tags = NULL,
           }
         filter <- paste0("filter=", filter)
         csv_args <- c("-n", "-T", "-csv", "-q", "-b", "-api", filter, args)
-        ## Use data read by json to get classes of each column
-        colNames <- names(return_value_json)
-        colClasses <- unname(sapply(return_value_json, class))
-        ## Construct and execute a call to Exiftool
-        resFile <- tempfile("exif_results")
-        return_value <-
-            exif_call(args = csv_args, path = path, stdout = resFile)
-        ## Postprocess the results. (Uses fread because it does not
-        ## convert "T" to TRUE and "F" to FALSE)
-        tmp <- names(fread(resFile, data.table = FALSE))
-        colClasses <- colClasses[match(tmp, colNames)]
+        ## Call Exiftool, writing results to a temp file
+        res_file <- tempfile("exif_results")
+        on.exit(unlink(res_file))
+        exif_call(args = csv_args, path = path, stdout = res_file)
+        ## Prepare colClasses, accounting for possibility that the
+        ## "csv" pipeline produces more columns than the "json" one
+        csv_names <- names(fread(res_file, data.table = FALSE))
+        colClasses <- json_classes[match(csv_names, json_names)]
         colClasses[is.na(colClasses)] <- "character"
-        return_value <- fread(resFile, colClasses = colClasses,
+        ## Read in results using best available column class info
+        return_value <- fread(res_file, colClasses = colClasses,
                               data.table = FALSE)
     }
 
