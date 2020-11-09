@@ -1,3 +1,14 @@
+# Version 0.1.5
+
+* Added a `pipeline` option to `exif_read()`, which allows users to
+  direct the exif executable to output results in csv rather than json
+  format. This is helpful for use with images whose metadata contains
+  non-UTF-8-encoded characters. As is documented
+  [here](https://exiftool.org/exiftool_pod.html#Input-output-text-formatting),
+  ExifTool's JSON output does not properly handle non-UTF-8 character
+  sets. Setting `pipeline="csv"` ensures that non-UTF-8 character sets
+  **are** properly handled, as demonstrated in a new example in `?exif_read`.
+
 # Version 0.1.4
 
 * Fixed `exif_read()` to now allow repeated elements in `args=`. This

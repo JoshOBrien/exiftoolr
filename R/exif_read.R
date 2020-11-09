@@ -33,11 +33,14 @@
 ##' @param pipeline One of \code{"json"} (the default) or
 ##'     \code{"csv"}. Controls whether the exiftool executable, behind
 ##'     the scenes, extracts metadata into a JSON data structure or a
-##'     tabular csv. The JSON pipeline works well in almost all cases,
-##'     but does not properly handle some character sets. If the exif
-##'     metadata fields include characters that need to be handled by
-##'     setting the \code{"-charset"} option, use the \code{"csv"}
-##'     pipeline as demonstrated in the second example below.
+##'     tabular csv. The JSON pipeline works well in most cases, but
+##'     (as documented at
+##'     \url{https://exiftool.org/exiftool_pod.html}) does not
+##'     properly handle non-UTF-8 character sets. If the metadata
+##'     fields include characters that are not encoded using UTF-8 and
+##'     that need to be handled by setting the \code{"-charset"}
+##'     option, use the \code{"csv"} pipeline as demonstrated in the
+##'     second example below.
 ##' @return A data frame of class \code{"exiftoolr"} with one row per
 ##'     file processed. The first column, named \code{"SourceFile"}
 ##'     gives the name(s) of the processed files. Subsequent columns
