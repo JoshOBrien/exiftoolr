@@ -16,6 +16,12 @@ form as you would if writing them on the command line
 
 \item{path}{A character vector giving one or more file paths.}
 
+\item{stdout}{Where output to stdout should be sent. If
+\code{TRUE} (the default), the output is captured in a
+character vector. For other options, see the help file for
+\code{\link[base]{system2}}, the function to which this
+argument's value gets passed along.}
+
 \item{quiet}{Use \code{FALSE} to display diagnostic
 information. Default value is \code{FALSE}.}
 

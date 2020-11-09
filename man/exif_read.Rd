@@ -33,11 +33,11 @@ information. Default value is \code{TRUE}}
 \item{pipeline}{One of \code{"json"} (the default) or
 \code{"csv"}. Controls whether the exiftool executable, behind
 the scenes, extracts metadata into a JSON data structure or a
-tabular csv. The JSON pipeline works well unless some of the
-values in the tag fields contain non-ASCII characters. If the
-fields do include non-ASCII characters, and you are needing to
-set the \code{"-charset"} option, use the \code{"csv"}
-pipeline instead.}
+tabular csv. The JSON pipeline works well in almost all cases,
+but does not properly handle some character sets. If the exif
+metadata fields include characters that need to be handled by
+setting the \code{"-charset"} option, use the \code{"csv"}
+pipeline as demonstrated in the second example below.}
 }
 \value{
 A data frame of class \code{"exiftoolr"} with one row per
@@ -75,9 +75,16 @@ website}.
 \examples{
 \dontrun{
 files <- dir(system.file(package = "exiftoolr", "images"),
-             pattern = "*.jpg", full.names = TRUE)
+             pattern = "LaSals|Lizard", full.names = TRUE)
 exif_read(files)
 exif_read(files, tags = c("filename", "imagesize"))
+
+## Use pipeline="csv" for images needing explicit specification
+## and proper handling of a non-default character sets
+img_file <- system.file(package = "exiftoolr", "images", "QS_Hongg.jpg")
+args <- c("-charset", "exiftool=cp1250")
+res <- exif_read(img_file, args = args, pipeline = "csv")
+res[["City"]]  ## "Zurich", with an umlaut over the "u"
 }
 }
 \references{
