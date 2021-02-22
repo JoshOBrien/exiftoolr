@@ -18,7 +18,10 @@ ruby RUBY_VERSION
 gem "github-pages", group: :jekyll_plugins
 # gem "jekyll-github-metadata", group: :jekyll_plugins
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
-gem 'nokogiri', '>= 1.10.8'
+## Whenever GitHub prompts me about a vulnerability found in my
+## lockfile, follow its instructions to modify the version of nokogiri
+## below and then locally run `bundle update nokogiri`
+gem 'nokogiri', '>= 1.11.0'
 gem 'json', '>= 2.3.0'
 gem 'kramdown', '>= 2.3.0'
 
