@@ -83,7 +83,7 @@ configure_exiftoolr <- function(command = NULL,
             if(grepl("'", com)) {
                 ## Use of scan() here based on:
                 ## https://stackoverflow.com/a/13628436/980833
-                com <- scan(text = str, what = "character", quiet = TRUE)
+                com <- scan(text = com, what = "character", quiet = TRUE)
             }
             set_exiftool_command(com)
             return(invisible(com))
