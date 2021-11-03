@@ -67,6 +67,24 @@ configure_exiftoolr <- function(command = NULL,
         }
         if (test_exiftool(paste(com, "-ver"), quiet = quiet)) {
             if(!quiet) message("ExifTool found at ", com)
+            ## If the command string includes single-quoted substrings
+            ## (most likely due to shQuote() of perl_path and command
+            ## above), split them out into a character vector. So, for
+            ## example, convert this:
+            ##
+            ##     "'/path/to/perl' '/path/to/exiftool'"
+            ##
+            ## to this:
+            ##
+            ##     c("/path/to/perl", "/path/to/exiftool"))
+            ##
+            ## This addresses the issue described at:
+            ## https://github.com/JoshOBrien/exiftoolr/issues/4
+            if(grepl("'", com)) {
+                ## Use of scan() here based on:
+                ## https://stackoverflow.com/a/13628436/980833
+                com <- scan(text = str, what = "character", quiet = TRUE)
+            }
             set_exiftool_command(com)
             return(invisible(com))
         }

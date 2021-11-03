@@ -256,6 +256,12 @@ exif_call <- function(args = NULL,
 
     ## Construct and then execute the command-line call
     args <- c("-@", shQuote(argfile))
+    ## Handle case where exiftoolpath is something like
+    ## c("/path/to/perl", "/path/to/exiftool")
+    if(length(exiftoolpath) > 1) {
+        exiftoolpath <- exiftoolpath[1]
+        args <- c(exiftoolpath[-1], args)
+    }
     system2(exiftoolpath, args = args, stdout = stdout)
 }
 

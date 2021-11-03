@@ -1,3 +1,11 @@
+# Version 0.1.6
+
+* Fixes a problem likely to affect Linux users (but also any others
+  relying on a local installation of Perl to execute calls to
+  ExifTool), caused by the internal change in `exif_call()` in 0.1.5
+  from `system()` to `system2()`. Thanks to Daniel Baumgartner for
+  bringing this to my attention.
+
 # Version 0.1.5
 
 * Added a `pipeline` option to `exif_read()`, which allows users to
