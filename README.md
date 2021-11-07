@@ -11,7 +11,7 @@
 
 [ExifTool][ExifTool-home] is a comprehensive open source utility for
 reading, writing and editing meta information in a wide variety of
-files. As noted on the [project homepage][ExifTool-home]:
+file types. As noted on its [project homepage][ExifTool-home]:
 
 > ExifTool supports many different metadata formats including EXIF, GPS,
 > IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
@@ -21,36 +21,28 @@ files. As noted on the [project homepage][ExifTool-home]:
 > Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
 > Sanyo, Sigma/Foveon and Sony.
 
-The **exiftoolr** R package provides a thin wrapper around a local
-installation of ExifTool, giving its users easy access to ExifTool
-functionality from within R. **exiftoolr** can be configured to use
-any ExifTool installation, but many or most users will prefer to
-simply run `install_exiftool()` once following package installation to
-download and install the most up-to-date version of ExifTool into the
-**exiftoolr** package directory. (`install_exiftool()` can also be run
-subsequently, at any time, to update the installed ExifTool to the
-most recent version.)
+[**exiftoolr**](https://CRAN.R-project.org/package=exiftoolr) wraps a
+local installation of ExifTool, giving users easy access to its
+functionality from within R. `exif_read()` can be used to read
+metadata from one or many files into a `data.frame` with one column
+per metadata field and one row per file. `exif_call()`, supports more
+general calls to the underlying ExifTool utility, examples of which
+are displayed [here][ExifTool-examples].
 
-Once the package is installed and set up, a simple call to
-`exif_read()` can be used to read metadata from one or more files into
-a `data.frame` with one column per metadata field and one row per
-file. Another function, `exif_call()`, supports more general calls to
-the underlying ExifTool utility, examples of which are displayed
-[here][ExifTool-examples].
 
 ## Example
 
-First up, an example of what ExifTool (via **exiftoolr**) can do. Say
-that you have an image onto which you would like to add a bit of text
-indicating the time and place at which it was taken. Here is a photo
-taken in the LaSal mountains in southeastern Utah, USA.
+Here is a photo taken in the La Sal mountains of southeastern Utah,
+USA.
 
 ![](img/LaSals.jpg)
 
-Here is one way to do that, using **exiftoolr** to extract the
-relevant data, and the
+Suppose you would like to annotate it with a bit of text indicating
+the time and place at which the photo was taken. You could do that as
+follows, using **exiftoolr** to extract the relevant data from the
+file, and the
 [**magick**](https://CRAN.R-project.org/package=magick) package to
-annotate the image with it:
+annotate the image:
 
 
 ```r
@@ -81,15 +73,15 @@ image_write(out, "LaSals_annotated.jpg")
 
 # Installation
 
-Released versions of **exiftoolr** are available via
-[CRAN](https://cran.r-project.org/) and may be installed by doing:
+To install **exiftoolr** from
+[CRAN](https://CRAN.R-project.org/package=exiftoolr) do, as usual:
 
 
 ```r
-install.packages("devtools")
+install.packages("exiftoolr")
 ```
 
-To install the most recent version from GitHub, do:
+To install the most recent version from GitHub, do this:
 
 
 ```r
@@ -100,10 +92,11 @@ devtools::install_github("JoshOBrien/exiftoolr")
 
 # Setup
 
-To install a copy of the ExifTool library or executable into the
-installed **exiftoolr** package's directory tree, where calls to
-functions in the **exiftoolr** package will automatically find it, run
-`install_exiftool()`:
+**exiftoolr** can be configured to use an existing ExifTool
+installation. Alternatively, run `install_exiftool()` one time
+following package installation. Doing so installs a copy of ExifTool
+in the package's directory tree, where calls to functions in the
+**exiftoolr** package will automatically find it:
 
 
 ```r
@@ -113,7 +106,7 @@ exiftoolr::install_exiftool()
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
 and ExifTool and in most cases will need no hints to find them. For
 direct control over which Perl or ExifTool is used, set their paths
-with either an explicit call to `configure_exiftool()` or by setting
+either with an explicit call to `configure_exiftool()` or by setting
 the environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
@@ -128,9 +121,9 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 11.99
+#> Using ExifTool version 12.34
 dim(exifinfo)
-#> [1]  2 99
+#> [1]   3 175
 names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
 #>  [1] "SourceFile"        "ExifToolVersion"   "FileName"          "Directory"         "FileSize"         
 #>  [6] "FileModifyDate"    "FileAccessDate"    "FileCreateDate"    "FilePermissions"   "FileType"         
@@ -144,9 +137,10 @@ argument:
 
 ```r
 exif_read(image_files, tags = c("filename", "imagesize"))
-#>                                 SourceFile   FileName ImageSize
-#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg LaSals.jpg   640 480
-#> 2 C:/R/Library/exiftoolr/images/Lizard.jpg Lizard.jpg 4032 3024
+#>                                   SourceFile     FileName ImageSize
+#> 1   C:/R/Library/exiftoolr/images/LaSals.jpg   LaSals.jpg   640 480
+#> 2   C:/R/Library/exiftoolr/images/Lizard.jpg   Lizard.jpg 4032 3024
+#> 3 C:/R/Library/exiftoolr/images/QS_Hongg.jpg QS_Hongg.jpg 4674 3456
 ```
 
 The `tags` argument also accepts simple regular expressions. For
@@ -164,11 +158,10 @@ exif_read(image_files[1], tags = "*GPS*")
 #> 1    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705 39.6479805555556 -111.370505555556
 ```
 
-
 To access more general ExifTool functionality (many examples of which
-are shown [here][ExifTool-examples]), you can use the
-function `exif_call()` to roll your own ExifTool call. For the
-previous example, it would look something like this:
+are shown [here][ExifTool-examples]), use the `exif_call()`
+function. For example, the call just above, if run using
+`exif_call()`, would look something like this:
 
 
 ```r
@@ -178,21 +171,19 @@ exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])
 
 # Why another R package for reading image file metadata?
 
-Several existing R packages can read EXIF metadata from image
-files. The [**exif**](https://CRAN.R-project.org/package=exif),
+Several R packages can read EXIF metadata from image files. The
+[**exif**](https://CRAN.R-project.org/package=exif),
 [**exiv**](https://github.com/hrbrmstr/exiv), and
 [**magick**](https://CRAN.R-project.org/package=magick) packages, all
 include functions (`exif::read_exif()`, `exiv::read_exif()`, and
 `magick::image_attributes()`, respectively) that extract files' EXIF
-data. In many files, though, EXIF tags comprise only a subset of the
-metadata, and even well as EXIF maker notes and (despite its name)
-ExifTool reads data stored in many additional metadata formats.
+data. Often, though, EXIF tags comprise only a subset of the metadata
+in a file. Despite its name, ExifTool reads data stored in many
+additional metadata formats.
 
-The [**exifr**](https://CRAN.R-project.org/package=exifr) package is
-much more similar in the functionality that it provides. Both it and
-**exiftoolr** construct a thin wrapper around ExifTool, and so inherit
-its excellent support for a large variety of file types and many
-metadata formats beyond EXIF tags. The packages differ mainly in their
+The [**exifr**](https://CRAN.R-project.org/package=exifr) package --
+also a thin wrapper around ExifTool -- is much more similar in the
+functionality that it provides. The packages differ mainly in their
 support for easy installation and configuration on all operating
 systems. **exiftoolr**, in particular, was designed to make it as easy
 for Windows users -- even those without Python installations -- to
