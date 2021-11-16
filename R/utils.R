@@ -137,16 +137,26 @@ test_perl <- function(command, quiet = TRUE) {
 
 test_exiftool <- function(command, quiet = TRUE) {
     if(!quiet) message("Trying exiftool command: ", command, " -ver")
+    args <- "-ver"
+    if(grepl("'", command)) {
+        ## Use of scan() here based on:
+        ## https://stackoverflow.com/a/13628436/980833
+        commmand <- scan(text = command, what = "character", quiet = TRUE)
+    }
+    if (length(command) > 1) {
+        args <- c(command[-1], args)
+        command <- command[1]
+    }
     command_works <-
         suppressWarnings(
             suppressMessages(0 == try(system2(command,
-                                              args = "-ver",
+                                              args = args,
                                               stdout = FALSE,
                                               stderr = FALSE),
                                       silent = TRUE)))
     if (command_works) {
         ## check that version is a numeric value like 10.96
-        ver_string <- paste(system2(command, args = "-ver", stderr = FALSE),
+        ver_string <- paste(system2(command, args = args, stderr = FALSE),
                             collapse = "\n")
         ver_number <- suppressWarnings(as.numeric(ver_string))
         return(!is.na(ver_number))

@@ -258,7 +258,7 @@ exif_call <- function(args = NULL,
     args <- c("-@", shQuote(argfile))
     ## Handle case where exiftoolpath is something like
     ## c("/path/to/perl", "/path/to/exiftool")
-    if(length(exiftoolpath) > 1) {
+    if (length(exiftoolpath) > 1) {
         args <- c(exiftoolpath[-1], args)
         exiftoolpath <- exiftoolpath[1]
     }
