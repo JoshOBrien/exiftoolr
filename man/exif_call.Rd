@@ -31,7 +31,7 @@ information. Default value is \code{FALSE}.}
 The standard output as a character vector.
 }
 \description{
-Uses \code{system()} to run a basic call to \code{exiftool}.
+Uses \code{system2()} to run a basic call to \code{exiftool}.
 }
 \details{
 For examples of the command-line calls to ExifTool (all

@@ -65,7 +65,7 @@ configure_exiftoolr <- function(command = NULL,
         if (com == paste(shQuote(perl_path), shQuote(NULL))) {
             next
         }
-        if (test_exiftool(paste(com, "-ver"), quiet = quiet)) {
+        if (test_exiftool(com, quiet = quiet)) {
             if(!quiet) message("ExifTool found at ", com)
             ## If the command string includes single-quoted substrings
             ## (most likely due to shQuote() of perl_path and command
@@ -108,14 +108,14 @@ configure_perl <- function(perl_path = NULL, quiet = FALSE) {
     }
 
     for(p in perl_path) {
-        if (test_perl(paste(shQuote(p), "--version"), quiet = quiet)) {
-            if(!quiet) message("perl found at ", p)
+        if (test_perl(p, quiet = quiet)) {
+            if(!quiet) message("Perl found at ", p)
             set_perl_path(p)
             return(invisible(p))
         }
     }
 
-    ## warning("Could not find perl at any of the following locations: ",
+    ## warning("Could not find Perl at any of the following locations: ",
     ##         paste(perl_path, collapse = ", "),
     ##         '. Specify perl location using set_perl_path("my/path/to/perl")')
     return(NULL)
@@ -124,29 +124,29 @@ configure_perl <- function(perl_path = NULL, quiet = FALSE) {
 
 
 test_perl <- function(command, quiet = TRUE) {
-    if(!quiet) message("Trying perl command: ", command)
+    if(!quiet) message("Trying perl command: ", command, " --version")
     suppressWarnings(
-        suppressMessages(0 == try(system(command,
-                                         ignore.stdout = TRUE,
-                                         ignore.stderr = TRUE,
-                                         show.output.on.console = TRUE),
-                                  silent=TRUE)))
+        suppressMessages(0 == try(system2(command,
+                                          args = "--version",
+                                          stdout = FALSE,
+                                          stderr = FALSE),
+                                  silent = TRUE)))
 }
 
 
 
 test_exiftool <- function(command, quiet = TRUE) {
-    if(!quiet) message("Trying exiftool command: ", command)
+    if(!quiet) message("Trying exiftool command: ", command, " -ver")
     command_works <-
         suppressWarnings(
-            suppressMessages(0 == try(system(command,
-                                             ignore.stdout = TRUE,
-                                             ignore.stderr = TRUE,
-                                             show.output.on.console = TRUE),
-                                      silent=TRUE)))
+            suppressMessages(0 == try(system2(command,
+                                              args = "-ver",
+                                              stdout = FALSE,
+                                              stderr = FALSE),
+                                      silent = TRUE)))
     if (command_works) {
         ## check that version is a numeric value like 10.96
-        ver_string <- paste(system(command, ignore.stderr=TRUE, intern=TRUE),
+        ver_string <- paste(system2(command, args = "-ver", stderr = FALSE),
                             collapse = "\n")
         ver_number <- suppressWarnings(as.numeric(ver_string))
         return(!is.na(ver_number))

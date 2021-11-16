@@ -181,7 +181,7 @@ exif_read <- function(path, tags = NULL,
 
 ##' Call ExifTool from R
 ##'
-##' Uses \code{system()} to run a basic call to \code{exiftool}.
+##' Uses \code{system2()} to run a basic call to \code{exiftool}.
 ##' @param args Character vector of arguments, each written in same
 ##'     form as you would if writing them on the command line
 ##'     (e.g. \code{"-n"} or \code{"-csv"})
