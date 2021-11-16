@@ -141,7 +141,7 @@ test_exiftool <- function(command, quiet = TRUE) {
     if(grepl("'", command)) {
         ## Use of scan() here based on:
         ## https://stackoverflow.com/a/13628436/980833
-        commmand <- scan(text = command, what = "character", quiet = TRUE)
+        command <- scan(text = command, what = "character", quiet = TRUE)
     }
     if (length(command) > 1) {
         args <- c(command[-1], args)
