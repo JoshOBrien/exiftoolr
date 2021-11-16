@@ -65,26 +65,29 @@ configure_exiftoolr <- function(command = NULL,
         if (com == paste(shQuote(perl_path), shQuote(NULL))) {
             next
         }
+        ## If the command string includes single-quoted substrings
+        ## split them out into a character vector. (This is most
+        ## likely due to shQuote()'ing of perl_path and command above,
+        ## but could also be from the value supplied to command= or to
+        ## ET_EXIFTOOL_PATH (and retrieved using env_exiftool_path())),
+        ##
+        ## So, for example, convert this:
+        ##
+        ##     "'/path/to/perl' '/path/to/exiftool'"
+        ##
+        ## to this:
+        ##
+        ##     c("/path/to/perl", "/path/to/exiftool"))
+        ##
+        ## This addresses the issue described at:
+        ## https://github.com/JoshOBrien/exiftoolr/issues/4
+        if(grepl("'", com)) {
+            ## Use of scan() here based on:
+            ## https://stackoverflow.com/a/13628436/980833
+            com <- scan(text = com, what = "character", quiet = TRUE)
+        }
         if (test_exiftool(com, quiet = quiet)) {
             if(!quiet) message("ExifTool found at ", com)
-            ## If the command string includes single-quoted substrings
-            ## (most likely due to shQuote() of perl_path and command
-            ## above), split them out into a character vector. So, for
-            ## example, convert this:
-            ##
-            ##     "'/path/to/perl' '/path/to/exiftool'"
-            ##
-            ## to this:
-            ##
-            ##     c("/path/to/perl", "/path/to/exiftool"))
-            ##
-            ## This addresses the issue described at:
-            ## https://github.com/JoshOBrien/exiftoolr/issues/4
-            if(grepl("'", com)) {
-                ## Use of scan() here based on:
-                ## https://stackoverflow.com/a/13628436/980833
-                com <- scan(text = com, what = "character", quiet = TRUE)
-            }
             set_exiftool_command(com)
             return(invisible(com))
         }
@@ -138,11 +141,6 @@ test_perl <- function(command, quiet = TRUE) {
 test_exiftool <- function(command, quiet = TRUE) {
     if(!quiet) message("Trying exiftool command: ", command, " -ver")
     args <- "-ver"
-    if(grepl("'", command)) {
-        ## Use of scan() here based on:
-        ## https://stackoverflow.com/a/13628436/980833
-        command <- scan(text = command, what = "character", quiet = TRUE)
-    }
     if (length(command) > 1) {
         args <- c(command[-1], args)
         command <- command[1]
