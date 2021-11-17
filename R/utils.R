@@ -87,7 +87,8 @@ configure_exiftoolr <- function(command = NULL,
             com <- scan(text = com, what = "character", quiet = TRUE)
         }
         if (test_exiftool(com, quiet = quiet)) {
-            if(!quiet) message("ExifTool found at ", com)
+            if(!quiet) message("ExifTool found at: ",
+                               paste(shQuote(com), collapse = " "))
             set_exiftool_command(com)
             return(invisible(com))
         }
@@ -112,7 +113,8 @@ configure_perl <- function(perl_path = NULL, quiet = FALSE) {
 
     for(p in perl_path) {
         if (test_perl(p, quiet = quiet)) {
-            if(!quiet) message("Perl found at ", p)
+            if(!quiet) message("Perl found at: ",
+                               paste(shQuote(p), collapse = " "))
             set_perl_path(p)
             return(invisible(p))
         }
@@ -127,7 +129,9 @@ configure_perl <- function(perl_path = NULL, quiet = FALSE) {
 
 
 test_perl <- function(command, quiet = TRUE) {
-    if(!quiet) message("Trying perl command: ", command, " --version")
+    if(!quiet) message("Trying perl command: ",
+                       paste(shQuote(command), collapse = " "),
+                       " --version")
     suppressWarnings(
         suppressMessages(0 == try(system2(command,
                                           args = "--version",
@@ -139,7 +143,9 @@ test_perl <- function(command, quiet = TRUE) {
 
 
 test_exiftool <- function(command, quiet = TRUE) {
-    if(!quiet) message("Trying exiftool command: ", command, " -ver")
+    if(!quiet) message("Trying exiftool command: ",
+                       paste(shQuote(command), collapse = " "),
+                       " -ver")
     args <- "-ver"
     if (length(command) > 1) {
         args <- c(command[-1], args)
