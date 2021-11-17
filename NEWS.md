@@ -1,3 +1,12 @@
+# Version 0.1.7
+
+* Fixes an issue that could cause `configure_exiftoolr()` to fail if
+  the path to the ExifTool executable on a user's computer contained
+  any spaces. Now `configure_exiftoolr()` should work even if there
+  are spaces in the path(s) to the user's installation of Perl and/or
+  their ExifTool executable or library. Thanks to Lafont Rapnouil
+  Tristan for reporting the issue.
+
 # Version 0.1.6
 
 * Fixes a problem likely to affect Linux users (but also any others
