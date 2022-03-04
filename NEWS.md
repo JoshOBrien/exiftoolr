@@ -1,3 +1,7 @@
+# Version 0.1.8
+
+* Adds tests (using the **tinytest** package).
+
 # Version 0.1.7
 
 * Fixes an issue that could cause `configure_exiftoolr()` to fail if
