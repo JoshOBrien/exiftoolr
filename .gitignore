@@ -4,3 +4,4 @@ docs/_site/*
 /exiftool/*
 /README.html
 /inst/exiftool/win_exe/*
+/docs/
