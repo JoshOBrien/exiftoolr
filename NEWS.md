@@ -1,5 +1,11 @@
 # Version 0.1.8
 
+* Fixes an issue that caused `configure_exiftoolr()` (and thus
+  essentially all **exiftoolr** functionality) to fail on Windows
+  machines that do not have Perl installed in a location findable by
+  the `exiftoolr:::configure_perl()`. Thanks to Tom Yamashita for
+  reporting this issue.
+  
 * Adds tests (using the **tinytest** package).
 
 # Version 0.1.7

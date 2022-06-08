@@ -62,7 +62,8 @@ configure_exiftoolr <- function(command = NULL,
 
     for(com in command) {
         ## automatically fail perl_path ''
-        if (com == paste(shQuote(perl_path), shQuote(NULL))) {
+        if (!is.null(perl_path) &&
+            com == paste(shQuote(perl_path), shQuote(NULL))) {
             next
         }
         ## If the command string includes single-quoted substrings
