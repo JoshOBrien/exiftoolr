@@ -169,7 +169,7 @@ also a thin wrapper around ExifTool -- is much more similar in the
 functionality that it provides. The packages differ mainly in their
 support for easy installation and configuration on all operating
 systems. **exiftoolr**, in particular, was designed to make it as easy
-for Windows users -- even those without Python installations -- to
+for Windows users -- even those without Perl installations -- to
 access ExifTool functionality as it is for *NIX and Mac
 users. Relative to **exifr**, **exiftoolr** also makes it easier to
 update ExifTool to its most current version.
