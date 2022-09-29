@@ -161,7 +161,7 @@ test_exiftool <- function(command, quiet = TRUE) {
                                       silent = TRUE)))
     if (command_works) {
         ## check that version is a numeric value like 10.96
-        ver_string <- paste(system2(command, args = args, stderr = FALSE),
+        ver_string <- paste(system2(command, args = args, stdout = TRUE, stderr = FALSE),
                             collapse = "\n")
         ver_number <- suppressWarnings(as.numeric(ver_string))
         return(!is.na(ver_number))
