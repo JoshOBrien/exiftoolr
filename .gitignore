@@ -5,3 +5,4 @@ docs/_site/*
 /README.html
 /inst/exiftool/win_exe/*
 /docs/
+*.swp

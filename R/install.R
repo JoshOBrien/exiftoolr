@@ -54,7 +54,10 @@ install_exiftool <- function(install_location = NULL,
     ##---------------------------##
     if (is.null(install_location)) {
         ## Default install location
-        install_location <- system.file("exiftool", package = "exiftoolr")
+        install_location <- R_user_dir("exiftoolr")
+        if (!dir.exists(install_location)) {
+            dir.create(install_location, recursive = TRUE)
+        }
     }
 
     ## Find writable locations
