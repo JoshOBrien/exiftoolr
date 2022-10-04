@@ -2,12 +2,12 @@
 ##' Install the current version of ExifTool
 ##'
 ##'
-##' @title Install ExifTool, downloading (by default) the current version
+##' @title Install ExifTool, downloading (by default) the current
+##'     version
 ##' @param install_location Path to the directory into which ExifTool
 ##'     should be installed. If \code{NULL} (the default),
-##'     installation will be into the (initially empty)
-##'     \code{exiftool} folder in the \pkg{exiftoolr} package's
-##'     directory tree.
+##'     installation will be into the directory returned by
+##'     \code{backports::R_user_dir("exiftoolr")}.
 ##' @param win_exe Logical, only used on Windows machines. Should we
 ##'     install the standalone ExifTool Windows executable or the
 ##'     ExifTool Perl library?  (The latter relies, for its execution,
@@ -18,8 +18,7 @@
 ##' @param local_exiftool If installing ExifTool from a local "*.zip"
 ##'     or ".tar.gz", supply the path to that file as a character
 ##'     string. With default value, `NULL`, the function downloads
-##'     ExifTool from \url{https://exiftool.org}
-##'     and then installs it.
+##'     ExifTool from \url{https://exiftool.org} and then installs it.
 ##' @param quiet Logical.  Should function should be chatty?
 ##' @return Called for its side effect
 ##' @export
@@ -54,7 +53,7 @@ install_exiftool <- function(install_location = NULL,
     ##---------------------------##
     if (is.null(install_location)) {
         ## Default install location
-        install_location <- R_user_dir("exiftoolr")
+        install_location <- R_user_dir("exiftoolr", which = "data")
         if (!dir.exists(install_location)) {
             dir.create(install_location, recursive = TRUE)
         }

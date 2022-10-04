@@ -32,7 +32,9 @@ configure_exiftoolr <- function(command = NULL,
         ## (b) On Windows, check for a locally installed standalone
         ## executable
         if (allow_win_exe & is_windows()) {
-            internal_win_exe <- file.path(R_user_dir("exiftoolr"), "win_exe/exiftool(-k).exe")
+            internal_win_exe <-
+                file.path(R_user_dir("exiftoolr", which = "data"),
+                          "win_exe", "exiftool(-k).exe")
             if (nchar(internal_win_exe))
                 command <- c(command, internal_win_exe)
         }
@@ -40,7 +42,9 @@ configure_exiftoolr <- function(command = NULL,
         command <- c(command, "exiftool")
         ## (d) Check for locally installed ExifTool Perl scripts
         if (!is.null(perl_path)) {
-            internal_exiftool <- file.path(R_user_dir("exiftoolr"), "exiftool")
+            internal_exiftool <-
+                file.path(R_user_dir("exiftoolr", which = "data"),
+                          "exiftool")
             if (nchar(internal_exiftool)) {
                 command <-
                     c(command,

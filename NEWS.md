@@ -1,3 +1,15 @@
+# Version 0.2.0
+
+* Changes default location into which exiftool executable is
+  downloaded by a call to `install_exiftool()`. Formerly, the
+  executable was installed into the directory returned by
+  `system.file("exiftool", package = "exiftoolr")`, which will not
+  always be writable (as, e.g., when the package is installed by an
+  admin in the shared library of a multi-user server, and hence is
+  owned by "root"). Now, the executable is by default installed to the
+  directory given by `backports::R_user_dir()`, which should be more
+  generally writable.
+
 # Version 0.1.8
 
 * Fixes an issue that caused `configure_exiftoolr()` (and thus
