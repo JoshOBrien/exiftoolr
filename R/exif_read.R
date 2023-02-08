@@ -273,10 +273,13 @@ exif_version <- function(quiet = TRUE) {
 
 ## private helper command to generate call to exiftool
 construct_argfile <- function(args, path) {
+    if (any(gl <- grepl("\n", args))) {
+        args <- ifelse(gl,
+                       paste0("#[CSTR]", gsub("\n", "\\\\n", args)),
+                       args)
+    }
     all_args <- c(args, path)
     tmpfile <- tempfile("args.cmd")
     writeLines(all_args, tmpfile, sep="\n")
     tmpfile
 }
-
-
