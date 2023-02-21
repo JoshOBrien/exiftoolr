@@ -48,6 +48,7 @@ configure_exiftoolr <- function(command = NULL,
             if (nchar(internal_exiftool)) {
                 command <-
                     c(command,
+                      shQuote(internal_exiftool),
                       paste(shQuote(perl_path), shQuote(internal_exiftool)))
         }
         }
