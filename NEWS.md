@@ -1,3 +1,9 @@
+# Version 0.2.2
+
+* Fixes bug that could cause a failure to locate an already-installed
+  version of ExifTool on MacOS (and possibly also on *NIX
+  OS's). Thanks to Courtney Meier for the bug report.
+
 # Version 0.2.0
 
 * Changes default location into which exiftool executable is
