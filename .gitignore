@@ -6,3 +6,4 @@ docs/_site/*
 /inst/exiftool/win_exe/*
 /docs/
 *.swp
+docs

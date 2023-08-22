@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
   )
-options(width = 115)
+options(width = 85)
 ```
 
 # ExifTool functionality from R
@@ -42,7 +42,7 @@ are displayed [here][ExifTool-examples].
 Here is a photo taken in the La Sal mountains of southeastern Utah,
 USA.
 
-![](img/LaSals.jpg)
+![](man/figures/LaSals.jpg)
 
 Suppose you would like to annotate it with a bit of text indicating
 the time and place at which the photo was taken. You could do that as
@@ -74,7 +74,7 @@ out <- image_annotate(image_read(infile), txt,
 image_write(out, "LaSals_annotated.jpg")
 ```
 
-![](img/LaSals_annotated.jpg)
+![](man/figures/LaSals_annotated.jpg)
 
 
 # Installation
@@ -97,20 +97,20 @@ devtools::install_github("JoshOBrien/exiftoolr")
 # Setup
 
 **exiftoolr** can be configured to use an existing ExifTool
-installation. Alternatively, run `install_exiftool()` one time
-following package installation. Doing so installs a copy of ExifTool
-in the package's directory tree, where calls to functions in the
-**exiftoolr** package will automatically find it:
+installation. Alternatively, run `install_exiftool()` once following
+package installation to install a copy of ExifTool in the package's
+directory tree, where calls to functions in the **exiftoolr** package
+will automatically find it:
 
 ```{r, exiftool-installation, eval = FALSE}
 exiftoolr::install_exiftool()
 ```
 
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
-and ExifTool and in most cases will need no hints to find them. For
+and ExifTool and, in most cases, will need no hints to find them. For
 direct control over which Perl or ExifTool is used, set their paths
-either with an explicit call to `configure_exiftool()` or by setting
-the environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
+either with an explicit call to `configure_exiftool()` or with the
+environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
 # Usage
@@ -124,7 +124,7 @@ image_files <- dir(system.file("images", package = "exiftoolr"),
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
 dim(exifinfo)
-names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
+names(exifinfo)[1:20] ## Display first 20 metadata fields read by ExifTool
 ```
 
 To extract only those tags that are actually needed, use the `tags`
@@ -155,10 +155,9 @@ exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])
 # Why another R package for reading image file metadata?
 
 Several R packages can read EXIF metadata from image files. The
-[**exif**](https://CRAN.R-project.org/package=exif),
-[**exiv**](https://github.com/hrbrmstr/exiv), and
-[**magick**](https://CRAN.R-project.org/package=magick) packages, all
-include functions (`exif::read_exif()`, `exiv::read_exif()`, and
+[**exif**](https://CRAN.R-project.org/package=exif) and
+[**magick**](https://CRAN.R-project.org/package=magick) packages both
+include functions (`exif::read_exif()`, and
 `magick::image_attributes()`, respectively) that extract files' EXIF
 data. Often, though, EXIF tags comprise only a subset of the metadata
 in a file. Despite its name, ExifTool reads data stored in many

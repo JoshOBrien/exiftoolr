@@ -17,7 +17,7 @@ Description: Reads, writes, and edits EXIF and other file metadata
     Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
     Sanyo, Sigma/Foveon and Sony.
 License: GPL-2
-URL: https://github.com/JoshOBrien/exiftoolr#readme
+URL: https://github.com/JoshOBrien/exiftoolr#readme, https://joshobrien.github.io/exiftoolr/
 BugReports: https://github.com/JoshOBrien/exiftoolr/issues
 SystemRequirements: Perl
 Depends:
