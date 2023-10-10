@@ -178,7 +178,6 @@ exif_read <- function(path, tags = NULL,
     return_value
 }
 
-
 ##' Call ExifTool from R
 ##'
 ##' Uses \code{system2()} to run a basic call to \code{exiftool}.
@@ -193,10 +192,22 @@ exif_read <- function(path, tags = NULL,
 ##'     argument's value gets passed along.
 ##' @param quiet Use \code{FALSE} to display diagnostic
 ##'     information. Default value is \code{FALSE}.
+##' @param config_file Path to a config file of the format expected by
+##'     Exiftool's command line \code{-config} option. (See Details
+##'     for an explanation of why this one option cannot be passed
+##'     directly to \code{args} via \code{-config} argument.)
 ##' @param ... Additional arguments to be passed to \code{system2()}.
 ##' @details For examples of the command-line calls to ExifTool (all
 ##'     of which can be reproduced by calls to \code{exif_call}), see
 ##'     \url{https://exiftool.org/examples.html}.
+##'
+##'     Under the hood, \code{exif_call()} writes the options in
+##'     \code{args} to a text file and then calls Exiftool, passing
+##'     that text file's contents to Exiftool via its \code{-@
+##'     ARGFILE} option. The \code{-config} is one of two options that
+##'     may not be used in such a \code{-@ ARGFILE}, so we handle that
+##'     option separately using \code{exif_call()}'s
+##'     \code{config_file} argument.
 ##' @return The standard output as a character vector.
 ##' @export
 ##'
@@ -237,6 +248,7 @@ exif_call <- function(args = NULL,
                       path = NULL,
                       stdout = TRUE,
                       quiet = FALSE,
+                      config_file = NULL,
                       ...) {
     ## Ensure that exiftoolr is properly configured
     if (!is_exiftoolr_configured()) {
@@ -256,6 +268,10 @@ exif_call <- function(args = NULL,
 
     ## Construct and then execute the command-line call
     args <- c("-@", shQuote(argfile))
+    ## "-config" must come first and can't be used in an -@ ARGFILE
+    if (!is.null(config_file)) {
+        args <- c(paste("-config", shQuote(config_file)), args)
+    }
     ## Handle case where exiftoolpath is something like
     ## c("/path/to/perl", "/path/to/exiftool")
     if (length(exiftoolpath) > 1) {

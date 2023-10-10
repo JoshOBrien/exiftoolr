@@ -5,7 +5,14 @@
 \alias{exif_version}
 \title{Call ExifTool from R}
 \usage{
-exif_call(args = NULL, path = NULL, stdout = TRUE, quiet = FALSE, ...)
+exif_call(
+  args = NULL,
+  path = NULL,
+  stdout = TRUE,
+  quiet = FALSE,
+  config_file = NULL,
+  ...
+)
 
 exif_version(quiet = TRUE)
 }
@@ -25,6 +32,11 @@ argument's value gets passed along.}
 \item{quiet}{Use \code{FALSE} to display diagnostic
 information. Default value is \code{FALSE}.}
 
+\item{config_file}{Path to a config file of the format expected by
+Exiftool's command line \code{-config} option. (See Details
+for an explanation of why this one option cannot be passed
+directly to \code{args} via \code{-config} argument.)}
+
 \item{...}{Additional arguments to be passed to \code{system2()}.}
 }
 \value{
@@ -37,6 +49,14 @@ Uses \code{system2()} to run a basic call to \code{exiftool}.
 For examples of the command-line calls to ExifTool (all
     of which can be reproduced by calls to \code{exif_call}), see
     \url{https://exiftool.org/examples.html}.
+
+    Under the hood, \code{exif_call()} writes the options in
+    \code{args} to a text file and then calls Exiftool, passing
+    that text file's contents to Exiftool via its \code{-@
+    ARGFILE} option. The \code{-config} is one of two options that
+    may not be used in such a \code{-@ ARGFILE}, so we handle that
+    option separately using \code{exif_call()}'s
+    \code{config_file} argument.
 }
 \examples{
 \dontrun{
