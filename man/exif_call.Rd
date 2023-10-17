@@ -10,8 +10,9 @@ exif_call(
   path = NULL,
   stdout = TRUE,
   quiet = FALSE,
+  ...,
   config_file = NULL,
-  ...
+  common_args = NULL
 )
 
 exif_version(quiet = TRUE)
@@ -32,12 +33,18 @@ argument's value gets passed along.}
 \item{quiet}{Use \code{FALSE} to display diagnostic
 information. Default value is \code{FALSE}.}
 
+\item{...}{Additional arguments to be passed to \code{system2()}.}
+
 \item{config_file}{Path to a config file of the format expected by
 Exiftool's command line \code{-config} option. (See Details
 for an explanation of why this one option cannot be passed
-directly to \code{args} via \code{-config} argument.)}
+directly to \code{args} via the \code{-config} argument.)}
 
-\item{...}{Additional arguments to be passed to \code{system2()}.}
+\item{common_args}{A character vector of arguments to be applied
+to all executed commands when the Exiftool \code{-execute}
+option is being used. (See Details for an explanation of why
+this option cannot be passed directly to \code{args} via
+\code{-common_args} argument.)}
 }
 \value{
 The standard output as a character vector.
@@ -53,10 +60,10 @@ For examples of the command-line calls to ExifTool (all
     Under the hood, \code{exif_call()} writes the options in
     \code{args} to a text file and then calls Exiftool, passing
     that text file's contents to Exiftool via its \code{-@
-    ARGFILE} option. The \code{-config} is one of two options that
-    may not be used in such a \code{-@ ARGFILE}, so we handle that
-    option separately using \code{exif_call()}'s
-    \code{config_file} argument.
+    ARGFILE} option. \code{-config} and \code{-common_args} are
+    the two options that may not be used in such a \code{-@
+    ARGFILE}, so we handle that option separately using
+    \code{exif_call()}'s \code{config_file} argument.
 }
 \examples{
 \dontrun{

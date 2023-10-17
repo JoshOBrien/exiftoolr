@@ -4,6 +4,7 @@
 ^inst/exiftool/win_exe/.*$
 ^inst/exiftool/lib/.*$
 ^inst/exiftool/exiftool$
+^man/figures/.*$
 ^docs/.*
 ^img$
 ^TODO.org$
@@ -11,3 +12,4 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^\.devcontainer/.*$

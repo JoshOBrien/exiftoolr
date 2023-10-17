@@ -1,3 +1,11 @@
+# Version 0.2.3
+
+* Adds arguments `config_file=` and `common_args=` to
+  `exif_call()`. These are passed on to exiftool options `-config` and
+  `-common_args` respectively, neither of which was supported here
+  before due to their not being allowed in the `-@ ARGFILE` option
+  used 'behind the scenes' by all calls to `exif_call()`.
+
 # Version 0.2.2
 
 * Fixes bug that could cause a failure to locate an already-installed
