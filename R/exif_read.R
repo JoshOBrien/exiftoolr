@@ -133,7 +133,18 @@ exif_read <- function(path, tags = NULL,
     json_args <- c("-n", "-j", "-q", "-b", args)
     ## Construct and execute a call to Exiftool
     return_value <-
-        exif_call(args = json_args, path = path)
+        suppressWarnings(exif_call(args = json_args, path = path))
+
+    ## Handle rare case in which ExifTool finds no files to read
+    ## (e.g. https://github.com/JoshOBrien/exiftoolr/issues/20)
+    if (!length(return_value)) {
+        args <- setdiff(json_args, "-q")
+        return_value <-
+            suppressWarnings(exif_call(args = args, path = path))
+        warning(paste0(return_value, collapse = "\n"))
+        return(NULL)
+    }
+
     ## Postprocess the results
     return_value <- fromJSON(paste0(return_value, collapse = ""))
 
