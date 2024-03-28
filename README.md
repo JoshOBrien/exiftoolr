@@ -35,7 +35,7 @@ are displayed [here][ExifTool-examples].
 Here is a photo taken in the La Sal mountains of southeastern Utah,
 USA.
 
-![](img/LaSals.jpg)
+![](man/figures/LaSals.jpg)
 
 Suppose you would like to annotate it with a bit of text indicating
 the time and place at which the photo was taken. You could do that as
@@ -68,7 +68,7 @@ out <- image_annotate(image_read(infile), txt,
 image_write(out, "LaSals_annotated.jpg")
 ```
 
-![](img/LaSals_annotated.jpg)
+![](man/figures/LaSals_annotated.jpg)
 
 
 # Installation
@@ -93,10 +93,10 @@ devtools::install_github("JoshOBrien/exiftoolr")
 # Setup
 
 **exiftoolr** can be configured to use an existing ExifTool
-installation. Alternatively, run `install_exiftool()` one time
-following package installation. Doing so installs a copy of ExifTool
-in the package's directory tree, where calls to functions in the
-**exiftoolr** package will automatically find it:
+installation. Alternatively, run `install_exiftool()` once following
+package installation to install a copy of ExifTool in the package's
+directory tree, where calls to functions in the **exiftoolr** package
+will automatically find it:
 
 
 ```r
@@ -104,10 +104,10 @@ exiftoolr::install_exiftool()
 ```
 
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
-and ExifTool and in most cases will need no hints to find them. For
+and ExifTool and, in most cases, will need no hints to find them. For
 direct control over which Perl or ExifTool is used, set their paths
-either with an explicit call to `configure_exiftool()` or by setting
-the environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
+either with an explicit call to `configure_exiftool()` or with the
+environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
 # Usage
@@ -121,14 +121,14 @@ library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
-#> Using ExifTool version 12.34
 dim(exifinfo)
-#> [1]   3 175
-names(exifinfo)[1:20] ## List the first 20 metadata fields read by ExifTool
-#>  [1] "SourceFile"        "ExifToolVersion"   "FileName"          "Directory"         "FileSize"         
-#>  [6] "FileModifyDate"    "FileAccessDate"    "FileCreateDate"    "FilePermissions"   "FileType"         
-#> [11] "FileTypeExtension" "MIMEType"          "ExifByteOrder"     "Make"              "Model"            
-#> [16] "Orientation"       "XResolution"       "YResolution"       "ResolutionUnit"    "Software"
+#> [1]   3 181
+names(exifinfo)[1:20] ## Display first 20 metadata fields read by ExifTool
+#>  [1] "SourceFile"        "ExifToolVersion"   "FileName"          "Directory"        
+#>  [5] "FileSize"          "FileModifyDate"    "FileAccessDate"    "FileCreateDate"   
+#>  [9] "FilePermissions"   "FileType"          "FileTypeExtension" "MIMEType"         
+#> [13] "ExifByteOrder"     "Make"              "Model"             "Orientation"      
+#> [17] "XResolution"       "YResolution"       "ResolutionUnit"    "Software"
 ```
 
 To extract only those tags that are actually needed, use the `tags`
@@ -150,12 +150,16 @@ instance, to extract all fields with names containing the substring
 
 ```r
 exif_read(image_files[1], tags = "*GPS*")
-#>                                 SourceFile GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef
-#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg              N               W              0     23:05:36           K
-#>   GPSSpeed GPSImgDirectionRef GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError
-#> 1        0                  T        107.2073                 T       107.2073   2016:09:21                    5
-#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude                        GPSPosition
-#> 1    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705 39.6479805555556 -111.370505555556
+#>                                 SourceFile GPSLatitudeRef GPSLongitudeRef
+#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg              N               W
+#>   GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed GPSImgDirectionRef
+#> 1              0     23:05:36           K        0                  T
+#>   GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError
+#> 1        107.2073                 T       107.2073   2016:09:21                    5
+#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude
+#> 1    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705
+#>                          GPSPosition
+#> 1 39.6479805555556 -111.370505555556
 ```
 
 To access more general ExifTool functionality (many examples of which
@@ -172,10 +176,9 @@ exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])
 # Why another R package for reading image file metadata?
 
 Several R packages can read EXIF metadata from image files. The
-[**exif**](https://CRAN.R-project.org/package=exif),
-[**exiv**](https://github.com/hrbrmstr/exiv), and
-[**magick**](https://CRAN.R-project.org/package=magick) packages, all
-include functions (`exif::read_exif()`, `exiv::read_exif()`, and
+[**exif**](https://CRAN.R-project.org/package=exif) and
+[**magick**](https://CRAN.R-project.org/package=magick) packages both
+include functions (`exif::read_exif()`, and
 `magick::image_attributes()`, respectively) that extract files' EXIF
 data. Often, though, EXIF tags comprise only a subset of the metadata
 in a file. Despite its name, ExifTool reads data stored in many
