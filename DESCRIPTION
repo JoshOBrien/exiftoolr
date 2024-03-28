@@ -2,20 +2,19 @@ Package: exiftoolr
 Type: Package
 Title: ExifTool Functionality from R
 Version: 0.2.4
-Date: 2024-03-27
+Date: 2024-03-28
 Authors@R: c(person("Joshua", "O'Brien", role = c("aut", "cre"),
                     email = "joshmobrien@gmail.com"))
 Maintainer: Joshua O'Brien <joshmobrien@gmail.com>
-Description: Reads, writes, and edits EXIF and other file metadata
-    using ExifTool <https://exiftool.org/>, returning read results as
-    a data frame. ExifTool supports many different metadata formats
-    including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile,
-    Photoshop IRB, FlashPix, AFCP and ID3, Lyrics3, as well as the
-    maker notes of many digital cameras by Canon, Casio, DJI, FLIR,
-    FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
+Description: Reads, writes, and edits EXIF and other file metadata using
+    ExifTool <https://exiftool.org/>, returning read results as a data
+    frame. ExifTool supports many different metadata formats including EXIF,
+    GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP
+    and ID3, Lyrics3, as well as the maker notes of many digital cameras by
+    Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
     Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
-    Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
-    Sanyo, Sigma/Foveon and Sony.
+    Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung, Sanyo,
+    Sigma/Foveon and Sony.
 License: GPL-2
 URL: https://github.com/JoshOBrien/exiftoolr#readme, https://joshobrien.github.io/exiftoolr/
 BugReports: https://github.com/JoshOBrien/exiftoolr/issues
@@ -30,4 +29,4 @@ Imports:
     data.table
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
