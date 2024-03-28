@@ -1,57 +1,51 @@
 
 ##' Read EXIF and other metadata from files
 ##'
-##' Reads EXIF and other metadata into a \code{data.frame} by calling
-##' Phil Harvey's ExifTool command-line application.
+##' Reads EXIF and other metadata into a \code{data.frame} by calling Phil
+##' Harvey's ExifTool command-line application.
 ##'
 ##' From the \href{https://exiftool.org}{ExifTool website}:
-##' "ExifTool is a platform-independent Perl library plus a
-##' command-line application for reading, writing and editing meta
-##' information in a wide variety of files. ExifTool supports many
-##' different metadata formats including EXIF, GPS, IPTC, XMP, JFIF,
-##' GeoTIFF, ICC Profile, Photoshop IRB, FlashPix, AFCP and ID3, as
-##' well as the maker notes of many digital cameras by Canon, Casio,
-##' DJI, FLIR, FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak, Leaf,
-##' Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
-##' Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung,
-##' Sanyo, Sigma/Foveon and Sony."
+##' "ExifTool is a platform-independent Perl library plus a command-line
+##' application for reading, writing and editing meta information in a wide
+##' variety of files. ExifTool supports many different metadata formats
+##' including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop IRB,
+##' FlashPix, AFCP and ID3, as well as the maker notes of many digital cameras
+##' by Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP, JVC/Victor, Kodak,
+##' Leaf, Minolta/Konica-Minolta, Motorola, Nikon, Nintendo, Olympus/Epson,
+##' Panasonic/Leica, Pentax/Asahi, Phase One, Reconyx, Ricoh, Samsung, Sanyo,
+##' Sigma/Foveon and Sony."
 ##'
 ##' For more information, see the \href{https://exiftool.org}{ExifTool
 ##' website}.
 ##'
 ##' @param path A vector of filenames.
-##' @param tags A vector of tags to output. It is a good idea to
-##'     specify this when reading large numbers of files, as it
-##'     decreases the output overhead significantly. Spaces will be
-##'     stripped in the output data frame. This parameter is not
-##'     case-sensitive.
-##' @param recursive \code{TRUE} to pass the \code{"-r"} option to
-##'     ExifTool.
+##' @param tags A vector of tags to output. It is a good idea to specify this
+##'     when reading large numbers of files, as it decreases the output overhead
+##'     significantly. Spaces will be stripped in the output data frame. This
+##'     parameter is not case-sensitive.
+##' @param recursive \code{TRUE} to pass the \code{"-r"} option to ExifTool.
 ##' @param args Additional arguments.
-##' @param quiet Use \code{FALSE} to display diagnostic
-##'     information. Default value is \code{TRUE}
-##' @param pipeline One of \code{"json"} (the default) or
-##'     \code{"csv"}. Controls whether the exiftool executable, behind
-##'     the scenes, extracts metadata into a JSON data structure or a
-##'     tabular csv. The JSON pipeline works well in most cases, but
-##'     (as documented at
-##'     \url{https://exiftool.org/exiftool_pod.html}) does not
-##'     properly handle non-UTF-8 character sets. If the metadata
-##'     fields include characters that are not encoded using UTF-8 and
-##'     that need to be handled by setting the \code{"-charset"}
-##'     option, use the \code{"csv"} pipeline as demonstrated in the
-##'     second example below.
-##' @return A data frame of class \code{"exiftoolr"} with one row per
-##'     file processed. The first column, named \code{"SourceFile"}
-##'     gives the name(s) of the processed files. Subsequent columns
-##'     contain info from the tags read from those files.
+##' @param quiet Use \code{FALSE} to display diagnostic information. Default
+##'     value is \code{TRUE}
+##' @param pipeline One of \code{"json"} (the default) or \code{"csv"}. Controls
+##'     whether the exiftool executable, behind the scenes, extracts metadata
+##'     into a JSON data structure or a tabular csv. The JSON pipeline works
+##'     well in most cases, but (as documented at
+##'     \url{https://exiftool.org/exiftool_pod.html}) does not properly handle
+##'     non-UTF-8 character sets. If the metadata fields include characters that
+##'     are not encoded using UTF-8 and that need to be handled by setting the
+##'     \code{"-charset"} option, use the \code{"csv"} pipeline as demonstrated
+##'     in the second example below.
+##' @return A data frame of class \code{"exiftoolr"} with one row per file
+##'     processed. The first column, named \code{"SourceFile"} gives the name(s)
+##'     of the processed files. Subsequent columns contain info from the tags
+##'     read from those files.
 ##'
 ##'     Note that binary tags such as thumbnails are loaded as
-##'     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded
-##'     strings} that start with \code{"base64:"}. Although these are
-##'     truncated in the printed representation of the
-##'     \code{data.frame} returned by the function, they are left
-##'     unaltered in the \code{data.frame} itself.
+##'     \href{https://en.wikipedia.org/wiki/Base64}{base64-encoded strings} that
+##'     start with \code{"base64:"}. Although these are truncated in the printed
+##'     representation of the \code{data.frame} returned by the function, they
+##'     are left unaltered in the \code{data.frame} itself.
 ##' @references \url{https://exiftool.org}
 ##' @importFrom jsonlite fromJSON
 ##' @importFrom data.table fread

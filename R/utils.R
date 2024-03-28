@@ -3,12 +3,10 @@
 ##'
 ##' @param command Character string giving the exiftool command.
 ##' @param perl_path Path to a Perl executable.
-##' @param allow_win_exe Logical. If running on a Windows machine, and
-##'     if a standalone exiftool executable is available, should it be
-##'     used?
+##' @param allow_win_exe Logical. If running on a Windows machine, and if a
+##'     standalone exiftool executable is available, should it be used?
 ##' @param quiet Logical. Should function should be chatty?
-##' @return A character string giving the exiftool command, returned
-##'     invisibly.
+##' @return A character string giving the exiftool command, returned invisibly.
 ##' @export
 ##'
 configure_exiftoolr <- function(command = NULL,
@@ -53,9 +51,9 @@ configure_exiftoolr <- function(command = NULL,
         }
         }
     } else {
-        ## For commands supplied as argument to configure_exiftoolr(), if
-        ## Perl is present, try the command with and without prepended
-        ## invocation of Perl
+        ## For commands supplied as argument to configure_exiftoolr(), if Perl
+        ## is present, try the command with and without prepended invocation of
+        ## Perl
         if (!is.null(perl_path)) {
             command <- c(command,
                          paste(shQuote(perl_path), shQuote(command)))
@@ -68,11 +66,11 @@ configure_exiftoolr <- function(command = NULL,
             com == paste(shQuote(perl_path), shQuote(NULL))) {
             next
         }
-        ## If the command string includes single-quoted substrings
-        ## split them out into a character vector. (This is most
-        ## likely due to shQuote()'ing of perl_path and command above,
-        ## but could also be from the value supplied to command= or to
-        ## ET_EXIFTOOL_PATH (and retrieved using env_exiftool_path())),
+        ## If the command string includes single-quoted substrings split them
+        ## out into a character vector. (This is most likely due to
+        ## shQuote()'ing of perl_path and command above, but could also be from
+        ## the value supplied to command= or to ET_EXIFTOOL_PATH (and retrieved
+        ## using env_exiftool_path())),
         ##
         ## So, for example, convert this:
         ##
