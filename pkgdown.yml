@@ -1,9 +1,8 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-03-28T22:45Z
+last_built: 2024-07-17T22:59Z
 urls:
   reference: https://joshobrien.github.io/exiftoolr/reference
   article: https://joshobrien.github.io/exiftoolr/articles
-
