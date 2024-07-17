@@ -72,7 +72,10 @@ install_exiftool <- function(install_location = NULL,
             dir.create(write_dir)
         }
         ## This calls zip::unzip, not utils::unzip
-        unzip(tmpfile, exdir = write_dir)
+        unzip(tmpfile, exdir = tmpdir)
+        exif_dir <- dir(tmpdir, pattern = "exiftool-")
+        file.copy(dir(exif_dir, full.names = TRUE), write_dir, recursive = TRUE)
+
     } else {
         ## Perl library
         untar(tmpfile, exdir = tmpdir)
@@ -112,7 +115,8 @@ download_exiftool <- function(win_exe = FALSE,
     ver <- current_exiftool_version()
     exiftool_url <-
         if(win_exe & is_windows()) {
-            file.path(base_url, paste0("exiftool-", ver, ".zip"))
+            platform <- ifelse(.Machine$sizeof.pointer == 8, "_64", "_32")
+            file.path(base_url, paste0("exiftool-", ver, platform, ".zip"))
         } else {
             file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
         }
@@ -126,6 +130,3 @@ download_exiftool <- function(win_exe = FALSE,
     curl_download(url = exiftool_url, destfile = download_path, quiet = quiet)
     return(download_path)
 }
-
-
-

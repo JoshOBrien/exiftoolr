@@ -1,8 +1,8 @@
 Package: exiftoolr
 Type: Package
 Title: ExifTool Functionality from R
-Version: 0.2.4
-Date: 2024-03-28
+Version: 0.2.5
+Date: 2024-07-17
 Authors@R: c(person("Joshua", "O'Brien", role = c("aut", "cre"),
                     email = "joshmobrien@gmail.com"))
 Maintainer: Joshua O'Brien <joshmobrien@gmail.com>
@@ -29,4 +29,4 @@ Imports:
     data.table
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

@@ -1,3 +1,9 @@
+# Version 0.2.5
+
+* Modified `install_exiftool()` (and its helper function, `download_exiftool()`)
+  to handle a couple of changes in how Phil Harvey's http://exiftool.org
+  provides Windows ExifTool executables.
+
 # Version 0.2.4
 
 * Ensures that Unicode tags are correctly written to files even in non-Unicode

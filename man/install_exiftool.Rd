@@ -2,8 +2,7 @@
 % Please edit documentation in R/install.R
 \name{install_exiftool}
 \alias{install_exiftool}
-\title{Install ExifTool, downloading (by default) the current
-    version}
+\title{Install ExifTool, downloading (by default) the current version}
 \usage{
 install_exiftool(
   install_location = NULL,
@@ -13,23 +12,21 @@ install_exiftool(
 )
 }
 \arguments{
-\item{install_location}{Path to the directory into which ExifTool
-should be installed. If \code{NULL} (the default),
-installation will be into the directory returned by
-\code{backports::R_user_dir("exiftoolr")}.}
+\item{install_location}{Path to the directory into which ExifTool should be
+installed. If \code{NULL} (the default), installation will be into the
+directory returned by \code{backports::R_user_dir("exiftoolr")}.}
 
-\item{win_exe}{Logical, only used on Windows machines. Should we
-install the standalone ExifTool Windows executable or the
-ExifTool Perl library?  (The latter relies, for its execution,
-on an existing installation of Perl being present on the
-user's machine.)  If set to \code{NULL} (the default), the
-function installs the Windows executable on Windows machines
-and the Perl library on other operating systems.}
+\item{win_exe}{Logical, only used on Windows machines. Should we install the
+standalone ExifTool Windows executable or the ExifTool Perl library?
+(The latter relies, for its execution, on an existing installation of
+Perl being present on the user's machine.)  If set to \code{NULL} (the
+default), the function installs the Windows executable on Windows
+machines and the Perl library on other operating systems.}
 
-\item{local_exiftool}{If installing ExifTool from a local "*.zip"
-or ".tar.gz", supply the path to that file as a character
-string. With default value, `NULL`, the function downloads
-ExifTool from \url{https://exiftool.org} and then installs it.}
+\item{local_exiftool}{If installing ExifTool from a local "*.zip" or
+".tar.gz", supply the path to that file as a character string. With
+default value, `NULL`, the function downloads ExifTool from
+\url{https://exiftool.org} and then installs it.}
 
 \item{quiet}{Logical.  Should function should be chatty?}
 }

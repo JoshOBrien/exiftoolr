@@ -156,8 +156,7 @@ test_exiftool <- function(command, quiet = TRUE) {
         suppressWarnings(
             suppressMessages(0 == try(system2(command,
                                               args = args,
-                                              stdout = FALSE,
-                                              stderr = FALSE),
+                                              stdout = FALSE),
                                       silent = TRUE)))
     if (command_works) {
         ## check that version is a numeric value like 10.96

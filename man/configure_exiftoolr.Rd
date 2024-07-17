@@ -16,15 +16,13 @@ configure_exiftoolr(
 
 \item{perl_path}{Path to a Perl executable.}
 
-\item{allow_win_exe}{Logical. If running on a Windows machine, and
-if a standalone exiftool executable is available, should it be
-used?}
+\item{allow_win_exe}{Logical. If running on a Windows machine, and if a
+standalone exiftool executable is available, should it be used?}
 
 \item{quiet}{Logical. Should function should be chatty?}
 }
 \value{
-A character string giving the exiftool command, returned
-    invisibly.
+A character string giving the exiftool command, returned invisibly.
 }
 \description{
 Configure package to point to ExifTool and/or Perl
