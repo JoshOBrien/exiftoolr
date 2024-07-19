@@ -73,7 +73,7 @@ install_exiftool <- function(install_location = NULL,
         }
         ## This calls zip::unzip, not utils::unzip
         unzip(tmpfile, exdir = tmpdir)
-        exif_dir <- dir(tmpdir, pattern = "exiftool-")
+        exif_dir <- dir(tmpdir, pattern = "exiftool-", full.names = TRUE)
         file.copy(dir(exif_dir, full.names = TRUE), write_dir, recursive = TRUE)
 
     } else {
