@@ -75,7 +75,8 @@ install_exiftool <- function(install_location = NULL,
         unzip(tmpfile, exdir = tmpdir)
         exif_dir <- dir(tmpdir, pattern = "exiftool-", full.names = TRUE)
         file.copy(dir(exif_dir, full.names = TRUE), write_dir, recursive = TRUE)
-
+        file.rename(file.path(write_dir, "exiftool(-k).exe"),
+                    file.path(write_dir, "exiftool.exe"))
     } else {
         ## Perl library
         untar(tmpfile, exdir = tmpdir)

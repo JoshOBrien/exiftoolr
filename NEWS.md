@@ -1,3 +1,15 @@
+# Version 0.2.7
+
+* On Windows, `install_exiftool()` now changes the name of the installed
+  executable from `"exiftool(-k).exe"` to `"exiftool.exe"` as recommended for
+  command-line use by Phil Harvey here:
+  https://exiftool.org/install.html#Windows. `exiftoolr:::configure_exiftoolr()`,
+  which searches for locally available executables, now searches first for
+  `"exiftool.exe"` and then for `"exiftool(-k).exe"`, so that it will still find
+  ExifTool executables installed by previous versions of this R package. Thanks
+  to Andy Lyons for suggesting this change, which fixes a problem that plagued
+  at least some Windows users.
+
 # Version 0.2.6
 
 * One more modification to `install_exiftool()` needed to handle changes in how

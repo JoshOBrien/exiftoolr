@@ -27,13 +27,17 @@ configure_exiftoolr <- function(command = NULL,
         ##
         ## (a) Try path stored in environment variable
         command <- env_exiftool_path()
-        ## (b) On Windows, check for a locally installed standalone
-        ## executable
+        ## (b) On Windows, check for a locally installed standalone executable.
+        ##     Beginning in version 0.2.7, install_exiftool() renames the
+        ##     ExifTool executable it installs to "exiftool.exe", as suggested
+        ##     by Phil Harvey, so we now look for both that and
+        ##     "exiftool(-k).exe", which will have been installed by any
+        ##     previous versions of the package.
         if (allow_win_exe & is_windows()) {
             internal_win_exe <-
                 file.path(R_user_dir("exiftoolr", which = "data"),
-                          "win_exe", "exiftool(-k).exe")
-            if (nchar(internal_win_exe))
+                          "win_exe", c("exiftool.exe", "exiftool(-k).exe"))
+            if (nchar(internal_win_exe[1]))
                 command <- c(command, internal_win_exe)
         }
         ## (c) Maybe "exiftool" is on search path?
