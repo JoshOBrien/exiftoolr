@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">exiftoolr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,12 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.7" id="version-027">Version 0.2.7<a class="anchor" aria-label="anchor" href="#version-027"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.8" id="version-028">Version 0.2.8<a class="anchor" aria-label="anchor" href="#version-028"></a></h2>
+<ul><li>
+<code><a href="../reference/configure_exiftoolr.html">configure_exiftoolr()</a></code> now checks for and more gracefully handles zero length string command candidates. (Those had caused a problem on, at least, MacOS.) Thanks to George Ostrouchov for describing the issue and suggesting the fix.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.7" id="version-027">Version 0.2.7<a class="anchor" aria-label="anchor" href="#version-027"></a></h2><p class="text-muted">CRAN release: 2025-01-14</p>
 <ul><li>On Windows, <code><a href="../reference/install_exiftool.html">install_exiftool()</a></code> now changes the name of the installed executable from <code>"exiftool(-k).exe"</code> to <code>"exiftool.exe"</code> as recommended for command-line use by Phil Harvey here: <a href="https://exiftool.org/install.html#Windows" class="external-link uri">https://exiftool.org/install.html#Windows</a>. <code>exiftoolr:::configure_exiftoolr()</code>, which searches for locally available executables, now searches first for <code>"exiftool.exe"</code> and then for <code>"exiftool(-k).exe"</code>, so that it will still find ExifTool executables installed by previous versions of this R package. Thanks to Andy Lyons for suggesting this change, which fixes a problem that plagued at least some Windows users.</li>
 </ul></div>
     <div class="section level2">
