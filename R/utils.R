@@ -65,6 +65,10 @@ configure_exiftoolr <- function(command = NULL,
     }
 
     for(com in command) {
+        ## Empty string causes an error on MacOS as reported in Issue #25
+        if (!nzchar(com)) {
+            next
+        }
         ## automatically fail perl_path ''
         if (!is.null(perl_path) &&
             com == paste(shQuote(perl_path), shQuote(NULL))) {

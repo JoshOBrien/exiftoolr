@@ -1,8 +1,8 @@
 Package: exiftoolr
 Type: Package
 Title: ExifTool Functionality from R
-Version: 0.2.7
-Date: 2025-01-13
+Version: 0.2.8
+Date: 2025-04-18
 Authors@R: c(person("Joshua", "O'Brien", role = c("aut", "cre"),
                     email = "joshmobrien@gmail.com"))
 Maintainer: Joshua O'Brien <joshmobrien@gmail.com>

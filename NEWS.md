@@ -1,3 +1,9 @@
+# Version 0.2.8
+
+* `configure_exiftoolr()` now checks for and more gracefully handles zero length
+  string command candidates. (Those had caused a problem on, at least, MacOS.)
+  Thanks to George Ostrouchov for describing the issue and suggesting the fix.
+
 # Version 0.2.7
 
 * On Windows, `install_exiftool()` now changes the name of the installed

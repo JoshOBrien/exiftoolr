@@ -106,7 +106,7 @@ exiftoolr::install_exiftool()
 **exiftoolr** makes a reasonable attempt to find local copies of Perl
 and ExifTool and, in most cases, will need no hints to find them. For
 direct control over which Perl or ExifTool is used, set their paths
-either with an explicit call to `configure_exiftool()` or with the
+either with an explicit call to `configure_exiftoolr()` or with the
 environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 
 
