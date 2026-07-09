@@ -105,7 +105,7 @@ install_exiftool <- function(install_location = NULL,
 download_exiftool <- function(win_exe = FALSE,
                               download_path = NULL,
                               quiet = FALSE) {
-    base_url <- "https://exiftool.org"
+    base_url <- "https://sourceforge.net/projects/exiftool/files"
     ## Got internet?
     if(!has_internet()) {
         stop("No internet connection detected, so cannot download ",
@@ -117,9 +117,13 @@ download_exiftool <- function(win_exe = FALSE,
     exiftool_url <-
         if(win_exe & is_windows()) {
             platform <- ifelse(.Machine$sizeof.pointer == 8, "_64", "_32")
-            file.path(base_url, paste0("exiftool-", ver, platform, ".zip"))
+            file.path(base_url,
+                      paste0("exiftool-", ver, platform, ".zip"),
+                      "download")
         } else {
-            file.path(base_url, paste0("Image-ExifTool-", ver, ".tar.gz"))
+            file.path(base_url,
+                      paste0("Image-ExifTool-", ver, ".tar.gz"),
+                      "download")
         }
     if (is.null(download_path)) {
         download_path <- file.path(tempdir(), basename(exiftool_url))
