@@ -1,3 +1,13 @@
+
+# Version 0.2.10
+
+* Changed URLs from which Windows and MacOS executables are downloaded. The
+  download URLs change from the ExifTool project's homepage at
+  https://exiftool.org (where the executables had been hosted) to SourceForge,
+  at https://sourceforge.net/projects/exiftool/files (where ExifTool author Phil
+  Harvey moved them not long before June, 2026). Thanks to Courtney Meier for
+  bringing this to my attention.
+
 # Version 0.2.8
 
 * `configure_exiftoolr()` now checks for and more gracefully handles zero length

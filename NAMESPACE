@@ -6,8 +6,10 @@ export(exif_call)
 export(exif_read)
 export(exif_version)
 export(install_exiftool)
-importFrom(curl,curl_download)
-importFrom(curl,has_internet)
+importFrom(curl,
+  curl_download,
+  has_internet
+)
 importFrom(data.table,fread)
 importFrom(jsonlite,fromJSON)
 importFrom(utils,untar)
