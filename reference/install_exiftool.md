@@ -19,7 +19,7 @@ install_exiftool(
 
   Path to the directory into which ExifTool should be installed. If
   `NULL` (the default), installation will be into the directory returned
-  by `backports::R_user_dir("exiftoolr")`.
+  by `backports:::R_user_dir("exiftoolr")`.
 
 - win_exe:
 
