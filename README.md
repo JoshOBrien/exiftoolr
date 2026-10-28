@@ -45,7 +45,7 @@ file, and the
 annotate the image:
 
 
-```r
+``` r
 library(exiftoolr)
 library(magick)
 
@@ -77,16 +77,16 @@ To install **exiftoolr** from
 [CRAN](https://CRAN.R-project.org/package=exiftoolr) do, as usual:
 
 
-```r
+``` r
 install.packages("exiftoolr")
 ```
 
 To install the most recent version from GitHub, do this:
 
 
-```r
-if(!require(devtools)) {install.packages("devtools")}
-devtools::install_github("JoshOBrien/exiftoolr")
+``` r
+if(!require(pak)) {install.packages("pak")}
+pak::pak("JoshOBrien/exiftoolr")
 ```
 
 
@@ -99,7 +99,7 @@ directory tree, where calls to functions in the **exiftoolr** package
 will automatically find it:
 
 
-```r
+``` r
 exiftoolr::install_exiftool()
 ```
 
@@ -116,13 +116,14 @@ environment variables `"ET_PERL_PATH"` and `"ET_EXIFTOOL_PATH"`.
 the results in a plain `data.frame`:
 
 
-```r
+``` r
 library(exiftoolr)
 image_files <- dir(system.file("images", package = "exiftoolr"), 
                    full.names = TRUE)
 exifinfo <- exif_read(image_files)
+#> Using ExifTool version 13.59
 dim(exifinfo)
-#> [1]   3 181
+#> [1]   3 182
 names(exifinfo)[1:20] ## Display first 20 metadata fields read by ExifTool
 #>  [1] "SourceFile"        "ExifToolVersion"   "FileName"          "Directory"        
 #>  [5] "FileSize"          "FileModifyDate"    "FileAccessDate"    "FileCreateDate"   
@@ -135,12 +136,16 @@ To extract only those tags that are actually needed, use the `tags`
 argument:
 
 
-```r
+``` r
 exif_read(image_files, tags = c("filename", "imagesize"))
-#>                                   SourceFile     FileName ImageSize
-#> 1   C:/R/Library/exiftoolr/images/LaSals.jpg   LaSals.jpg   640 480
-#> 2   C:/R/Library/exiftoolr/images/Lizard.jpg   Lizard.jpg 4032 3024
-#> 3 C:/R/Library/exiftoolr/images/QS_Hongg.jpg QS_Hongg.jpg 4674 3456
+#>                                                                             SourceFile
+#> 1   D:/Grand Canyon Trust Dropbox/Josh O'Brien/C/R/Library/exiftoolr/images/LaSals.jpg
+#> 2   D:/Grand Canyon Trust Dropbox/Josh O'Brien/C/R/Library/exiftoolr/images/Lizard.jpg
+#> 3 D:/Grand Canyon Trust Dropbox/Josh O'Brien/C/R/Library/exiftoolr/images/QS_Hongg.jpg
+#>       FileName ImageSize
+#> 1   LaSals.jpg   640 480
+#> 2   Lizard.jpg 4032 3024
+#> 3 QS_Hongg.jpg 4674 3456
 ```
 
 The `tags` argument also accepts simple regular expressions. For
@@ -148,16 +153,16 @@ instance, to extract all fields with names containing the substring
 `"GPS"`, you could use the following call:
 
 
-```r
+``` r
 exif_read(image_files[1], tags = "*GPS*")
-#>                                 SourceFile GPSLatitudeRef GPSLongitudeRef
-#> 1 C:/R/Library/exiftoolr/images/LaSals.jpg              N               W
-#>   GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed GPSImgDirectionRef
-#> 1              0     23:05:36           K        0                  T
-#>   GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp GPSHPositioningError
-#> 1        107.2073                 T       107.2073   2016:09:21                    5
-#>   GPSAltitude          GPSDateTime GPSLatitude GPSLongitude
-#> 1    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705
+#>                                                                           SourceFile
+#> 1 D:/Grand Canyon Trust Dropbox/Josh O'Brien/C/R/Library/exiftoolr/images/LaSals.jpg
+#>   GPSLatitudeRef GPSLongitudeRef GPSAltitudeRef GPSTimeStamp GPSSpeedRef GPSSpeed
+#> 1              N               W              0     23:05:36           K        0
+#>   GPSImgDirectionRef GPSImgDirection GPSDestBearingRef GPSDestBearing GPSDateStamp
+#> 1                  T        107.2073                 T       107.2073   2016:09:21
+#>   GPSHPositioningError GPSAltitude          GPSDateTime GPSLatitude GPSLongitude
+#> 1                    5    2257.414 2016:09:21 23:05:36Z    39.64798    -111.3705
 #>                          GPSPosition
 #> 1 39.6479805555556 -111.370505555556
 ```
@@ -168,7 +173,7 @@ function. For example, the call just above, if run using
 `exif_call()`, would look something like this:
 
 
-```r
+``` r
 exif_call(args = c("-n", "-j", "-q", "-*GPS*"), path = image_files[1])
 ```
 

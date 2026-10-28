@@ -5,7 +5,7 @@
 ##' @title Install ExifTool, downloading (by default) the current version
 ##' @param install_location Path to the directory into which ExifTool should be
 ##'     installed. If \code{NULL} (the default), installation will be into the
-##'     directory returned by \code{backports::R_user_dir("exiftoolr")}.
+##'     directory returned by \code{backports:::R_user_dir("exiftoolr")}.
 ##' @param win_exe Logical, only used on Windows machines. Should we install the
 ##'     standalone ExifTool Windows executable or the ExifTool Perl library?
 ##'     (The latter relies, for its execution, on an existing installation of

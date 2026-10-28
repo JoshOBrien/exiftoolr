@@ -89,8 +89,8 @@ install.packages("exiftoolr")
 To install the most recent version from GitHub, do this:
 
 ```{r, gh-installation, eval = FALSE}
-if(!require(devtools)) {install.packages("devtools")}
-devtools::install_github("JoshOBrien/exiftoolr")
+if(!require(pak)) {install.packages("pak")}
+pak::pak("JoshOBrien/exiftoolr")
 ```
 
 
